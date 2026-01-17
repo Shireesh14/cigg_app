@@ -1,0 +1,105 @@
+
+
+services:
+
+ postgres:
+    # building the image from a Dockerfile located in the ./database directory 
+    build: 
+     context: ./database
+     dockerfile: Dockerfile
+    # using the official PostgreSQL image as a base 
+    container_name: my_postgres_db
+    # using environment variables to set up the database
+    environment:
+      POSTGRES_USER: cigtracker
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cigtracker
+    # exposing the default PostgreSQL port
+    ports:
+      - "5432:5432"
+    # Persisting data using a named volume
+    volumes: 
+      - cigtracker:/var/lib/postgresql
+    # connecting the container to a custom network
+    networks:
+      - cig_app_network
+    # adding a healthcheck to ensure the database is ready
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U cigtracker"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+ backend:
+    #  building the backend service from a Dockerfile located in the ./backend directory
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: cig_backend
+    # setting environment variables for the backend service
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_NAME=cigtracker
+      - DB_USER=cigtracker
+      - DB_PASSWORD=password
+      - PORT=3000
+      - NODE_ENV=production
+    # exposing port 3000 for the backend service
+    ports:
+      - "3000:3000"
+
+    # wait for postgres to be ready before starting backend
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+    # connecting the container to a custom network
+    networks:
+      - cig_app_network
+    
+    # mounting volumes for code and dependencies
+    volumes:
+      - ./backend:/app
+      - /app/node_modules
+    # adding a healthcheck to monitor the backend service
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:3000/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      start_period: 15s
+      retries: 3
+
+ frontend:
+    # building the frontend service from a Dockerfile located in the ./frontend directory
+    build: 
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: cig_frontend
+
+    # exposing port 8080 for the frontend service
+    ports:
+      - "8080:8080"
+
+    # ensuring the frontend service starts only after the backend is healthy
+    depends_on:
+      backend:
+        condition: service_healthy
+
+    # connecting the frontend service to the custom network
+    networks:
+      - cig_app_network
+
+    # adding a healthcheck to monitor the frontend service
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://127.0.0.1:8080/healthz || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  cig_app_network:
+    driver: bridge
+
+volumes:
+  cigtracker:
