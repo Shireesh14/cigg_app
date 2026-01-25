@@ -1,0 +1,44 @@
+name: ci_pipeline
+
+on:
+ push:
+  branches:
+    - main
+
+ workflow_dispatch: 
+
+jobs:
+ ci_build:
+  runs-on: ubuntu-latest
+
+  steps:
+    - name: checksout code
+    uses: actions/checkout@v6.0.2
+
+# ----- backend -----
+
+  name: backend install and test
+  working-directory: backend
+  run: |
+    npm install
+
+  name: sonarcloud scan backend
+  uses: SonarSource/sonarqube-scan-action@v7.0.0
+  env:
+   SONAR_TOKEN: ${{ secrets.SONAR_CUBE }}
+  with:
+    projectBaseDir: backend
+
+# ---- frontend ----
+
+  name: sonarcloud scan frontend
+  uses: SonarSource/sonarqube-scan-action@v7.0.0
+  env:
+   SONAR_TOKEN: ${{ secrets.SONAR_CUBE }}
+  with:
+    projectBaseDir: frontend
+
+
+  
+  
+  
