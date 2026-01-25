@@ -18,7 +18,7 @@ jobs:
     - name: Backend - Install & Test
       working-directory: backend
       run: |
-        npm ci
+        npm install
 
     - name: SonarCloud Scan - Backend
       uses: SonarSource/sonarcloud-github-action@v2
