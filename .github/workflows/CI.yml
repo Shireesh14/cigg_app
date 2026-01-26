@@ -20,7 +20,7 @@ jobs:
         working-directory: backend
         run: npm install
 
-      # ---------- SonarCloud Scan (ONLY ONCE) ----------
+      # ---------- SonarCloud Scan  ----------
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@v2
         env:
