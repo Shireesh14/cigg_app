@@ -25,9 +25,7 @@ jobs:
       uses: SonarSource/sonarcloud-github-action@v2
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_PROJECT_KEY: shireesh14_cigg_app_backend
-        SONAR_ORGANIZATION: shireesh14
-
+       
       with:
         projectBaseDir: backend
 
@@ -36,8 +34,7 @@ jobs:
       uses: SonarSource/sonarcloud-github-action@v2
       env:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        SONAR_PROJECT_KEY: shireesh14_cigg_app_frontend
-        SONAR_ORGANIZATION: shireesh14
+        
       with:
         projectBaseDir: frontend
 
