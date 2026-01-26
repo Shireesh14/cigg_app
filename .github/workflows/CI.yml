@@ -27,7 +27,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        
       with:
-        projectBaseDir: backend
+        projectBaseDir: .
 
     # ---------- Frontend ----------
     - name: SonarCloud Scan - Frontend
@@ -36,7 +36,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
       with:
-        projectBaseDir: frontend
+        projectBaseDir: .
 
     # ---------- Trivy FS Scan ----------
     - name: Trivy Filesystem Scan
