@@ -27,7 +27,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
        
       with:
-        projectBaseDir: .
+        projectBaseDir: shireesh14_cigg_app/backend
 
     # ---------- Frontend ----------
     - name: SonarCloud Scan - Frontend
@@ -36,7 +36,7 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         
       with:
-        projectBaseDir: .
+        projectBaseDir: shireesh14_cigg_app/frontend
 
     # ---------- Trivy FS Scan ----------
     - name: Trivy Filesystem Scan
