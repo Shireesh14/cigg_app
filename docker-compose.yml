@@ -11,9 +11,9 @@ services:
     container_name: my_postgres_db
     # using environment variables to set up the database
     environment:
-      POSTGRES_USER: cigtracker
-      POSTGRES_PASSWORD: password
-      POSTGRES_DB: cigtracker
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
     # exposing the default PostgreSQL port
     ports:
       - "5432:5432"
@@ -38,11 +38,11 @@ services:
     container_name: cig_backend
     # setting environment variables for the backend service
     environment:
-      - DB_HOST=postgres
+      - DB_HOST=${DB_HOST}
       - DB_PORT=5432
-      - DB_NAME=cigtracker
-      - DB_USER=cigtracker
-      - DB_PASSWORD=password
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
       - PORT=3000
       - NODE_ENV=production
     # exposing port 3000 for the backend service
