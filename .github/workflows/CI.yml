@@ -1,9 +1,9 @@
 name: CI Pipeline
 
 on:
-  pull_request:
-    branches: [ main ]
   push:
+    branches: [ main ]
+  pull_request:
     branches: [ main ]
   workflow_dispatch:
 
@@ -12,53 +12,28 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-    # ---------- Backend ----------
-    - name: Backend - Install & Test
-      working-directory: backend
-      run: |
-        npm install
+      # ---------- Backend ----------
+      - name: Backend - Install
+        working-directory: backend
+        run: npm install
 
-    - name: SonarCloud Scan - Backend
-      uses: SonarSource/sonarcloud-github-action@v2
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-       
-      with:
-        projectBaseDir: shireesh14_cigg_app
-        
-      
-    # ---------- Frontend ----------
-    - name: SonarCloud Scan - Frontend
-      uses: SonarSource/sonarcloud-github-action@v2
-      env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        
-      with:
-        projectBaseDir: shireesh14_cigg_app
+      # ---------- SonarCloud Scan (ONLY ONCE) ----------
+      - name: SonarCloud Scan
+        uses: SonarSource/sonarcloud-github-action@v2
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        with:
+          projectBaseDir: .
 
-    # ---------- Trivy FS Scan ----------
-    - name: Trivy Filesystem Scan
-      uses: aquasecurity/trivy-action@0.20.0
-      with:
-        scan-type: fs
-        scan-ref: .
-        severity: HIGH,CRITICAL
-        exit-code: 1
+      # ---------- Trivy FS Scan ----------
+      - name: Trivy Filesystem Scan
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: HIGH,CRITICAL
+          exit-code: 1
 
-    # ---------- Docker Build ----------
- #   - name: Docker Build Images
- #     run: |
- #      docker build -t cig-backend:${{ github.sha }} backend
- #       docker build -t cig-frontend:${{ github.sha }} frontend
- #       docker build -t cig-postgres:${{ github.sha }} database
-
-    # ---------- Trivy Image Scan ----------
- #   - name: Trivy Image Scan
- #     uses: aquasecurity/trivy-action@0.20.0
- #     with:
- #       image-ref: cig-backend:${{ github.sha }}
- #       severity: HIGH,CRITICAL
- #       exit-code: 1
