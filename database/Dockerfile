@@ -5,9 +5,9 @@ FROM postgres:18.1
 COPY init.sql /docker-entrypoint-initdb.d/
 
 # Set environment variables for PostgreSQL
-ENV POSTGRES_USER=cigtracker
-ENV POSTGRES_PASSWORD=password
-ENV POSTGRES_DB=cigtracker
+ENV POSTGRES_USER=${POSTGRES_USER}
+ENV POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+ENV POSTGRES_DB=${POSTGRES_DB}
 
 # Expose the default PostgreSQL port
 EXPOSE 5432
