@@ -42,21 +42,21 @@ jobs:
       - name: Login to Docker Hub
         uses: docker/login-action@v3
         with:
-          username: ${{ vars.DOCKERHUB_USERNAME }}
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }} ---------
 
       - name: build images and tag - frontend
         uses: docker/build-push-action@v6
         with:
           context: frontend
-          tags: ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
           push: false
       
       - name: build images and tag - backend
         uses: docker/build-push-action@v6
         with:
            context: backend
-           tags: ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+           tags: ${{ secrets.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
            push: false
 
 #   scan with trivy image scan
@@ -64,7 +64,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           scan-type: image
-          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
           severity: HIGH,CRITICAL
           exit-code: 1  
       
@@ -72,7 +72,7 @@ jobs:
         uses: aquasecurity/trivy-action@0.20.0
         with:
           scan-type: image
-          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+          image-ref: ${{ secrets.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
           severity: HIGH,CRITICAL
           exit-code: 1  
           
@@ -83,14 +83,14 @@ jobs:
         uses: docker/build-push-action@v6
         with: 
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
-            ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/cig-frontend:latest
           push: true
       
       - name: Push images to Docker Hub
         uses: docker/build-push-action@v6
         with:
           tags: |
-            ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
-            ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:latest
+            ${{ secrets.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+            ${{ secrets.DOCKERHUB_USERNAME }}/cig-backend:latest
           push: true    
