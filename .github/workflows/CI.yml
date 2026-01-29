@@ -37,3 +37,60 @@ jobs:
           severity: HIGH,CRITICAL
           exit-code: 1
 
+      # ---------- Docker login ----------
+      
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }} ---------
+
+      - name: build images and tag - frontend
+        uses: docker/build-push-action@v6
+        with:
+          context: frontend
+          tags: ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+          push: false
+      
+      - name: build images and tag - backend
+        uses: docker/build-push-action@v6
+        with:
+           context: backend
+           tags: ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+           push: false
+
+#   scan with trivy image scan
+      - name: Trivy Image Scan - frontend
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: image
+          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: 1  
+      
+      - name: Trivy Image Scan - backend
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          scan-type: image
+          image-ref: ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+          severity: HIGH,CRITICAL
+          exit-code: 1  
+          
+          
+          #image push to docker hub
+
+      - name: Push images to Docker Hub
+        uses: docker/build-push-action@v6
+        with: 
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/cig-frontend:latest
+          push: true
+      
+      - name: Push images to Docker Hub
+        uses: docker/build-push-action@v6
+        with:
+          tags: |
+            ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:${{ github.sha }}
+            ${{ vars.DOCKERHUB_USERNAME }}/cig-backend:latest
+          push: true    
