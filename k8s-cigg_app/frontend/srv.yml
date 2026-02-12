@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+  namespace: cigg-app
+spec:
+  type: ClusterIP
+  selector:
+   app: cigg-frontend
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+  

@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cigg-app-db-migration
+  namespace: cigg-app
+spec:
+  template:
+    spec:
+      containers:
+      - name: flyway-migrate
+        image: flyway/flyway:9
+        command: ["flyway"]
+        args:
+          - "-url=jdbc:postgresql://postgres:5432/cigtracker"
+          - "-user=cigtracker"
+          - "-password=password"
+          - "-locations=filesystem:/flyway/sql"
+          - "migrate"
+        volumeMounts:
+          - name: migration-sql
+            mountPath: /flyway/sql
+      restartPolicy: OnFailure
+      volumes:
+        - name: migration-sql
+          configMap:
+            name: cigg-app-db-migration-sql

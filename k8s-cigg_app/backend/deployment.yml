@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-deployment
+  namespace: cigg-app
+  labels:
+    app: cigg-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cigg-backend
+  template:
+    metadata:
+      labels:
+        app: cigg-backend
+    spec:
+      containers:
+      - name: cigg-backend
+        image: shireesh14/cig-backend:d96282f71ef813c223a894ee96ae792c537f0e88		
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
+        env:
+          - name: DB_HOST
+            value: postgres
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_NAME
+            value: cigtracker
+          - name: DB_USER
+            value: cigtracker
+          - name: DB_PASSWORD
+            value: password
+          - name: PORT
+            value: "3000"
+          - name: NODE_ENV
+            value: production
+      
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          failureThreshold: 9
+          periodSeconds: 10
+      
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 4
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 4
+
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"

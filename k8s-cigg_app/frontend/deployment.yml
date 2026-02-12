@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: frontend-deployment
+  namespace: cigg-app
+  labels:
+    app: cigg-frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cigg-frontend
+  template:
+    metadata:
+      labels:
+        app: cigg-frontend
+    spec:
+      containers:
+      - name: cigg-frontend
+        image: shireesh14/cig-frontend:d96282f71ef813c223a894ee96ae792c537f0e88
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 8080
+      
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          failureThreshold: 9
+          periodSeconds: 10
+      
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 4
+        
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 5
+          periodSeconds: 4
+
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "250m"
+          limits:
+            memory: "256Mi"
+            cpu: "500m"
