@@ -1,0 +1,1862 @@
+apiVersion: v1
+items:
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2026-03-20T07:44:36Z"
+    generateName: cigg-app-cigg-app-backend-5b9d47fc64-
+    labels:
+      app: cigg-app-cigg-app-backend
+      pod-template-hash: 5b9d47fc64
+    name: cigg-app-cigg-app-backend-5b9d47fc64-86nfh
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: cigg-app-cigg-app-backend-5b9d47fc64
+      uid: 06e761a9-da9b-4f92-8a07-6e8bf7822b82
+    resourceVersion: "78406"
+    uid: 0525663f-418e-4bd9-968e-f09f4a645320
+  spec:
+    containers:
+    - env:
+      - name: DB_HOST
+        value: postgres
+      - name: DB_PORT
+        value: "5432"
+      - name: DB_NAME
+        value: cigtracker
+      - name: DB_USER
+        value: cigtracker
+      - name: DB_PASSWORD
+        value: password
+      - name: PORT
+        value: "3000"
+      - name: NODE_ENV
+        value: production
+      image: shireesh14/cig-backend:d96282f71ef813c223a894ee96ae792c537f0e88
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 4
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: cigg-app-cigg-app-backend
+      ports:
+      - containerPort: 3000
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 4
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+      startupProbe:
+        failureThreshold: 30
+        httpGet:
+          path: /health
+          port: 3000
+          scheme: HTTP
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-2kf96
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    initContainers:
+    - command:
+      - sh
+      - -c
+      - |
+        echo "Waiting for PostgreSQL..."
+        until nc -z postgres 5432; do
+          echo "DB not ready..."
+          sleep 2
+        done
+        echo "DB ready!"
+      image: busybox:1.36
+      imagePullPolicy: IfNotPresent
+      name: wait-for-db
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-2kf96
+        readOnly: true
+    nodeName: siri
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-2kf96
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:21Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T07:44:37Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:18:03Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:18:03Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T07:44:36Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://09a88f2b6a810853a0c6ac3f7e2431d8b97f37b919ad941d3d5a4b3ebba5b5b0
+      image: shireesh14/cig-backend:d96282f71ef813c223a894ee96ae792c537f0e88
+      imageID: docker-pullable://shireesh14/cig-backend@sha256:46611ba599ea0596210c099437a97e69fdc1c61e64047983a28cfb938a60ca6d
+      lastState:
+        terminated:
+          containerID: docker://7441b5d1a8fbe110bbf71089425a318116560212a977342996e81d7bbd56fd60
+          exitCode: 1
+          finishedAt: "2026-03-20T15:54:19Z"
+          reason: Error
+          startedAt: "2026-03-20T10:35:07Z"
+      name: cigg-app-cigg-app-backend
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2026-03-24T08:17:56Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-2kf96
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    initContainerStatuses:
+    - containerID: docker://7900b5890687adb226c415b916172da616df020d1d5927ed44bae75c34853332
+      image: busybox:1.36
+      imageID: docker-pullable://busybox@sha256:b9598f8c98e24d0ad42c1742c32516772c3aa2151011ebaf639089bd18c605b8
+      lastState: {}
+      name: wait-for-db
+      ready: true
+      restartCount: 1
+      started: false
+      state:
+        terminated:
+          containerID: docker://7900b5890687adb226c415b916172da616df020d1d5927ed44bae75c34853332
+          exitCode: 0
+          finishedAt: "2026-03-24T08:17:55Z"
+          reason: Completed
+          startedAt: "2026-03-24T08:17:20Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-2kf96
+        readOnly: true
+        recursiveReadOnly: Disabled
+    phase: Running
+    podIP: 10.244.0.66
+    podIPs:
+    - ip: 10.244.0.66
+    qosClass: Burstable
+    startTime: "2026-03-20T07:44:36Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2026-03-20T09:46:50Z"
+    generateName: cigg-app-cigg-app-db-migration-
+    labels:
+      batch.kubernetes.io/controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+      batch.kubernetes.io/job-name: cigg-app-cigg-app-db-migration
+      controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+      job-name: cigg-app-cigg-app-db-migration
+    name: cigg-app-cigg-app-db-migration-tghzk
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: batch/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Job
+      name: cigg-app-cigg-app-db-migration
+      uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+    resourceVersion: "78125"
+    uid: 3fbd792d-18f0-4a3a-b403-c4a40877d4e9
+  spec:
+    containers:
+    - args:
+      - -url=jdbc:postgresql://postgres:5432/cigtracker
+      - -user=cigtracker
+      - -password=password
+      - -locations=filesystem:/flyway/sql
+      - -connectRetries=60
+      - migrate
+      command:
+      - flyway
+      image: flyway/flyway:9
+      imagePullPolicy: IfNotPresent
+      name: flyway
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /flyway/sql
+        name: migration-sql
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-48fqf
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: siri
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: OnFailure
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - configMap:
+        defaultMode: 420
+        name: cigg-app-cigg-app-db-migration-sql
+      name: migration-sql
+    - name: kube-api-access-48fqf
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T09:46:53Z"
+      status: "False"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T09:46:50Z"
+      reason: PodCompleted
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T09:46:52Z"
+      reason: PodCompleted
+      status: "False"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T09:46:52Z"
+      reason: PodCompleted
+      status: "False"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-20T09:46:50Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://dbd4372914dbbb5f99761dadafe33f4f8d89412e7cd0860fb5022b2ab360b719
+      image: flyway/flyway:9
+      imageID: docker-pullable://flyway/flyway@sha256:9e78682c33f6b22e83b00a2971a3e8b0f257a51857dfc34ed4a5f6a839038239
+      lastState: {}
+      name: flyway
+      ready: false
+      restartCount: 0
+      started: false
+      state:
+        terminated:
+          containerID: docker://dbd4372914dbbb5f99761dadafe33f4f8d89412e7cd0860fb5022b2ab360b719
+          exitCode: 0
+          finishedAt: "2026-03-20T09:46:52Z"
+          reason: Completed
+          startedAt: "2026-03-20T09:46:50Z"
+      volumeMounts:
+      - mountPath: /flyway/sql
+        name: migration-sql
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-48fqf
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Succeeded
+    qosClass: BestEffort
+    startTime: "2026-03-20T09:46:50Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generateName: cigg-app-cigg-app-frontend-d6f7dbd67-
+    labels:
+      app: cigg-app-cigg-app-frontend
+      pod-template-hash: d6f7dbd67
+    name: cigg-app-cigg-app-frontend-d6f7dbd67-mqnmf
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: ReplicaSet
+      name: cigg-app-cigg-app-frontend-d6f7dbd67
+      uid: 273b695a-5365-4089-8372-b93b9f628d85
+    resourceVersion: "78349"
+    uid: 4bce4652-2fa1-4418-81ef-d996520efa47
+  spec:
+    containers:
+    - image: shireesh14/cig-frontend:5f9a3f91f31b3af151d91789ccc14b2db8d042da
+      imagePullPolicy: IfNotPresent
+      livenessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthz
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 4
+        successThreshold: 1
+        timeoutSeconds: 1
+      name: cigg-app-cigg-app-frontend
+      ports:
+      - containerPort: 8080
+        protocol: TCP
+      readinessProbe:
+        failureThreshold: 3
+        httpGet:
+          path: /healthz
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 5
+        periodSeconds: 4
+        successThreshold: 1
+        timeoutSeconds: 1
+      resources:
+        limits:
+          cpu: 500m
+          memory: 256Mi
+        requests:
+          cpu: 250m
+          memory: 128Mi
+      startupProbe:
+        failureThreshold: 9
+        httpGet:
+          path: /healthz
+          port: 8080
+          scheme: HTTP
+        initialDelaySeconds: 20
+        periodSeconds: 10
+        successThreshold: 1
+        timeoutSeconds: 1
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-r5dp6
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    nodeName: siri
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    terminationGracePeriodSeconds: 30
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: kube-api-access-r5dp6
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:21Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-14T11:32:03Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:46Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:46Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-14T11:32:03Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://09c82be72c630a488733516a9eb8fe6a7b19f067d01a99469d01525b29aa8a55
+      image: shireesh14/cig-frontend:5f9a3f91f31b3af151d91789ccc14b2db8d042da
+      imageID: docker-pullable://shireesh14/cig-frontend@sha256:eed7894609bb9822119eafb98ed78a72fc48917aa6afb97cfc5e1d878a956de3
+      lastState:
+        terminated:
+          containerID: docker://334870545a61776e2506fb9e210520eab3ad2ddb0c99d9e9e188ec3a4be444a7
+          exitCode: 0
+          finishedAt: "2026-03-20T15:54:19Z"
+          reason: Completed
+          startedAt: "2026-03-20T07:13:24Z"
+      name: cigg-app-cigg-app-frontend
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2026-03-24T08:17:20Z"
+      volumeMounts:
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-r5dp6
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Running
+    podIP: 10.244.0.61
+    podIPs:
+    - ip: 10.244.0.61
+    qosClass: Burstable
+    startTime: "2026-03-14T11:32:03Z"
+- apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generateName: cigg-app-cigg-app-statefulset-
+    labels:
+      app: cigg-app-cigg-app-statefulset
+      apps.kubernetes.io/pod-index: "0"
+      controller-revision-hash: cigg-app-cigg-app-statefulset-64b4768c7d
+      statefulset.kubernetes.io/pod-name: cigg-app-cigg-app-statefulset-0
+    name: cigg-app-cigg-app-statefulset-0
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: StatefulSet
+      name: cigg-app-cigg-app-statefulset
+      uid: 3a37e0cd-c125-4e99-adf5-9c1c78e3bfa5
+    resourceVersion: "78141"
+    uid: 16b50483-4169-4be8-b19f-11e10743a581
+  spec:
+    containers:
+    - env:
+      - name: POSTGRES_USER
+        value: cigtracker
+      - name: POSTGRES_PASSWORD
+        value: password
+      - name: POSTGRES_DB
+        value: cigtracker
+      image: postgres:15
+      imagePullPolicy: IfNotPresent
+      name: postgres
+      ports:
+      - containerPort: 5432
+        protocol: TCP
+      resources: {}
+      terminationMessagePath: /dev/termination-log
+      terminationMessagePolicy: File
+      volumeMounts:
+      - mountPath: /var/lib/postgresql/data
+        name: postgres-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-8966d
+        readOnly: true
+    dnsPolicy: ClusterFirst
+    enableServiceLinks: true
+    hostname: cigg-app-cigg-app-statefulset-0
+    nodeName: siri
+    preemptionPolicy: PreemptLowerPriority
+    priority: 0
+    restartPolicy: Always
+    schedulerName: default-scheduler
+    securityContext: {}
+    serviceAccount: default
+    serviceAccountName: default
+    subdomain: postgres
+    terminationGracePeriodSeconds: 10
+    tolerations:
+    - effect: NoExecute
+      key: node.kubernetes.io/not-ready
+      operator: Exists
+      tolerationSeconds: 300
+    - effect: NoExecute
+      key: node.kubernetes.io/unreachable
+      operator: Exists
+      tolerationSeconds: 300
+    volumes:
+    - name: postgres-storage
+      persistentVolumeClaim:
+        claimName: postgres-storage-cigg-app-cigg-app-statefulset-0
+    - name: kube-api-access-8966d
+      projected:
+        defaultMode: 420
+        sources:
+        - serviceAccountToken:
+            expirationSeconds: 3607
+            path: token
+        - configMap:
+            items:
+            - key: ca.crt
+              path: ca.crt
+            name: kube-root-ca.crt
+        - downwardAPI:
+            items:
+            - fieldRef:
+                apiVersion: v1
+                fieldPath: metadata.namespace
+              path: namespace
+  status:
+    conditions:
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:21Z"
+      status: "True"
+      type: PodReadyToStartContainers
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-14T11:32:05Z"
+      status: "True"
+      type: Initialized
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:21Z"
+      status: "True"
+      type: Ready
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-24T08:17:21Z"
+      status: "True"
+      type: ContainersReady
+    - lastProbeTime: null
+      lastTransitionTime: "2026-03-14T11:32:05Z"
+      status: "True"
+      type: PodScheduled
+    containerStatuses:
+    - containerID: docker://0ec893858a4efc8a9c6ee5ea0a9977488cc4d90fa0a963ff37a5720a7447308e
+      image: postgres:15
+      imageID: docker-pullable://postgres@sha256:f30e3de0ac9cc938dac627ef2231099867c694b5f949fadb924c8c977428c399
+      lastState:
+        terminated:
+          containerID: docker://9b8843db327dd3e8a700d6b43283f9f75eb837fc9a02cbbc0f71ac6a28347640
+          exitCode: 0
+          finishedAt: "2026-03-20T15:54:19Z"
+          reason: Completed
+          startedAt: "2026-03-20T07:13:24Z"
+      name: postgres
+      ready: true
+      restartCount: 3
+      started: true
+      state:
+        running:
+          startedAt: "2026-03-24T08:17:20Z"
+      volumeMounts:
+      - mountPath: /var/lib/postgresql/data
+        name: postgres-storage
+      - mountPath: /var/run/secrets/kubernetes.io/serviceaccount
+        name: kube-api-access-8966d
+        readOnly: true
+        recursiveReadOnly: Disabled
+    hostIP: 192.168.49.2
+    hostIPs:
+    - ip: 192.168.49.2
+    phase: Running
+    podIP: 10.244.0.60
+    podIPs:
+    - ip: 10.244.0.60
+    qosClass: BestEffort
+    startTime: "2026-03-14T11:32:05Z"
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-20T09:46:54Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-backend-service
+    namespace: cigg-app
+    resourceVersion: "62987"
+    uid: e25818f5-a472-4224-9eb8-697618558148
+  spec:
+    clusterIP: 10.108.12.254
+    clusterIPs:
+    - 10.108.12.254
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 3000
+      protocol: TCP
+      targetPort: 3000
+    selector:
+      app: cigg-app-cigg-app-backend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: my-service
+    namespace: cigg-app
+    resourceVersion: "35528"
+    uid: ac9c694e-8a34-4e36-b50c-d267866f11d9
+  spec:
+    clusterIP: 10.103.229.162
+    clusterIPs:
+    - 10.103.229.162
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: cigg-app-cigg-app-frontend
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: postgres
+    namespace: cigg-app
+    resourceVersion: "35526"
+    uid: 81dbb97a-7bfa-499f-a425-4f27bb8842f3
+  spec:
+    clusterIP: None
+    clusterIPs:
+    - None
+    internalTrafficPolicy: Cluster
+    ipFamilies:
+    - IPv4
+    ipFamilyPolicy: SingleStack
+    ports:
+    - port: 5432
+      protocol: TCP
+      targetPort: 5432
+    selector:
+      app: cigg-app-cigg-app-statefulset
+    sessionAffinity: None
+    type: ClusterIP
+  status:
+    loadBalancer: {}
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "5"
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generation: 5
+    labels:
+      app: cigg-app-cigg-app-backend
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-backend
+    namespace: cigg-app
+    resourceVersion: "78410"
+    uid: 0da499a3-df11-4cb5-a504-170cdc1c5237
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: cigg-app-cigg-app-backend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cigg-app-cigg-app-backend
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: postgres
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_NAME
+            value: cigtracker
+          - name: DB_USER
+            value: cigtracker
+          - name: DB_PASSWORD
+            value: password
+          - name: PORT
+            value: "3000"
+          - name: NODE_ENV
+            value: production
+          image: shireesh14/cig-backend:d96282f71ef813c223a894ee96ae792c537f0e88
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: cigg-app-cigg-app-backend
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for PostgreSQL..."
+            until nc -z postgres 5432; do
+              echo "DB not ready..."
+              sleep 2
+            done
+            echo "DB ready!"
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-03-20T07:37:10Z"
+      lastUpdateTime: "2026-03-20T07:44:47Z"
+      message: ReplicaSet "cigg-app-cigg-app-backend-5b9d47fc64" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-03-24T08:18:03Z"
+      lastUpdateTime: "2026-03-24T08:18:03Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 5
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    annotations:
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generation: 1
+    labels:
+      app: cigg-app-cigg-app-frontend
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-frontend
+    namespace: cigg-app
+    resourceVersion: "78353"
+    uid: ecaaffb4-4bb4-4742-ae49-34113ef3df65
+  spec:
+    progressDeadlineSeconds: 600
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: cigg-app-cigg-app-frontend
+    strategy:
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
+      type: RollingUpdate
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cigg-app-cigg-app-frontend
+      spec:
+        containers:
+        - image: shireesh14/cig-frontend:5f9a3f91f31b3af151d91789ccc14b2db8d042da
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: cigg-app-cigg-app-frontend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          startupProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    conditions:
+    - lastTransitionTime: "2026-03-14T11:32:03Z"
+      lastUpdateTime: "2026-03-14T11:32:33Z"
+      message: ReplicaSet "cigg-app-cigg-app-frontend-d6f7dbd67" has successfully
+        progressed.
+      reason: NewReplicaSetAvailable
+      status: "True"
+      type: Progressing
+    - lastTransitionTime: "2026-03-24T08:17:46Z"
+      lastUpdateTime: "2026-03-24T08:17:46Z"
+      message: Deployment has minimum availability.
+      reason: MinimumReplicasAvailable
+      status: "True"
+      type: Available
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updatedReplicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "5"
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-20T07:44:36Z"
+    generation: 1
+    labels:
+      app: cigg-app-cigg-app-backend
+      pod-template-hash: 5b9d47fc64
+    name: cigg-app-cigg-app-backend-5b9d47fc64
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: cigg-app-cigg-app-backend
+      uid: 0da499a3-df11-4cb5-a504-170cdc1c5237
+    resourceVersion: "78409"
+    uid: 06e761a9-da9b-4f92-8a07-6e8bf7822b82
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: cigg-app-cigg-app-backend
+        pod-template-hash: 5b9d47fc64
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cigg-app-cigg-app-backend
+          pod-template-hash: 5b9d47fc64
+      spec:
+        containers:
+        - env:
+          - name: DB_HOST
+            value: postgres
+          - name: DB_PORT
+            value: "5432"
+          - name: DB_NAME
+            value: cigtracker
+          - name: DB_USER
+            value: cigtracker
+          - name: DB_PASSWORD
+            value: password
+          - name: PORT
+            value: "3000"
+          - name: NODE_ENV
+            value: production
+          image: shireesh14/cig-backend:d96282f71ef813c223a894ee96ae792c537f0e88
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: cigg-app-cigg-app-backend
+          ports:
+          - containerPort: 3000
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          startupProbe:
+            failureThreshold: 30
+            httpGet:
+              path: /health
+              port: 3000
+              scheme: HTTP
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        initContainers:
+        - command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for PostgreSQL..."
+            until nc -z postgres 5432; do
+              echo "DB not ready..."
+              sleep 2
+            done
+            echo "DB ready!"
+          image: busybox:1.36
+          imagePullPolicy: IfNotPresent
+          name: wait-for-db
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: ReplicaSet
+  metadata:
+    annotations:
+      deployment.kubernetes.io/desired-replicas: "1"
+      deployment.kubernetes.io/max-replicas: "2"
+      deployment.kubernetes.io/revision: "1"
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generation: 1
+    labels:
+      app: cigg-app-cigg-app-frontend
+      pod-template-hash: d6f7dbd67
+    name: cigg-app-cigg-app-frontend-d6f7dbd67
+    namespace: cigg-app
+    ownerReferences:
+    - apiVersion: apps/v1
+      blockOwnerDeletion: true
+      controller: true
+      kind: Deployment
+      name: cigg-app-cigg-app-frontend
+      uid: ecaaffb4-4bb4-4742-ae49-34113ef3df65
+    resourceVersion: "78352"
+    uid: 273b695a-5365-4089-8372-b93b9f628d85
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: cigg-app-cigg-app-frontend
+        pod-template-hash: d6f7dbd67
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cigg-app-cigg-app-frontend
+          pod-template-hash: d6f7dbd67
+      spec:
+        containers:
+        - image: shireesh14/cig-frontend:5f9a3f91f31b3af151d91789ccc14b2db8d042da
+          imagePullPolicy: IfNotPresent
+          livenessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          name: cigg-app-cigg-app-frontend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          readinessProbe:
+            failureThreshold: 3
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 5
+            periodSeconds: 4
+            successThreshold: 1
+            timeoutSeconds: 1
+          resources:
+            limits:
+              cpu: 500m
+              memory: 256Mi
+            requests:
+              cpu: 250m
+              memory: 128Mi
+          startupProbe:
+            failureThreshold: 9
+            httpGet:
+              path: /healthz
+              port: 8080
+              scheme: HTTP
+            initialDelaySeconds: 20
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+  status:
+    availableReplicas: 1
+    fullyLabeledReplicas: 1
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+- apiVersion: apps/v1
+  kind: StatefulSet
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-statefulset
+    namespace: cigg-app
+    resourceVersion: "35609"
+    uid: 3a37e0cd-c125-4e99-adf5-9c1c78e3bfa5
+  spec:
+    persistentVolumeClaimRetentionPolicy:
+      whenDeleted: Retain
+      whenScaled: Retain
+    podManagementPolicy: OrderedReady
+    replicas: 1
+    revisionHistoryLimit: 10
+    selector:
+      matchLabels:
+        app: cigg-app-cigg-app-statefulset
+    serviceName: postgres
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          app: cigg-app-cigg-app-statefulset
+      spec:
+        containers:
+        - env:
+          - name: POSTGRES_USER
+            value: cigtracker
+          - name: POSTGRES_PASSWORD
+            value: password
+          - name: POSTGRES_DB
+            value: cigtracker
+          image: postgres:15
+          imagePullPolicy: IfNotPresent
+          name: postgres
+          ports:
+          - containerPort: 5432
+            protocol: TCP
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /var/lib/postgresql/data
+            name: postgres-storage
+        dnsPolicy: ClusterFirst
+        restartPolicy: Always
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 10
+    updateStrategy:
+      rollingUpdate:
+        partition: 0
+      type: RollingUpdate
+    volumeClaimTemplates:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
+        creationTimestamp: null
+        name: postgres-storage
+      spec:
+        accessModes:
+        - ReadWriteOnce
+        resources:
+          requests:
+            storage: 1Gi
+        storageClassName: standard
+        volumeMode: Filesystem
+      status:
+        phase: Pending
+  status:
+    availableReplicas: 1
+    collisionCount: 0
+    currentReplicas: 1
+    currentRevision: cigg-app-cigg-app-statefulset-64b4768c7d
+    observedGeneration: 1
+    readyReplicas: 1
+    replicas: 1
+    updateRevision: cigg-app-cigg-app-statefulset-64b4768c7d
+    updatedReplicas: 1
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-hpa-autoscaler
+    namespace: cigg-app
+    resourceVersion: "78071"
+    uid: cdbdc197-7d94-4942-a1c0-5b980217e772
+  spec:
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 79
+          type: Utilization
+      type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: cigg-app-cigg-app-frontend
+  status:
+    conditions:
+    - lastTransitionTime: "2026-03-20T15:53:47Z"
+      message: the HPA controller was able to get the target's current scale
+      reason: SucceededGetScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2026-03-14T11:32:18Z"
+      message: 'the HPA was unable to compute the replica count: failed to get cpu
+        utilization: unable to get metrics for resource cpu: unable to fetch metrics
+        from resource metrics API: the server could not find the requested resource
+        (get pods.metrics.k8s.io)'
+      reason: FailedGetResourceMetric
+      status: "False"
+      type: ScalingActive
+    currentMetrics:
+    - type: ""
+    - type: ""
+    currentReplicas: 1
+    desiredReplicas: 0
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-hpa-autoscaler-backend
+    namespace: cigg-app
+    resourceVersion: "78070"
+    uid: aaabb6e4-b711-4c7a-93d0-86a351a2cba7
+  spec:
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 79
+          type: Utilization
+      type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: cigg-app-cigg-app-backend
+  status:
+    conditions:
+    - lastTransitionTime: "2026-03-20T15:53:47Z"
+      message: the HPA controller was able to get the target's current scale
+      reason: SucceededGetScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2026-03-14T11:32:18Z"
+      message: 'the HPA was unable to compute the replica count: failed to get cpu
+        utilization: unable to get metrics for resource cpu: unable to fetch metrics
+        from resource metrics API: the server could not find the requested resource
+        (get pods.metrics.k8s.io)'
+      reason: FailedGetResourceMetric
+      status: "False"
+      type: ScalingActive
+    currentMetrics:
+    - type: ""
+    - type: ""
+    currentReplicas: 1
+    desiredReplicas: 0
+- apiVersion: batch/v1
+  kind: Job
+  metadata:
+    annotations:
+      helm.sh/hook: pre-install,pre-upgrade
+    creationTimestamp: "2026-03-20T09:46:50Z"
+    generation: 1
+    labels:
+      batch.kubernetes.io/controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+      batch.kubernetes.io/job-name: cigg-app-cigg-app-db-migration
+      controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+      job-name: cigg-app-cigg-app-db-migration
+    name: cigg-app-cigg-app-db-migration
+    namespace: cigg-app
+    resourceVersion: "62984"
+    uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+  spec:
+    backoffLimit: 4
+    completionMode: NonIndexed
+    completions: 1
+    manualSelector: false
+    parallelism: 1
+    podReplacementPolicy: TerminatingOrFailed
+    selector:
+      matchLabels:
+        batch.kubernetes.io/controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+    suspend: false
+    template:
+      metadata:
+        creationTimestamp: null
+        labels:
+          batch.kubernetes.io/controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+          batch.kubernetes.io/job-name: cigg-app-cigg-app-db-migration
+          controller-uid: 643bf0af-9df0-4169-a685-e7ff35b70ba1
+          job-name: cigg-app-cigg-app-db-migration
+      spec:
+        containers:
+        - args:
+          - -url=jdbc:postgresql://postgres:5432/cigtracker
+          - -user=cigtracker
+          - -password=password
+          - -locations=filesystem:/flyway/sql
+          - -connectRetries=60
+          - migrate
+          command:
+          - flyway
+          image: flyway/flyway:9
+          imagePullPolicy: IfNotPresent
+          name: flyway
+          resources: {}
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /flyway/sql
+            name: migration-sql
+        dnsPolicy: ClusterFirst
+        restartPolicy: OnFailure
+        schedulerName: default-scheduler
+        securityContext: {}
+        terminationGracePeriodSeconds: 30
+        volumes:
+        - configMap:
+            defaultMode: 420
+            name: cigg-app-cigg-app-db-migration-sql
+          name: migration-sql
+  status:
+    completionTime: "2026-03-20T09:46:54Z"
+    conditions:
+    - lastProbeTime: "2026-03-20T09:46:54Z"
+      lastTransitionTime: "2026-03-20T09:46:54Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: SuccessCriteriaMet
+    - lastProbeTime: "2026-03-20T09:46:54Z"
+      lastTransitionTime: "2026-03-20T09:46:54Z"
+      message: Reached expected number of succeeded pods
+      reason: CompletionsReached
+      status: "True"
+      type: Complete
+    ready: 0
+    startTime: "2026-03-20T09:46:50Z"
+    succeeded: 1
+    terminating: 0
+    uncountedTerminatedPods: {}
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:40:45Z"
+    generation: 1
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-ingress
+    namespace: cigg-app
+    resourceVersion: "78474"
+    uid: 9211201c-6d15-44e9-89a8-982e58669007
+  spec:
+    ingressClassName: nginx
+    rules:
+    - host: cigg-app.local
+      http:
+        paths:
+        - backend:
+            service:
+              name: cigg-app-cigg-app-backend-service
+              port:
+                number: 3000
+          path: /api
+          pathType: Prefix
+        - backend:
+            service:
+              name: my-service
+              port:
+                number: 8080
+          path: /
+          pathType: Prefix
+  status:
+    loadBalancer:
+      ingress:
+      - ip: 192.168.49.2
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    V1__init.sql: |-
+      CREATE TABLE IF NOT EXISTS entries (
+          id SERIAL PRIMARY KEY,
+          quantity INTEGER NOT NULL CHECK (quantity > 0),
+          location VARCHAR(255) NOT NULL,
+          notes TEXT,
+          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      );
+  kind: ConfigMap
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-cigg-app-db-migration-sql
+    namespace: cigg-app
+    resourceVersion: "35525"
+    uid: 03d1a745-60d3-4f9c-afc2-6d108590aca8
+- apiVersion: v1
+  data:
+    ca.crt: |
+      -----BEGIN CERTIFICATE-----
+      MIIDBjCCAe6gAwIBAgIBATANBgkqhkiG9w0BAQsFADAVMRMwEQYDVQQDEwptaW5p
+      a3ViZUNBMB4XDTI1MDIyMzExMjYwOFoXDTM1MDIyMjExMjYwOFowFTETMBEGA1UE
+      AxMKbWluaWt1YmVDQTCCASIwDQYJKoZIhvcNAQEBBQADggEPADCCAQoCggEBALgI
+      uN55ngLYzCKUtcoFMXu46aa+5oNx9ovYHHIbFbrgbvvhZ3svc4IJDV5yUOgnfADW
+      3E7HCW5DmbAM4WrubiCfWbXlZd4TvHDixJACkNbfbPRhHTKXpzxniX9ErsxKdtdF
+      QFKxY6+/deopohVpjz7GGWBFz/JVoXTNTowaAuV9KH85/KPH38o8cTQwJJOFrLf8
+      kKZH/PHifbVyHszqqeI+Xr85Tz2vVpbxt+MPyReIvnC9w/QrD3caIJ/Ts/p+1fzr
+      D3SmolA8Y+82CrBlXrBMQA5WBkUI+C9foblGBmY+WveEzpQu9QtQNBgy0nEstAtb
+      jPMt3+SeWkf05CXqQ2kCAwEAAaNhMF8wDgYDVR0PAQH/BAQDAgKkMB0GA1UdJQQW
+      MBQGCCsGAQUFBwMCBggrBgEFBQcDATAPBgNVHRMBAf8EBTADAQH/MB0GA1UdDgQW
+      BBQzjVk1jsMR1naqSE9vxe0fkN5G8TANBgkqhkiG9w0BAQsFAAOCAQEAtDo8QRmu
+      8XPDqEXBK8EcxsxFa1Ie/hwzrZCM/2rFlXbKnjQLrazyeSpI+oqUF4/p+HrJYMmN
+      PcPo+FU9U7uckvHXBlnPPbcmdgs3k+ZHuIL4mzcCv9+tX3rqDG+tikhPM5tpWfhh
+      vdeOtjo9fpkfSJqwKSPriPZoOdsi+Ra/pbpTpIkwv9zC9c0WkjSb//rUQ2Ul814s
+      +PP7hzRpxxXqOqxTObZkLfvFgNxwUt5JXfX262whoykiJszCimvzApGaQRwtig2u
+      qXOLbsQN+JiDrkLsl3vPbIaGrFQnb9h/6YDVrilhe0ofvyenKV75ovrwqUnTkQUA
+      /JQkhcK/V+4DnQ==
+      -----END CERTIFICATE-----
+  kind: ConfigMap
+  metadata:
+    annotations:
+      kubernetes.io/description: Contains a CA bundle that can be used to verify the
+        kube-apiserver when using internal endpoints such as the internal service
+        IP or kubernetes.default.svc. No other usage is guaranteed across distributions
+        of Kubernetes clusters.
+    creationTimestamp: "2026-03-09T08:37:01Z"
+    name: kube-root-ca.crt
+    namespace: cigg-app
+    resourceVersion: "777"
+    uid: 2781bf06-da22-4fc1-bfa0-4d2e23749a73
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt4OFdYUGlTdExvWDFGb1htYnU5U0lKNHpiY09BK0FRUWlEYkFSb0c1L29LSlVLU2FhMHRCYXdPTGYvK3hlbERiSFlwcnQ5enB5WStGNjZzWlNWbFptVmV4YjhRWHZBUlhTYmhvNWxYWUlnb0M5b3gxdjZkUHNQZXVtRVVmelZSQUgyVTJUU2JacGp1TnRMcG5ISjNzelpMMjJHYXpPTks0NjkrM0xUYUhIcy8yV2E3UVpEWDlBWS9Nd3FFMkVVWi9EWkh4RU1uU0IyZkk5dTB4TENDRVNJZXE2SWZLYXBKWEF3TXRzVVM2RXc5RVBLaHpBSlEyUzJuNzNuK1A5UXdIU2RLSEo4ajlvZ3cvYjlGZlZNcndGMlRCQ2pLODl5dk5jcng3TkNGRVZYcThSQW9ZZGlGRjA1L2pOTm1jaHprRW5GTnFKQzlDMUJVZHltYkQrS2EvdGZZUjhDL0V4VHdET3BBTVEyOVV4Zmc4QjVwaWtub2dBT0VUQlR5a1JMeDBNbTVYaFVzUmQ1QkJJY1g1ZUlMcXNQQmNTejkrelJGM1FVZ3ppSjZEWWRKUUVLSTJRaWsvNStRVU1iaERFNUdoZkZ3QVF4SUorUEQzQ053aWdYSFhQRlhqRkhBdTFRUTRSZEtzTkdMZjJRZXFoRVFGL1FJSERrQ3NHYXk1NEV1eWZzRlh1YjRZelRnT3dMZ2dBN0VHU292MS9RMkljcnV1MGxHRi9RTVhJRERBalc5cjhyT3F1SDExOXRoQWwzVjNHQUNZMFpQelJxUk9zSEs1anBxc1JDOThiU09OdUczdFF5M0VHc1QvMXY0d2JiNm5ueGwvR3N1OUlWUFREY2hTVzRZcUJ6TU5iVTdtYnNObTFEV1RoQ2oyMHRwOEVYbEhhU2FZNGptUk1jczI3eG5MRjBwYmtTaG15clo1Ry83NzcxOEFpYlF6azFuSzVyS3ErUndHZTRIaDZjMW00Tkw3dEFhV0toTjNvQml1bU5sY0VHOXBvWmZFYmpUTERHYWs2ajBHdk9kT1VWYTZxSXg2c01sN1ZVbVJnMUltdThFbjFOSFRHMTV3K29FY1VDTHlkNmo5RG9QeFN5dURjNE5qYTRHOHZnQjQ2dXZHNTdqci9ld1V0WWQzR2l6enFPeG1GUFQxa2JEanRKQ1NzNG5aakE1cktKV2MyVlU4T1ZHVjJkSkVDNVcyYzB6MzJMMEFTVTVvc3hsRmRIdUVxK25FeDIyVFBRa0IxZEhTVzZLbUdZTmdNamJRV0dKekthMG53cDhZM3hDQnU4YkVOdThhYnM2ZThYSjNUREFIQ0ZQUE15OXlNdTh1S3IxSzFwaWFaMkE5bVZVOGpodGZIaVc0UTdtTGE0eVRRSWdkSmNQVHJkdnE1Mkk2T0JZMTFwTWoyWHhTWS9XR21xWkQ5YXZsV2M3SzB3akw4SVBFNDA3cFhWK1VOTjBsbURmMDAwaGNXQzAwa0l0V05sWkd0Y2pBMTMraUQwdXBHbWpMQXhuTnoybkk0bDlMcEVNcitFRXphNldOdjZCSGRLNkFlS2FNTnRLVTNkTm9ZeWtiYWpLV0pJSkRqMlJoanlyNEhHRGU2TmhweVl1ZVpZd2xBa2tuOHgrVmFhOGR2cldJWXlZRFRPbnV6VDNMRUVmckNCOSs5cmdPN0prY0dYbG5XVGFiSG1EbDRBSnlkNmgrd25ZVVB0UnBvcTRkMStNcU1wa20zeS9kcGVyN2JteWhITWVDeWVmWUxjTWp4RGNhTXJkYjdFdGVGSk5yRlc2TldlOXhqckhLMy9rT2VTZmg3SG1tTGlSNmViZVJ2WkhVU21JbS9IYmtWZkFoVFcxcmxGQWwxNVl6VEVnSndMSXRZd0R6NWNZL0lETC9OU0ZmMGRLMzhuVDRuWFdmQXRvaWZOcy9ZZnlwRXg2SzROSHI5ayswOXJmQXk3YStoSjIvTDhTbGxwWEl2UUVCaXVuQzc0Vm1yZXY2T1BiazNtbU9DYlpwNnRkdGJZOExUYndvTXpCb3R0UTltOGdVdE9US2Q3Si9ETndIQWxiSGhUNjdGM1NMUElFQzlxcXQwcGRGdU9QcS9yRlRrYm16R0gzYUd1VG0vcjhpdjR0VTNldWhWNkxWOVhCcEhKVy90cmV4MEwvaksvaEFiZEJzb3JDMTE1QVlZakREbDdiZkRUVytGKzlYQkFENFl1WHVzREVST1o2OFBKclhEZjMxUjA3K25jYTJDNmNxS3I0bll4SEswMWQzSEFYOWMzaDlKRzRtUm0venl6ZHh0TmxmeEhwN01Hdkd3YlE4ay9JUnZDUzI2VHZhYWlLYThzaVJpVi92ZWFMd2JYWkRRRko3bzZtaHFORVVOMHRGcmYyZDhUS00zQTVMRnQ5Q1ZzOElQbWdwUEoraFh4YmVMVVA1QzVuQUtsdGRxRHFlT3JmeDZPc0taSVJEZTNrTzJtQmpmQ2gveUNvY1RBdm9uTmUvL0UrUTRZY085Ylk4N0dtdkxLZ002eHJBaHY3OW5Xa1gwYzZ1am44Riszb1ZSWHhiV3BqbDUwZFhKQ3I4K3dMUkkzdUJZTFhSSERkTi9HSm5QaFdJYzd2LzMyZnFTMkE3QWZvdlBrQkx0dnFJOFArWDZpSzAxYmMxOXhudkFFTnVTeG9xdWpMVkJheWFQVHRVMVZXa05PdEEwZUp6b0o3MVlWM2dXak1RcVFtNG1ldU1EVlZKVVpveUcrYU1vcmhsWVE2NnBrNi95QTBUS1gwTTFDeDZQVHJTVnRMS0VoMXVyckhMWVNVYy9iaFpPY0JubWhxU05QVjZXWnJtaTdrSDlBTXh4MnQrT0c5bHE4UDUyTzVPOUttcjZndEJzWXJoaVppdlIrWWtrU3NGbU5Sb2VFV1p3c1NGamg4WXVtVHQ0ejJVem1CL0RGVVhkalRiVm5aNlVjcnIzUlpzMTkrTFJRZVo3RjVuQVVhSTFjYmtRTmtkb2xQTTRxbFMzVUhicnkxbWpJcWNiVlhGZVpsdkhpeHF6TW9zdmtjdDkzNGVZUWIwZ0lsMVVwTUhoOHE1SC91WnU5dE1KMDVaU0U1Z09ZRDJWazhvTlU1MlJteW5ibC9iWE5xVTU0VUlqck0zRVpsbitlVHhZYlNpdEZmd05lNTRvY0c0MVI4ME4rclI5SjRLTncvWDdtYnI3MEh3Q0hFLzNldHhhY25Kb3VmdEduWjVudlRpVlZFVU5QRHpSdVVjK2d5eU41MDNQRGNqOTFrbVFpbnIyVlBYOUdocHBIa2wzbXkxaHdPRnFiZk92RjREYTN3a0M2WDFUUjUrT29VNmNkSGtXZFVvMms2Yy9oZWN2Ym04YWw2MWhoVnU1ZlF0OWJPcFlMZ3FzVW5IdkVVNUxZdU5pYks0UE41eFZsa2pOVzJFQnZqR3lUeDJ2RFliZFEyVHpVMUNmVFdPZ09FcDFiV0NOZUR3eGV6bkNNZTUxVkhzQko4ZFM1ZlpyVnhWVEgyZHhDNVpVSEpFcVUzaTZ6TE1rbHo0eXl2SjM3MXJLWGxlYldLQzlBc3FDNjdIV3JBQ3YyZHV2SHN5NDVCdUtGenhINWkyOThJR3pOSlZXZXRhNExmZWEybkQ5TjJCbXVRV0s0TGFad0dic0t3cld4d1RNSjVLdzE0RnRya0FxM1dXYlptTVpBYVc1SjZEWjZyNlFpWXNhcXZDRTRkWDdQaGpNYk56amRuZk00QmlySm1qTmJZblNGM1JqOGdLa3kvcCtvL25UM3RXbHlnK1p4WmJVNGNwdUdnajNvRGhnUzVzZHVYdkVkVm1VYTE0b05aWkRKWEVsSHJqSEVEVTFkT1dvOXd5UHV0bkdVdGNWQ1Q0aE5kUlE5cWUvdEc2dzBWNVNodXlFSzQ1ekdJV0w0d2g3WXUrU01QWG1ycThLYjZ5QS8yTUtHdVlidXRIVVErbGVhMDl4b3FyZzF1VmFhcFdvejRTQ1RaaXpCWVNPREUzT2Q4Q1l0M2NXUnJvcE4ySkN3TWZmWHBhekhEZkhWNkoxY1Q3TGRSRmRFWnVIS0RIUXhobHVHbTV5Q3JReHo0ZlRxMmY1UVh4dERPZFlYN05wVW1zeCtsNkVUMThMdWtiUFlyOWp5OVl1cU90QWpwSm8ybXJVeTJFcCtwSnByU0RiMHBLbkJ2UVphWTNVcjlGdUo1QTRDWXlpbituUzN2K20ySWxOaGNaMm04YXlLYXpGUXpMUUkyVEZzREtJRHZhcWM1bUYxODdPZERKMFg0ajNkVXNWWG8vT08zLy9zU0o1WnZkNFlZYmdKdHBDWFgzS3ZKRWFtS2pLNk9ob3Q3bjFyN3JZUy9ZMStGdkZRUDVFOEU2L0Q2SXJPR2tNUm0xbnZhci92TVo2VjBiZkRpdmVUZEhmYWtnMWRFNXVEb2phK1h6Q1RyZkNPeEdJUW8yV0NJL1RqM2N0NVJlV0FVUG1tRkgrUis1cmsvNEtPSWJFVms1Y0pYVnRkemZ6NFZsZEhIRkJFUEMvMEdQS3RyY21icWE1T2pycWdrK2wvcU5Pb2lpUzJZY0lUNU9TeWZOdkpyc2k1ZEhWRTRscnVWMVptcWlraVhweW81aWZ6emtQZHRzdnV3UnUrb1dZcDUzUWRKZWV0K0pUbGQ4UDkyRE9lZFk4Nk9VZWEzK3VRZEo4NzlEMDFHcWR6Vmx4STdHaXdZRnZ5Z3BGbngxMkpQSjZjcEhjWG00NThmZW5mRnYzV1hPNmJNMGtXbDR2K1lMNWd6YWZGYW5yVTBURXp2TWZ4VytlRnBCYmp6dDVMNmdzL3RJZk9aM3hrY0hzbFhPSC81MHFMTlk2NnJHK2NkMHJzdFpXVmRVZnlQSXhSRGQyR1Rpc0NpckRlMlJDSnRhMHM1eVByU3hxbTNLc05GSFpSNVZCcVZhNGYrSm45R0ZPelRXTExhK2dPdktyTXJYSzJRcThWOFVWWHhlMWNhYTBJZm1FUVdRTE91blVxZERHakwxcUp4aTBjWWJBN2h3cm5Rb3hJdmxINWhJWmtHeTd4dnJ2ejNwWFY4cjRzU1V4V1pSS1hqMlJjNFo4ZnRUZElqbFBKT2k5ejM0cUZ5OUQzNHIvbmNFcFBpU2xYbmFGaUJQaUxBZE9GYmw0ZjZYdmhvaG84Ylk5TmVrZkhmM0pBcFh1anZQNXkzeWdaK0FPNTUyNDhPdHIvVTJUM2hwbDg3UDUvZWMvM3cwWHRySXF3a1o5WmF3dFVhUTI5RlpIbDdZRzU3UGJvTlFOREdYajZqSVFRZURqc3lkL0pYYUtydXhUNTBHM3V6dW5QSGxUVjZUNDV3RGc1YlBuVUlaTjllKzZ3cFM2WGM0WU1lbGwyeUpKUDNDUGdXeEZKeGg5L1lCZ3hlZW44YllaU3lEcDNHRlBYNFhNR2NqZ0JxaFJveW10ZlYxNXRKTmQ1VzV6Qi8xN2FzVCtZVVFhcmJPK0crTGZXbGI5c0lQWDJNS3B1aS9YMTFyTFhUVWljSkxGUnVPK25iM2VacTFCODF2UnB6ODhNdS9iWWxSTk5HVVc2a3V2SWNkeXVKa09CNGNLMStTTHNXbXA4S3dWcWtPa2E4Vk42ZjhDYWZHdXJjWU5JVjRXSHc1S2tUS0ZxTVN2T2FGRDIxOVZhWC9renVTdzZSMWgvS2VQV1lBTmtIVU5QekR2OEpENE9KMW5MTDM4ZkI0WTd2Ulg2RW9tOWE2U3cyUEFLbmYyczNPS0RxZE94ck5uQXdMdWNvZlMxaGpLNCtVRThOaHFjd3BPMWpGNktHQm9MUTZrSitjV3RNTmdOT291eWJhZHJKMUpjcmRGbGp3cit2Y0Z4TlZhUVRSNUhRQTEyYmRCZGk0L1QxWkd0Yy9JK3pNdTc4ZWkvZnZKMGRKWmVJZDkrUVlzc00wQjVEVkRSa2lLbHM4YkoyUVdZWWpSemNFWHV3eFQ5czV0V01acXhWY3VpUGlFdTVmVE8rVmJyWU5yTXpxdzhROGpKa2E2SWpORVFjdGwvVHI3N0NlT21laDVmanRqazdkZzdqcXVsM3A2UmQ5WGxzS2xkSENHNEhrNmZaM2xYOS8zUmgrSEtqTW0xMHV3ODAyYjRPTXl2T082TlFwU21SK3dDYmo2dHBSWVlibFpxYi9kdURIaHlWQ3VyZlZMU0g4c1hKMW1aMzVna2dKVFd0VGlkWFZxcCtaM3Nvc3BlVFRLeHBxdkIvWXlSSDZWN3Y2aWRMR3ZNRFRaZzFuV0JPdHFhdTl3c3J1VVdOdVRyRjQveXZFc3U5SGN4SEdIZHhUZDd0VTg1TVQ2OFFET3N4cTdIZWNxdlg3Q01xOUhrOUkwODhDZy96UFpsRFdXRTRjdDdseWJmMTJVaDdmS0xWZXRSN3VleTFiaE10ckdtdkViMU1WSjFlV2pqSCtSdzlxTHd5VlBveWk1UTZ4Zkx1aFVkUisySmt0LzU4VVdsTWo0WjZ1cXo1ZktoYmRMZmY3K2cxd0FuS0tMYmY5REZhSjk4aEw0WEE4ZEQ0Wk1meG5TN3dURE1CWTI4ZGYzQzkzMzM2L0J4TnFjTEZIU2JEdndvSnZaY3QvWDc3dGVuUjZrTzFieHBjQWNRWW1mU3IwRkF4NHBEUWt4NEFMZVk5YVZ6NEo0NnM1bnlLTjNYYVFOUnRQRkRzdzU1UUJqaHN2NWFmTHp2ZisyTGNoMUw2SnNKek8vRS8zNUIyMEYyVXg5NXdNRElwTnR4bUtBTDJnV3ZFc291ejBkMHUzbEJ1NDYzKzV1OW9HTVFXaWp1UFMwV3NZT2RiVFlBZmtJaFJGNE1MRVMzdnpBbHpBUzVmcGkrQmRiNmZrRTdidmI1RHpwSU1IN3lzUU5UdWswTFM5R1BuMElVSVMrbUwrZ1FCWDdreEg1STNrVzJFeUlVMmV6Tk5YU3N5L0xReVpZVzNhYk4xaTEzeHkyL3NHaDV4ellneHpYQVhlc0dvZFl0UUY5YUhHdzJ2aXdaZEhkSGY4L3dFcTU2ZnVMRkdXY2hpdndraExrNlljZDE0dXdUREJKeTdnemowaGUwbS9GRXQybXVlVHR4Y2pUWnR6RnFvRnh6SDVUbDdnam85d3M2UXVIYUtUWUlhcnBaZkdtaGg1TW9ScUh3bEFHYkJnRWovOVpWcFJKYXBhOXR0a2xmN0RTa3Bpd1hkQlQ3WVE3TjhnNTlRU2NSQ2c5Vmp5N1RraE9tYzhmY01mOFZpbEx4V0dwS2M5a0NqV1dMWFRaWW93R1diSk0xVyt5WHV4YUVrTDB4T05PNE01a2J6Z1IvRzAzSmorS2twaFI1Q0lHMS9TaXVmZTBtLzBvUTJieTZyRUdnU2hWYTRuUUQwdXY4djNhTHZxQmZUQU11UWt5M3MwL3RVc2UrNGZiMWRhVnd4QWRlNytsazlBMFBISnlUSzdOZnZ6cWVFMTlGM3dpZW50VHZ6UHZVdk5NZDl5bGhRSW1QYzZxdkNyUDVqRUplSERvb292NzU3RkVVUlRrbU5ldExRbWRNUFVuQ3BDTnAxRU5mdThqZmZVdUFGenR4U2duaXZNLzNwUXlOdUJpUHFkNnczM3VnL2xrQlBDY00wMEFVODY5aUpaRUE0WnVTTzFKdjJKSCt5VFdiLzZxV0YwQ2VINk9JbXZmVmVmRUFoZ2pFeVB3S1ltb3VUUHF6ZVdmeVJOMzNCNTNGZUU3MUZwTFVGK2RmcXpmRm9pUXdmMkRScy9ldi8vZnNaUWRJWEhZVUFMajNqU21pQmRCR0xpaS91TFRNSmJ5TFlWYzJ3cTVqZVg2SWR1bW5rSGFubWlveHVqcEtZTnBsakxRYjZGeHpEZDJGWlhJMk5weXVZeW80MHJQTHE5ME5DZnVrVElMcHpZT1FkaGVBeDF0aEtMS3dhR2NLUTlIWHMyOGRtWkhCQ1dVN1BEQmNHQW5ERVRaSXVxSHF1RWpsOXQvemcwVHYrQzhDMzhRNmw1ZFBRcy9lNU9tSGpmVmV0d0ZVeVJkNi9XRHNkSjhNOTdVcDhLMUVuMlhwWDhaRDF1cHl1aEZRbW5ocytZazBFSmVMYkdLeUlQUlczMEtTVitKYzRLVUFlcE9Ic1dzR1p1OHUvNS9IbnVHMlVuM3FKNW9YcE9OTi9qOVF6TVJvakhEUGFmcDZTbUJ0ci9ac2E3bzM2NTR6c2FiWjdabFdJdkJaQ3NqQ1hqZTdXZ1UzL3JleEp6Wmd4LzgyZGtjMnlQNlc0dnp2VmdvVStQRGdaVEpWTkhVVUdBMTVLL1J4WDFJbkQyT3ZteHBjZ0xYRzlHSHM0cFd1OU5jOXgwOU1udDFBdC9XdDV6UTV5SWxyblYrczg0blA3OFNFZ2Vjc1VXYmZsNWVYejk0L3FGbm1oZHBVcVRQWFoxMkplL1oyWDZaclUydjIyVnM1bnRtbWVoblVCQVRQWHZsTnZqWlJiS0p0dXoxMlh3N2MyeUw2aHArOWFrbmRCN1NwLzMrWjI4ZjVydUFqZC9Cckx1RnN0M0RTTmZ5MGUvZ1pGMEhXRURmeDhZRWZYRzE5NjVCbmVXQjUvNGdyWENWd0ZDQ1lBWkw0MDZhcThFTWVSUWdqR1B0aDlwNENRWEJLVndxTUJJU0VzeWdIcGk2cElQUmpIL3E0VGMxN1Q2V2NDRWliSXJsUitTUlBGSjVxejg4eWdWOFFSaG50YXN6RGt1MDJKZm9lT21iK0xlNXJWMjVPU0NCamlzVFVVOHpteno5bTlyQzM5RE1zdStrbm5uaEowQThkT1VseVRra2hmMzYrRWV6UHdQZGxBWUlndXQ0SjVMNENQZFB0MVZRWkF3UGg2UDJ6cjhBcmlSYnBaTlNtMkJNcTVJSVkydU02NG5PTXFoUkJpYVRPU09idTloR2VnNUtpS29vemwxZFdCanNzbCtmSXFIRG1KT05zVTZmTHQvYTVaZHNCdnFlcUdHaFQ5VnBnQjFaWHZKeml2UUpuMzhkUUZQTFdlOEE1ZTBXcllQZUNvcktLdXU0alRxd2g5Zm1KTmM5WkMrR1pQcmxHN0V6Nko5YnNjdTJUcXhhenZ2VGpxOG8yd3ltK2lncnllTjJiVEdXQ1BNRlUyWVk0dFV2Vmp0aTlqR0lReGtud0ZQb0dhdGZYMkhFYzhDamVlMFpsdjNMUXBxNXRCSEJzSDd3NmNiNVU5Z01OU1lqbWRvZ2kyOGRtbTJyVlh3Y29kSHh6aHFEdm1jUStxN1cxeE1GWkl3OUYwYWVTU0IzdVFsRWtmWElBdmtjWXBCVkJ6WGVJdmRtOTIzMEtFVENkVHlmM1YrbXMwMWRVMGdkazVFWDF3VU9LZ2tIU3BraUJmZmdpTDZIYlZGWnM3NzhzeSs3VHlFZ0ovaGF5ckJ6L29lRDdaOGFkZWtBOUovRHM0RDgvOHRScCthelFVOGY1SzdGbkg4L2J3YWVFYTUvYkN2cjg2Rk5QZHo3SEIyNVBtV3g5bXpPYzRFbUw1cGkvMGsrZXhjYmZ3VVArYVlUK3Q3bklneTlrSDdqR0pQWWpDTERqV2RkcnJ2U1FRejkwdHNSZzhKTnZkZ29Ra3N5ODV5N3RBRnlDQ3ZaRTlwMjltR2UxaFlTV2xRczk0YWZKaTJOZm5mVUVQazU3YTkzd3d0dlcrdVhGNmJzb0RoMllTLzJ5S0xTazRyVHpqY3F6cnc2bTJEbEk5cXVrMnNIbGFHck45SnJqWGFNUVdLajJyazE5WVg1NDkvenNQNDJBMWc5RjJMOVdmLzRpdmFtSHJQOVZuRTlWbk9NdlBMMmJsYzBLMkJrNk55M2I2KzNzdE9XblU2dURYbEhSa0JFUGVsSkh1ZHhuWldFSDJ4OGtZakVLWGNmTERvQVBBVVJQYitVQjcyUnN4MFZ6a1ovVkJwby9rRVBWRzJlSEZYeTlicDNOZWFrL082cVYzNjJXVDZ3L1ZUVy9VemVmd0hEZi9XRC8vZnhrN2VQRVJSTS84UTdpODZFOEw0dGg3ejUybHl4OHlsT1dOUWl2c1dOYzc2WjYxMFJIeUlKOGx4NEdqanN2YmFkd0wwZXE5TjYyZTlvQ0lFUlJOUEZORkxXcGYxUFB0SVNBcVlST2pCNDlpSjVwNnZjU3NzRFJ3eUNLY2xXUFl1Q1pZQ2ZLVTFuUXliU2xRTldtV1A2c3hLUitpV3ZmTlhnbzN2amh5dkdzcTlWZGRPWDROVDhobEQrTWVKYVBxSDVHY1ZlSkpiZ1NzTzFIOFc1VjhTdU9YcG1BVnN5UnZIUEg2aitvYnFmMzBCZnYyN2x6b2E1QjRGRFpqMlB1REs1SVZVRlF5L2ZJczNubWFaOUN0SFJlZDIvS2J0eWVOSFAzYzVBWWZwRC83THJJUjdueFlSN3BKYTZCd3YydXdqK29nZlFvempQZUlPSHRFbUI4eE5TZndWRzlBWDQyNlhtMlQxL1F0dSt2OXVhejc0L002QXVhNkJMZHBrZStrZDNnaU8zYW91dVBmMnVoTmhDczY2MUJaRmJUMVpGdi9NUkVqOEFCei9QajdLOVM4WjVwRzJIM0tyS3ZDYmZQZE80SExoMHZpZ0hHRjlrZlNXQ0Z3S3pQRU1nNStNdmxtRlFzUlJsMkVLL09MZmZ6cXdwSG9lUGdJa050VU9lN0xpQkMrUGR6Y2R2aG1mNjlGZ1JENjlDcFB0T1hTWWgvTy8vNlE3M3JXU0tJVVBqYnV4QmxwUGl0Q2huSE1PV0lNdm90bS95blVZemNkc0hqZGZRTm4xZ0NmYzlETUpaUU5rMzk3Wlk1aHNrUEdKRVhId2FaVXVvSFk5N1QwYVZHbUZmejJqRUk0N0pOOHVnTjh0YkREaUxmK2ZpZzM5Z1NsalBxdlZNN2QwSk5YOUJvamJ5WVdDbGRWMXhpZmpYVnBYOHZmakE0VExMN01oa1QyZFEyL3lWZzZMdEI5c1BBMVpQQUJoRXhlZnA3ZGl1eC9GMWE5cTI3SGY4VEFBRC8vN0FkeVpmaVdBQUE=
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      modifiedAt: "1773487923"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "1"
+    name: sh.helm.release.v1.cigg-app.v1
+    namespace: cigg-app
+    resourceVersion: "36192"
+    uid: 5c9d9b3c-e903-4a5b-92b8-030dec82ac75
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt4OFdYUGlTdExvWDFGb1htYmkybTFKR0xmRmpmTUFHSVF3eUVhQXR2R0pEcWxVbG1SS1Myc0JpN25udjkrbzBvSlliTlBkUHVjN01mRzlkR01wS3lzeksvY3MrQThkbUQ2a096VHdIT2ZTakNMNmd2YUM1NUR1L0lkKzl1SWsvV2JEQ0lVNXRPa096VEhjelNYVHVtU3ZGK3pYRHNOMW1OWVhqcjM5ZXQzaU9mYi9NTzFPaTZFdmFHUyt0NHBsT3RmdEx5MjJ4YmR1dWNZcUd5S1lFbmp5UndKaUwwcTlNS0E3OURKeVl0T0dGQWo5Q0FQUkYzU1NtbW1XMEIwNnlTSVlKOUNHTnYzSEJRMWNNMDR4NlQ1TVRkdE1UZno1bU1FMWpKTUNOZk9GL2NJY2JkaWxSaEQ1Rk1GR1BZY3hkWjlaTUE1Z0NoUDZnallqVDZrUnJEbnlKTm85WWIrd053Um5ta2Q0WHpPS2tBZE1ndnFQQ3hxRllFVjNnZ3loQ3pxRmZvUk1qTFh6NzVyTyt1SFZOeGNpek4yWE5FS1lSc0lQRFZ2Sit0Nko1b1ltczhDL2RuVE9kVUV3Y3l4L21CcXo4UHVreGZMOUlQMDZtZmRXaG1wRWxyOTBSRitLREE2a3V0YmJUUHkyYTZsTFQreXovUE1zK2dyemJqWXJjR1FMakdQZUs1OHpqcUcyVitLSTVmc08vdnYyZXgrTmtUMVNjc3ZyK2JiNm1vZ0N3WFYvNy9HN05ZTGltMm9iaWYzeGk2bmF3VVFkYmtDL1RlQUpqWFBSbVdnRmpXSy9QVGZVVjZSckVwcXNDQzduV1dOUzJFcWN5VW9LZFczTU5KN2Z3MWFTaW9LU0dYMU1ZM2hmeXVMTzR0alU0cTRkU3hoNmh2cTY3WHZoZWdjdkk4TkhtVEh2ZWpxSEFpTm5YVERxWmhXczZIVlRERnZJSm1WMVg4a3RYMkVNYlpxWjZ1MmEwTHdJSFV5VHFiWmZySkd5T3NKVjhlVVIyWkZuWmt2eERHMmNHWnFNUU42T3JKeVByRUJpZExYOVV1R2JvREd5Qk1VRjNQSk4yZE4vWEp6UURjc0VLeGpZbDRXZCtUQkl2K1IrUTB0MHJSY3B2cElERHEydGw5REIzSUdjNTZhektEYlY5dXJCNncwTXJaZFlMWlFhYXB2cCt5eXloZUZLMTJUM3dRbWQ4bVJ2eEZINlZSUlFwbk92ckNFY2FwTEJXc0pycHFzc0VyMXVocW1kcUdOWDUxSmsrYk43c2Q5TGRIV01yTkgwcHU5MUhiSGZ3NUw1Slp5ZzFVUDZOc1M0YzB5L3FVb3UyRmJTTkZ4cnBHQnBlN29xeFZpQ2syQ01nUEFhNmR6d3ptb3BtVjFvamlPT0pDejVGMXZnYzhKdnYrdFk2cERST1hlNlQzUFhFWVhoQnR5OXJ3RkdvQ1NXVUZuV05kRmkzUisrbUp5U0dWMjhuNHdzclpmb21veDIreW1NcnNxdUxRd2FlNzI2dXE4a2dQQllQdnNFdVJFOEkybGpxRTIrcExVVnlDNjJWaEEwbnZjWjV4eXQvNURuaW40QnBicHFvd2V2Ujd5TjRnOFRXMVcyRTcrbUx6TlYxalc0WlFaOFpXTzFwQWlmQzhUV3NJZytYR01MdzRCNHFacitybE84VTJiWTZ5d0ZIdXRKKzZ6OVIwcGlEWHRyUzBBdlpQOVpnNDlSYncwQ2VWdWRYeVVybmVNeERaSGxLL2xTNEhQNzdoMTk5QnN5UnhqZmpIaTJ4bGtqSzlCdlNnL09XQ3h5TFhYekJpNGxzNzNlclNpMEk4dVhrUlhNbklmK0ljMFNnNzJvcmZWbXdPYzlZOUhVSzN3MkxtT1BlaU5EbTkwMDVWZnk2OXFDY3lQMitkQlFoNGt0T1B0cisxMEgvREsvbUFiRE5kVlhGdmpLMGh5TkVlRGN0U1hNYnNTNzFmMEJQUWo0YUcwTUpZUmxib3ltTitMZFlGUFR2YWR6cjVIdEs1bWhTZHZsYUx6Vy9lVUJmNzNRSHNrYm1WT1kvZk1rN3phNkpvY1BYbmR0Q29wcmplVHdoR3d3TDRWTjl0dXFycjZ5T0dMVSt0OXZ2MWhjbTlGVmxCbmFlR2ExeGd6VzBYcDlkMzlQVTIxSHRvQmNheUFqU3hpMmw1eUMxNit3YjVObTRZSE1sZHhVK2RVZVRCTmY4L05vakhSVnhycTVCV3d2dDdneE91VFhITWtNR05qSXZndFBuTytRTWU5Q1o4SzVTRmRmR2JON0xDdk0yM3UyZFdRZmh6cjZPZnczYlNnM05HbHRhK01YUTV1ZTBPc3piQXZIRFk1bmdTOGhrTy9iMkhRaEh1dHc5N2ZmM28vVWJtVHVoK2dpT1VIK0crb1RBbUdRR1dyYjFmMVhWQ1E4a1FzRXBCcmFlR3VxZlBiZzlWeGJrOWVBazF4TFFKbUJ3N3RUaDNmUmFvMGo2QlBSWXhlNG1ta0tZN1drRjExOVJjQ0pVa09UWFVNWU1qcHhDVDBTT2g2OFhpTnBZekVOcWQ1YzU3RzFpUHJCTHB3VU5DaExYUnNIaGliUERWWGZoZndEbXNHb3Q1MjA5TmZ5L2VsMHBIaFgwZlFWNXIzSThxWEVWdVgzRTB1Y2dNMGJOSG80ektKc2ljT0tnRjUwYmZxZXlSS1pIOENYUjkxTGRjMmRuNVZ5K081R243ZjM0Zk5TNVFVVzJhTnhwTGNLdVdFMWhGb1A4eml2VmJaVWQrQXJXNnVsNURyWGNGMVZXaVpJRzdzMml4NVR5SDNmaGRzanRNRWhYTkhreUJMUWpZNy81NjczMGdyYlYzSWNtZzlnUHBTUkxReHpnMU9ZR2R0VDl0ZTJad2JtUWNXdXowWlZXUDU1UGxsa3FYd08vd2E4TGxRbHRWcmo5b2Y4T2orU3dDZngrdjNNM1g0WjNKc2N5b3k3MEZseVNtNzc2TVdZbldXK081WFVKQVFDSTlLNVpUT0RybzdrVGM4TnF2MjBhVVpFUEg4cmUvNk1ETFdJSkx2TWwzSEFhTHkyQmY3RjRqWTM0bEMrVzliUjUrT28wNlFkSEVXZFNvM2syYy9oZWN2YjI5YWw3emt4S2ZjdlFSZzhlNDV2Umw5eTg5d2pudUhFeGtmQlFoMXVQcThvazcySnlrWkdhK3phQWxwYkhyc0Y2dWErb1Q1RVk0RS96QXh1Nll3Rkk3SUVoZUNZOUx1cklvRGo0cWw3OHpodmlxbUpzNzBGNnF0ZzRpaFJlVHRpV2JLUG4xbFZlYnNJbmVjK0tjMmRjVkdBa0tENjNPL1ZBVmJxNzlaUDVqMThETmdMbnlQeWw5RDZRTmk2ajZzOFo5MFUrdHpudlQ5TjJBVFhNTE44bmlsZHhxNkM4RjFrQ1V3R09HZHRDdnphek1VYmtsbTJacW1wdHJjNGRGdjlWMXdSTVJOTjJXQ2NockJudzhUR0xjN3dGd0pLVFExbnpjU1dHRU5sTjVZd1pPcU0veWVxUDhOL2JkdmNzSDFjV1MyUDNLYWxvZ0Q0UXdhSCtZbGZWSHlIVlpuTzhhbWxEb25NMVh6c1d5UFUwcldWcHpVelBPeHVXMGRaV3lyMnhkVFd4c21qOXQ2KzBVcjNKUVg0RzZ3dzNta2NFZ0l2N0lHOXk5NGtVTGFHSnI2NURnakRMV2paYStEUCtJUFF2OUs5OWtiWHBLM044VGxKMWViaVFTYk5PS0xISmhZbkZUb1JUSG5EUjRtaFNXM1FrcEcxQ05lVnJDY3Q2ZFhxbjF5UHM5M01VQ1ZtNlNzTThCRUNXNGFibm9LdERYUHA5WnZaL3NoWVd5TWxOWmJzMmxiYnpINlhvWnMyd3U2UnM5aXYySXIxeTdvNk1CS28yUzZjOHdTMmxoK3U1bHF5Q3dKNVpuR3ZrZDVhM1lnRFBwUDlZV1NObE55WTdmYTNmVDZ4VlJZMWFack02N2lXbXFxZGx5RTdCYTFoY3FCWHRkTThyRzUrdHBOaENHSzZwMXVhOUdwMTMvSDdueDNKaWRVYnJURUNtMmdMQk9XbDhFcFNZbXNTWTJqajhmSXVkQlkrbnhsdjlMT3doL3FKNUJsN0hjWlFEZFlhU2NnbXZhdjl2c2RrWGtYZkxpdmRUZlBkYWNzdThHMWtEOHZhK0c3SlRMZmlPeEpMelJRK1p5aUJQOTY5WE5SVURqR1ZiMHJ4RjdsdlNQNHY2QmhpVzdFRkJkTzFOVFRpeDdlR051Wk1WVUtMVW8rQndHOXR3YzROYlhyVUJaM08vb2M2alpxRVl4dkNQQUZPcWNxM25lektuTXZReGppdUZYNWxaZWU2S3FIbGlXcCt1dWplTjIyNzZoNjg0UnNhbG5KTzExSDIzb3BQSkw4YjdjZWV5YngzMU1rNTB2eCtGNmY3M0tIdmFkQTRXN0RTVW1iSHd5WExLMHRHbVI5M0pZcDRjcExlWFd3Njh2V1ZmMXNPK0lVeXNPZXlJajB2QjhQRmtyVWZsNnZaVVVmSEpuaVA0N2NoaUZranhwMjlsendRZjJnUFF5QjhFTGk5RXE3MC93dVZaNjJqTHVzYjU1MWplK1ZKV1hja3o4TVkxVEpjNFBHSnFZcnJuUTNoV011VG5BK3ZyMmlZY2ErdXFiTExPb2ZTNm5MOXdNL3N4NWlHYldKYlhnTi9HTlJsYnAyemxYcXRTaStHSm0wWEtyL0MrTVZoNG9pSWRPczA0Q1BHV1BLWnppMDljYmc3aHhyblVrcHd2bEg3aEpic1dqNzJ2cnZ6M3BYVnlyNHNjVXpXRkJ5WGoyUmM0MThjdFRkd2psUEx1aWh6MzRxRnozRVlwSC9QNFpTUlkxT3VPMFBsQ1BBWEE2WVAvS0krTXZiQ1JUMTQyaDZiOUk2Ty84a0JsUkdNaS9yTGY2TmtFQTdrWHJqeDVHai9UNUhkRzJieXNmdi81VDNmRHhlTnN5ckRSbkZtL05iVTVEVUlWbGlXTndmbXN0dWozNDRzZFJnWWN4eEN3T0d3cDNpbjlMQ3U3bExrUTdlNU82Yy9lMURWcFB2a0FPUGtzT1ZUaDB6dXpibkRscVpjemhreUdGWFpvY2doZG8rbXdDYzRHWC80Z1dIRTlLWDd0eGxLUWVmY1lVeFRoODhaeUtITTFPUklWMThIaHZycVFxWEoyL0lNL3ZmU2p2M0JqRHBja2IxYjB0OWFWLzZ5Z2RUYnc2aW1MVGJYTzgvOVhvYmpKSTZONHQwZ2Y3dkxYSWZpczZaUGUzNW0xSE1udnBMcDZqZ3gxRUpIanVOMlBSbUtMQitzN1JkeDExSVQrTnpVSXFKcjJFOFpneUZyQy94VzU0YUpvWW4zaHlWSmxVSTFZbFpLYUZEMzF6VmFYOFV6cFNvNng4aDRxZUxXY0dNcUJnS0JWSFQ0Y1h3Y1RVbkxyM2lmUnBZL3V4RUhNbzY5YTZpeXlBcEtuZjJzM09LRHFkT3hyTm5JUXJ1Y29mSzFsanE4L2tFOExoeWV3a05hUmk5bERFM0ZrZHdHd3ZKR0hPNEduV1hadHRPMUV5bXUzdXF4UndYLzN1QzRIaXNvdG9BU1U0dDJiZEJkaTQ4enRMRnJjTW8rek11NzhlaS9mdkowZEpaQktkOUJTWXVpTUtiNkdzR3lKWVZMWjUxVHlBV1ljalJ6Y0VYdXd4VDlzNXRXS1p5emRjdWlPU0d1NVBUTytkYnJRTjRtWjFhZEllQ1V4RkFseG1xSmhldy9KOS85aEhGVE00K3ZSbXpLZGhJY3g5VktiOC9JdTVweTJEUXVqbUJjOTZmUDB3dWNHQ2JKQjZNUHkxY1ltK056Y3A1NU8zNFlGVmNjOTBZaGFqdkFkZ0UybjlaU2l5eWZsTnJidlJzRGdaSTB5dW9RbC9USDhrVVpLZk5iMDh6RXBYVWpUcE5MS3cyL1F5NnE3TlVrVTJlMkd0N05HZVZCdmd2TDJzbHhKdHh3WTg1N3ZxbU50L1l1TjBzYnVZVUxoT2JGb3lMdlVrcjlYWTdHeVBEUjlWN3RVMDJNRHkvUWpPcXg2M0dlOHVzWExOTjZORGw3SXc4OHlnL0p2cXlsamhGNGVlL1M1UHU2TE9ZOVlibmlINVJCSVZ1ZEk3Sk5kZlUxYVk2UjZzdERtL0FnaDNPWHBVK2VBVi94VGExNXNheFgwM0hVbnFqNFhSeGZWS3JpazZXdFBsc3VIOW9tL2NmdkYvVGFSQmxNNk01LzZISzBqeitDTUVoTkw0RHhZeGluZEtmRk1Nd0ZEWU4xODhMM1hlL2I2R0crb0VzVWRJZU93aVRGOXR5MDlidmV0OGNIdVFuVnZtNXhCeEJTZHpwb1FBRFBTV05NVEh3QXQ1d1A1SFBnSHJ2enVmb2czelZwTTVOa0U4WjJFL0tBTU14bDg3WDBjRGY0TnBDVUpwWTR0RE5RM0luLy9ZSjJJM0pUSHdhbWhhQk5kOUk0Z3hlMGI3N0trRnllVCtoTys0TDJ2V0QzTjN0QnAyYnN3TFQvdUZ5bUh2SzJaQUQ4Q0dNQWc5UjBJTjM1eWxRd1UraUhjZjRXR1AvSEJlMzU1UE4vNkNoRDZERkVIc2pwRGkwK1MySDZHTU1FQmlsOVFjY3dDaE12RFdQOExuRzlHTUxFWmErdmdPZGNWb2VPdDNUb0RtM3pOOXd0OS95VmhjKzNiQXR3WE11ODVhOGg1RzlNK0pYblFMdjE5Wm1CdDdmMEh3UXY1cW9mWmtGS09JdGhFbVl4S05RSmViNlhrazhneXZDNU00eFBYOUErNFludTBGejdadW9WYUw1bk1HbUNjdTE5VUphN3hhQi9YTkFKak5kZXVVSFUwTTN5U3d0OWxDVXBqTVZIQW14YkdBei8yMVNWV21pMXZuYllObjJ4MDVDR3NselFTUnJHQlRRcmVQUUZuU1V3UGxROXVrcExUcGpPTFhQTC9GY29TczFqcFNudFo5NXNQZlBzYzR1MVd1WXoyMlp0bnYxNnl3TUEyR3VMczYxYm03bm1iUE52b3luRlVaelVsRElQd2JCdW1LU05yOTE4UVNFd0VkNjh2cXlCb1NvVmVrYjV4c3l2aXY4NlBIMUJ2OWdXV01hSTdwQlBuVXJIdnFQTzFWV3RjTmdIWHUzcFpQSWREVDFVa0t1dzM3NTVnWmQrU2I1alBIMTUwRjBNcUVXM054bFE0cENTSGhiVVFCUG5pemtGZ3pUMllFTDk4eW1nS0lyeWJHbytrTVh1aEhxVXhXbFgxcW43Z1g1UnZQdWVtVUhxcFRrbFNvdUJNSkFKR21rNW1WRDkwYUIvVC8yekJuaktHS1lGS2VaZjVVb3NBY3czcFhUbC9xZ3IvNU5ydC85Vkx5K0JnakNGQ2JVWWFJdnlBWWlobVVMN201bFNDM0U2bUMrNjAwZnFiakRzTGljTHFyK1U1WUcwK0ZhL0tSZGxrZjBEaTU2Q2YvM2ZwNEFjSUhiWlNXU0N2VzlNWVMwQUx2VE42b3RMejRXRWR6SHNpd3VSN3psQkdNTmQraW5tdlptdXlZeWhqVE9ROXhncjcwVUcxMTREZituWW5Jc3NyK2ZaS2tvTWNubTF0OEZoSDVkSklMKytGL1BlMGhUUVZoeEpMQ2pibWVKSUNnM3lyU003c1RpeGFvZEhsZzhTY1RSR0ZrNDNOQU9WcWR6K2UyR1lHZDN3UlJUYXlPQ0s4a25zdTVzaS9YQ1IwZSsxVEUwT3hmNGdtbmk5Ujh0L2JZc0NueGx6a3Y0UkhraXJ5K3NscHRwR0V5Zk01S0gwdkNRVGt5V210LzRXa3JLU0ZxSWdSeUNZM2s5OE83TDd0OFgvQWdvc244K05XWmpwUVpSUE5zWC9wbXBuVm11TStsNDdOSElNNndhTloxdmJ2MTczdmFrekk3ZG4rRXdVU0FySWduNlBYSzBDbS9EN0pKQmFvQnQrbi9oajF5Ui95Mm54TjUrYktyaS9ENGhNVlYwYlIxWkwyWW9ETkpDMTZmMGs2T1VXRnlHOU5idWYrR2hscUlOMTN3c3pXMkEzd09lLzk3MDJCemhwYlFqTGRUSHgrUjJic0JsNHo1RFk5K1hsNVZQd0QycE92RkNIcW5UbTZxd3JjVS9CN3N0MEhXck5QZ1VyTDdBN1ZKOUFUYzNvS2FpK3lkZkJpbzIxYmJmSFpmMWhiNHZrTzNvSzZpVk5IOUNoL3Q5bFlSL251NEtQM01HdnVZU3ozY0pKMS9EVDd1Rm5YQVJlZzkzRXh3ZCtjTFgxclVPZUY0SGwvU091Y1ZYQVNRUUJBY1R4cDBQVjRRYy9TaUNDSUExajhwNHlvK2lVcnBRWU1RZ09aMGtCVEYxU1VSeW1JUWhSaDFyMEh5czVZWkFPaFhPajZrbVJLRHcybnA5bEFyOGdqQ3JhTlpnSEZkc2RTZ29EZU16OFc5dzNydHlja0FCaENzZlVVOHdXeno5bTlyQzM5RE1zKy9rbm5uaEYwQThkT1U1eVRrbWhlSDYrRWV6UHdQZGxZVVpSY3JVVHlGME5lcWJiYTZneU1pMklrdmZQdmdhdkpWcW1rMG1IWWsrb2tHK213SjAwRVo5alZKVUlLaVJOUm9pNzIwZDREa3FLcWlrbUxxK3FESFpZTHMrUlVlbk1jY2Jab1U2WGI1MXp5N1lEZkk5MU1kQ2htclhBRHF5cGVBWEZld1hPdm8raEtCaXM5NEFMOXNwV3dlNEZSWkdLdXVralRxekI5Zm1KTlUra2hmQkVuMXdqZGFlREUydDJ1ZmJKVmN2NVFQN3hWVldiNFJSZlpRVjV2TzVOcG9nZ1R6QlZ0U0ZPN1ZLM0kzWXZrOVNNMHl4NmpFTUxkcHByM0RTTkJKanVQYU9veUV6ZERuWGxRaE9sN3NHckUrZExVYyttaDdJWUx0d1lKbTZJN0E3Rk4xOUhNUFpDZXc1QkdOallQdXUxamNUQlc4TUFKc21ua2tnZDdrSlJPSDN5VEhRSGtablhCTFhmSWZaNjkyNzNLWWFtN1gwNnViOUtaNU8rc3BJK0lLTW9xZzhlVWhTSXNnNkZDK3pERjBVSjNhRklzYjMvc2lxN1R5UERKZmhieUVnNS9rUEI5OCtNTzgyQWVrN2cyY0YvZnVScDB2SlpvYWVKODFkaXp6NmV0NE5QQmRjNXR4WDArZEdubWU1OGpnL2NuakxaNWpabk9NR1RGczB4ZjZXZlBJdU52NE9IL05NSS9XOXprUWRmeUQ1d2pWa2FKc0JFWHVCY3JibktRNDdDMk50aWcwR1BvZDB0UVhBeTg1NjdkQ1B6MHF4aFQyVGY1TVdDMUJZeWZLNWQ2QWsvalY4YysyclNFL2c0N1cxMHcwdHYyK2lYbDZmdnd6VDJRQ0gxeTdMUWtzdlRMamFxenI0K21ITG5LTnV2a2hvSFY2QnBOTk1iam5jTlk5T0JqWGNkNml2enc3c1haLzlwQlBBL0ZHSC9XdjM1aS9TbUdiTCtWM0UrVlhHT3YvRDBibFkyTDJIbjhOeTBiSyszczlPV24wNnREbnBGWlVOR091aEpIZVZ5bjVXRkhXeC9rSWlsTVBhOWdCeUFFSnNBUHI2VkI3eVRzUjBYeldWKzFoaG8va0FPMVd5Y0hWYnd6YnAxdmhEa3dmeW9WbjYzV2o2eC9sVFYvRTdkZkFMRFhlK0QvZmZ6azNXSU1oOU93eXc0aU0rSDhyd3NoNzM3MkgyODhMRklXZFptZklVODYybzMxYnZDT29JWEZMdjBrZW41aThwMlN2ZHlwRXJ2YmJ1bkxTWUFNRW1tb1EyVER2VnY2b21Xb1dtcnNaZkNod0RBSjVyNnZZSXNjZlNSbVNTRnFpZXBHZGptVHBTbnNxQ1RhVXVKcWtPeHdsbUpTZk1TMTc1ckNHQzZDZU9WRnpoZlZyZkpGeTlzK0FteFdIV21qL0FxNkYwbGxxRmF3RzZZcEx0VnhjaTI0QWdub0RWek9PL2NzZm9QcXRmdDN3K2t1MDdoWEtnck0vSW84dU9STzRNclUxVXphdVI3K05tQ2VOckhHRDU3cjdzM1ZUZHVUNXFGK3psSUREL0lmM1pkNUtQYytEQ1BERExmZ3ZGK1YrRWYxRkIra0JhRU40QjV1elFST21McXorQ28yUUEvbS9RaTI2Y3ZhRGNNVjN2ejJmZEhadlFGalhXSjd0RGowQ0kzT0ZLM3NlanE0OTlhYUF3RW0zcHJZWmsxZEhVY1dqOHgwY053WmhDRUtmbXJVcnduMm9YSS81SzRWNWpiSjdyd0E1ZGVrS1FtUWhma2o2ejQ1ZENHdHVOekNKK2ZKN2hpS2N1d2czaDFicmxmWEZVNENoMEhGeGthZzdyUTkwMHNoSDgvbGJjZG51amZHMEV3ZGc2ZDZoTjltY1hvdC9PdlB6UzduaFdDQk1hL3ZRdFJSWXJmNnBCeERGT05LSlBmeU9RL1QxTG9kMG9lcjVMdjZNUVNFQVlCQktrTXlUVDF0eHZtR0tZNFlJaGZmQmhrS3FrZmpIbFBSNWNHWVVIRGE2ZG1uRlp0a29kZ1dMUWVkaERGenNjSC9jYVdvSnBSNzUzYXVSTnErb0tHYXhpazJFcnBwdUppODJ1b0x2MTcrWU82Y1VidXl4QW15TlQyalYvV3ZXbXpMTU8zMmpmMUwrdFdQNXY3NWlMK3kxZis2MWVXYjM5dDE0c2kxMHl3NDVobkFNRHE1M1dMMytqOUZtRVpldVFDQ0czQjV6Q0dsOWdFTDhrb0dydVQzOGw5eU9vWGNibTNicFg4L3dBQUFQLy9jaFMvdkh4WUFBQT0=
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-14T11:40:45Z"
+    labels:
+      modifiedAt: "1773487923"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "2"
+    name: sh.helm.release.v1.cigg-app.v2
+    namespace: cigg-app
+    resourceVersion: "43881"
+    uid: 2d73e836-7de9-4886-ac9d-3c614579bccc
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt4OFdYUGlTdExvWDFGb1htYmkybTFKR0xmRmpmTUFHSVF3eUVhQXR2R0pEcWxVbG1SS1Myc0JpN25udjkrbzBvSlliTlBkUHVjN01mRzlkR01wS3lzeksvY3MrQThkbUQ2a096VHdIT2ZTakNMNmd2YUM1NUR1L0lkKzl1SWsvV2JEQ0lVNXRPa096VEhjelNYVHVtU3ZGK3pYRHNOMW1OWVhqcjM5ZXQzaU9mYi9NTzFPaTZFdmFHUytzZXBtd2JZN0hOUGhtQy90YTQ2OStjcXkxL1VxR3lLWUVuanlSd0ppTDBxOU1LQTc5REp5WXRPR0ZBajlDQVBSRjNTU21tbVcwQjA2eVNJWUo5Q0dOdjNIQlExY00wNHg2VDVNVGR0TVRmejVtTUUxakpNQ05mT0YvY0ljYmRpbFJoRDVGTUZHUFljeGRaOVpNQTVnQ2hQNmdqWWpUNmtSckRueUpObzlZYit3TndSbm1rZDRYek9La0FkTWd2cVBDeHFGWUVWM2dneWhDenFGZm9STWpMWHo3NXJPK3VIVk54Y2l6TjJYTkVLWVJzSVBEVnZKK3Q2SjVvWW1zOEMvZG5UT2RVRXdjeXgvbUJxejhQdWt4Zkw5SVAwNm1mZFdobXBFbHI5MFJGK0tEQTZrdXRiYlRQeTJhNmxMVCt5ei9QTXMrZ3J6YmpZcmNHUUxqR1BlSzU4empxRzJWK0tJNWZzTy92djJleCtOa1QxU2NzdnIrYmI2bW9nQ3dYVi83L0c3TllMaW0yb2JpZjN4aTZuYXdVUWRia0MvVGVBSmpYUFJtV2dGaldLL1BUZlVWNlJyRXBxc0NDN25XV05TMkVxY3lVb0tkVzNNTko3ZncxYVNpb0tTR1gxTVkzaGZ5dUxPNHRqVTRxNGRTeGg2aHZxNjdYdmhlZ2N2SThOSG1USHZlanFIQWlOblhURHFaaFdzNkhWVERGdklKbVYxWDhrdFgyRU1iWnFaNnUyYTBMd0lIVXlUcWJaZnJKR3lPc0pWOGVVUjJaRm5aa3Z4REcyY0dacU1RTjZPckp5UHJFQmlkTFg5VXVHYm9ER3lCTVVGM1BKTjJkTi9YSnpRRGNzRUt4allsNFdkK1RCSXYrUitRMHQwclJjcHZwSUREcTJ0bDlEQjNJR2M1NmF6S0RiVjl1ckI2dzBNclpkWUxaUWFhcHZwK3l5eWhlRksxMlQzd1FtZDhtUnZ4Rkg2VlJSUXBuT3ZyQ0VjYXBMQldzSnJwcXNzRXIxdWhxbWRxR05YNTFKaytiTjdzZDlMZEhXTXJOSDBwdTkxSGJIZnc1TDVKWnlnMVVQNk5zUzRjMHkvcVVvdTJGYlNORnhycEdCcGU3b3F4VmlDazJDTWdQQWE2ZHp3em1vcG1WMW9qaU9PSkN6NUYxdmdjOEp2dit0WTZwRFJPWGU2VDNQWEVZWGhCdHk5cndGR29DU1dVRm5XTmRGaTNSKyttSnlTR1YyOG40d3NyWmZvbW94Mit5bU1yc3F1TFF3YWU3MjZ1cThrZ1BCWVB2c0V1UkU4STJsanFFMitwTFVWeUM2MlZoQTBudmNaNXh5dC81RG5pbjRCcGJwcW93ZXZSN3lONGc4VFcxVzJFNyttTHpOVjFqVzRaUVo4WldPMXBBaWZDOFRXc0lnK1hHTUx3NEI0cVpyK3JsTzhVMmJZNnl3Rkh1dEorNno5UjBwaURYdHJTMEF2WlA5Wmc0OVJidzBDZVZ1ZFh5VXJuZU14RFpIbEsvbFM0SFA3N2gxOTlCc3lSeGpmakhpMnhsa2pLOUJ2U2cvT1dDeHlMWFh6Qmk0bHM3M2VyU2kwSTh1WGtSWE1uSWYrSWMwU2c3Mm9yZlZtd09jOVk5SFVLM3cyTG1PUGVpTkRtOTAwNVZmeTY5cUNjeVAyK2RCUWg0a3RPUHRyKzEwSC9ESy9tQWJETmRWWEZ2akswaHlORWVEY3RTWE1ic1M3MWYwQlBRajRhRzBNSllSbGJveW1OK0xkWUZQVHZhZHpyNUh0SzVtaFNkdmxhTHpXL2VVQmY3M1FIc2tibVZPWS9mTWs3emE2Sm9jUFhuZHRDb3ByamVUd2hHd3dMNFZOOXR1cXJyNnlPR0xVK3Q5dnYxaGNtOUZWbEJuYWVHYTF4Z3pXMFhwOWQzOVBVMjFIdG9CY2F5QWpTeGkybDV5QzE2K3diNU5tNFlITWxkeFUrZFVlVEJOZjgvTm9qSFJWeHJxNUJXd3Z0N2d4T3VUWEhNa01HTmpJdmd0UG5PK1FNZTlDWjhLNVNGZGZHYk43TEN2TTIzdTJkV1FmaHpyNk9mdzNiU2czTkdsdGErTVhRNXVlME9zemJBdkhEWTVuZ1M4aGtPL2IySFFoSHV0dzk3ZmYzby9VYm1UdWgrZ2lPVUgrRytvVEFtR1FHV3JiMWYxWFZDUThrUXNFcEJyYWVHdXFmUGJnOVZ4Yms5ZUFrMXhMUUptQnc3dFRoM2ZSYW8wajZCUFJZeGU0bW1rS1k3V2tGMTE5UmNDSlVrT1RYVU1ZTWpweENUMFNPaDY4WGlOcFl6RU5xZDVjNTdHMWlQckJMcHdVTkNoTFhSc0hoaWJQRFZYZmhmd0Rtc0dvdDUyMDlOZnkvZWwwcEhoWDBmUVY1cjNJOHFYRVZ1WDNFMHVjZ00wYk5IbzR6S0pzaWNPS2dGNTBiZnFleVJLWkg4Q1hSOTFMZGMyZG41VnkrTzVHbjdmMzRmTlM1UVVXMmFOeHBMY0t1V0UxaEZvUDh6aXZWYlpVZCtBclc2dWw1RHJYY0YxVldpWklHN3MyaXg1VHlIM2ZoZHNqdE1FaFhOSGt5QkxRalk3LzU2NzMwZ3JiVjNJY21nOWdQcFNSTFF4emcxT1lHZHRUOXRlMlp3Ym1RY1d1ejBaVldQNTVQbGxrcVh3Ty93YThMbFFsdFZyajlvZjhPaitTd0NmeCt2M00zWDRaM0pzY3lveTcwRmx5U203NzZNV1luV1crTzVYVUpBUUNJOUs1WlRPRHJvN2tUYzhOcXYyMGFVWkVQSDhyZS82TURMV0lKTHZNbDNIQWFMeTJCZjdGNGpZMzRsQytXOWJSNStPbzA2UWRIRVdkU28zazJjL2hlY3ZiMjlhbDd6a3hLZmN2UVJnOGU0NXZSbDl5ODl3am51SEV4a2ZCUWgxdVBxOG9rNzJKeWtaR2EremFBbHBiSHJzRjZ1YStvVDVFWTRFL3pBeHU2WXdGSTdJRWhlQ1k5THVySW9EajRxbDc4emh2aXFtSnM3MEY2cXRnNGloUmVUdGlXYktQbjFsVmVic0luZWMrS2MyZGNWR0FrS0Q2M08vVkFWYnE3OVpQNWoxOEROZ0xueVB5bDlENlFOaTZqNnM4WjkwVSt0em52VDlOMkFUWE1MTjhuaWxkeHE2QzhGMWtDVXdHT0dkdEN2emF6TVVia2xtMlpxbXB0cmM0ZEZ2OVYxd1JNUk5OMldDY2hyQm53OFRHTGM3d0Z3SktUUTFuemNTV0dFTmxONVl3Wk9xTS95ZXFQOE4vYmR2Y3NIMWNXUzJQM0thbG9nRDRRd2FIK1lsZlZIeUhWWm5POGFtbERvbk0xWHpzV3lQVTByV1ZwelV6UE94dVcwZFpXeXIyeGRUV3hzbWo5dDYrMFVyM0pRWDRHNnd3M21rY0VnSXY3SUc5eTk0a1VMYUdKcjY1RGdqRExXalphK0RQK0lQUXY5Szk5a2JYcEszTjhUbEoxZWJpUVNiTk9LTEhKaFluRlRvUlRIbkRSNG1oU1czUWtwRzFDTmVWckNjdDZkWHFuMXlQczkzTVVDVm02U3NNOEJFQ1c0YWJub0t0RFhQcDladlovc2hZV3lNbE5aYnMybGJiekg2WG9aczJ3dTZSczlpdjJJcjF5N282TUJLbzJTNmM4d1MybGgrdTVscXlDd0o1Wm5HdmtkNWEzWWdEUHBQOVlXU05sTnlZN2ZhM2ZUNnhWUlkxYVpyTTY3aVdtcXFkbHlFN0JhMWhjcUJYdGRNOHJHNSt0cE5oQ0dLNnAxdWE5R3AxMy9IN254M0ppZFViclRFQ20yZ0xCT1dsOEVwU1ltc1NZMmpqOGZJdWRCWStueGx2OUxPd2gvcUo1Qmw3SGNaUURkWWFTY2dtdmF2OXZzZGtYa1hmTGl2ZFRmUGRhY3N1OEcxa0Q4dmErRzdKVExmaU94Skx6UlErWnlpQlA5NjlYTlJVRGpHVmIwcnhGN2x2U1A0djZCaGlXN0VGQmRPMU5UVGl4N2VHTnVaTVZVS0xVbytCd0c5dHdjNE5iWHJVQlozTy9vYzZqWnFFWXh2Q1BBRk9xY3EzbmV6S25NdlF4aml1Rlg1bFplZTZLcUhsaVdwK3V1amVOMjI3Nmg2ODRSc2FsbkpPMTFIMjNvcFBKTDhiN2NlZXlieDMxTWs1MHZ4K0Y2ZjczS0h2YWRBNFc3RFNVbWJId3lYTEswdEdtUjkzSllwNGNwTGVYV3c2OHZXVmYxc08rSVV5c09leUlqMHZCOFBGa3JVZmw2dlpVVWZISm5pUDQ3Y2hpRmtqeHAyOWx6d1FmMmdQUXlCOEVMaTlFcTcwL3d1Vlo2MmpMdXNiNTUxamUrVkpXWGNrejhNWTFUSmM0UEdKcVlycm5RM2hXTXVUbkErdnIyaVljYSt1cWJMTE9vZlM2bkw5d00vc3g1aUdiV0piWGdOL0dOUmxicDJ6bFhxdFNpK0dKbTBYS3IvQytNVmg0b2lJZE9zMDRDUEdXUEtaemkwOWNiZzdoeHJuVWtwd3ZsSDdoSmJzV2o3MnZydnozcFhWeXI0c2NVeldGQnlYajJSYzQxOGN0VGR3amxQTHVpaHozNHFGejNFWXBIL1A0WlNSWTFPdU8wUGxDUEFYQTZZUC9LSStNdmJDUlQxNDJoNmI5STZPLzhrQmxSR01pL3JMZjZOa0VBN2tYcmp4NUdqL1Q1SGRHMmJ5c2Z2LzVUM2ZEeGVOc3lyRFJuRm0vTmJVNURVSVZsaVdOd2Ztc3R1ajM0NHNkUmdZY3h4Q3dPR3dwM2luOUxDdTdsTGtRN2U1TzZjL2UxRFZwUHZrQU9Qa3NPVlRoMHp1emJuRGxxWmN6aGt5R0ZYWm9jZ2hkbyttd0NjNEdYLzRnV0hFOUtYN3R4bEtRZWZjWVV4VGg4OFp5S0hNMU9SSVYxOEhodnJxUXFYSjIvSU0vdmZTanYzQmpEcGNrYjFiMHQ5YVYvNnlnZFRidzZpbUxUYlhPOC85WG9iakpJNk40dDBnZjd2TFhJZmlzNlpQZTM1bTFITW52cExwNmpneDFFSkhqdU4yUFJtS0xCK3M3UmR4MTFJVCtOelVJcUpyMkU4Wmd5RnJDL3hXNTRhSm9ZbjNoeVZKbFVJMVlsWkthRkQzMXpWYVg4VXpwU282eDhoNHFlTFdjR01xQmdLQlZIVDRjWHdjVFVuTHIzaWZScFkvdXhFSE1vNjlhNml5eUFwS25mMnMzT0tEcWRPeHJObklRcnVjb2ZLMWxqcTgva0U4TGh5ZXdrTmFSaTlsREUzRmtkd0d3dkpHSE80R25XWFp0dE8xRXltdTN1cXhSd1gvM3VDNEhpc290b0FTVTR0MmJkQmRpNDh6dExGcmNNbyt6TXU3OGVpL2Z2SjBkSlpCS2Q5QlNZdWlNS2I2R3NHeUpZVkxaNTFUeUFXWWNqUnpjRVh1d3hUOXM1dFdLWnl6ZGN1aU9TR3U1UFRPK2RiclFONG1aMWFkSWVDVXhGQWx4bXFKaGV3L0o5LzloSEZUTTQrdlJtektkaEljeDlWS2I4L0l1NXB5MkRRdWptQmM5NmZQMHd1Y0dDYkpCNk1QeTFjWW0rTnpjcDU1TzM0WUZWY2M5MFloYWp2QWRnRTJuOVpTaXl5ZmxOcmJ2UnNEZ1pJMHl1b1FsL1RIOGtVWktmTmIwOHpFcFhValRwTkxLdzIvUXk2cTdOVWtVMmUyR3Q3TkdlVkJ2Z3ZMMnNseEp0eHdZODU3dnFtTnQvWXVOMHNidVlVTGhPYkZveUx2VWtyOVhZN0d5UERSOVY3dFUwMk1EeS9Rak9xeDYzR2U4dXNYTE5ONk5EbDdJdzg4eWcvSnZxeWxqaEY0ZWUvUzVQdTZMT1k5WWJuaUg1UkJJVnVkSTdKTmRmVTFhWTZSNnN0RG0vQWdoM09YcFUrZUFWL3hUYTE1c2F4WDAzSFVucWo0WFJ4ZlZLcmlrNld0UGxzdUg5b20vY2Z2Ri9UYVJCbE02TTUvNkhLMGp6K0NNRWhOTDREeFl4aW5kS2ZGTU13RkRZTjE4OEwzWGUvYjZHRytvRXNVZEllT3dpVEY5dHkwOWJ2ZXQ4Y0h1UW5Wdm01eEJ4QlNkenBvUUFEUFNXTk1USHdBdDV3UDVIUGdIcnZ6dWZvZzN6VnBNNU5rRThaMkUvS0FNTXhsODdYMGNEZjROcENVSnBZNHRETlEzSW4vL1lKMkkzSlRId2FtaGFCTmQ5STRneGUwYjc3S2tGeWVUK2hPKzRMMnZXRDNOM3RCcDJic3dMVC91RnltSHZLMlpBRDhDR01BZzlSMElOMzV5bFF3VStpSGNmNFdHUC9IQmUzNTVQTi82Q2hENkRGRUhzanBEaTArUzJINkdNTUVCaWw5UWNjd0NoTXZEV1A4TG5HOUdNTEVaYSt2Z09kY1ZvZU90M1RvRG0zek45d3Q5L3lWaGMrM2JBdHdYTXU4NWE4aDVHOU0rSlhuUUx2MTlabUJ0N2YwSHdRdjVxb2Zaa0ZLT0l0aEVtWXhLTlFKZWI2WGtrOGd5dkM1TTR4UFg5QSs0WW51MEZ6N1p1b1ZhTDVuTUdtQ2N1MTlVSmE3eGFCL1hOQUpqTmRldVVIVTBNM3lTd3Q5bENVcGpNVkhBbXhiR0F6LzIxU1ZXbWkxdm5iWU5uMngwNUNHc2x6UVNSckdCVFFyZVBRRm5TVXdQbFE5dWtwTFRwak9MWFBML0Zjb1NzMWpwU250Wjk1c1BmUHNjNHUxV3VZejIyWnRudjE2eXdNQTJHdUxzNjFibTdubWJQTnZveW5GVVp6VWxESVB3YkJ1bUtTTnI5MThRU0V3RWQ2OHZxeUJvU29WZWtiNXhzeXZpdjg2UEgxQnY5Z1dXTWFJN3BCUG5Vckh2cVBPMVZXdGNOZ0hYdTNwWlBJZERUMVVrS3V3Mzc1NWdaZCtTYjVqUEgxNTBGME1xRVczTnhsUTRwQ1NIaGJVUUJQbml6a0ZnelQyWUVMOTh5bWdLSXJ5YkdvK2tNWHVoSHFVeFdsWDFxbjdnWDVSdlB1ZW1VSHFwVGtsU291Qk1KQUpHbWs1bVZEOTBhQi9ULzJ6Qm5qS0dLWUZLZVpmNVVvc0FjdzNwWFRsL3Fnci81TnJ0LzlWTHkrQmdqQ0ZDYlVZYUl2eUFZaWhtVUw3bTVsU0MzRTZtQys2MDBmcWJqRHNMaWNMcXIrVTVZRzArRmEvS1JkbGtmMERpNTZDZi8zZnA0QWNJSGJaU1dTQ3ZXOU1ZUzBBTHZUTjZvdEx6NFdFZHpIc2l3dVI3emxCR01OZCtpbm12Wm11eVl5aGpUT1E5eGdyNzBVRzExNERmK25Zbklzc3IrZlpLa29NY25tMXQ4RmhINWRKSUwrK0YvUGUwaFRRVmh4SkxDamJtZUpJQ2czeXJTTTdzVGl4YW9kSGxnOFNjVFJHRms0M05BT1ZxZHorZTJHWUdkM3dSUlRheU9DSzhrbnN1NXNpL1hDUjBlKzFURTBPeGY0Z21uaTlSOHQvYllzQ254bHprdjRSSGtpcnkrc2xwdHBHRXlmTTVLSDB2Q1FUa3lXbXQvNFdrcktTRnFJZ1J5Q1kzazk4TzdMN3Q4WC9BZ29zbjgrTldaanBRWlJQTnNYL3BtcG5WbXVNK2w0N05ISU02d2FOWjF2YnYxNzN2YWt6STdkbitFd1VTQXJJZ242UFhLMENtL0Q3SkpCYW9CdCtuL2hqMXlSL3kybnhONStiS3JpL0Q0aE1WVjBiUjFaTDJZb0ROSkMxNmYwazZPVVdGeUc5TmJ1ZitHaGxxSU4xM3dzelcyQTN3T2UvOTcwMkJ6aHBiUWpMZFRIeCtSMmJzQmw0ejVEWTkrWGw1VlB3RDJwT3ZGQ0hxblRtNnF3cmNVL0I3c3QwSFdyTlBnVXJMN0E3Vko5QVRjM29LYWkreWRmQmlvMjFiYmZIWmYxaGI0dmtPM29LNmlWTkg5Q2gvdDlsWVIvbnU0S1AzTUd2dVlTejNjSkoxL0RUN3VGblhBUmVnOTNFeHdkK2NMWDFyVU9lRjRIbC9TT3VjVlhBU1FRQkFjVHhwMFBWNFFjL1NpQ0NJQTFqOHA0eW8raVVycFFZTVFnT1owa0JURjFTVVJ5bUlRaFJoMXIwSHlzNVlaQU9oWE9qNmttUktEdzJucDlsQXI4Z2pDcmFOWmdIRmRzZFNnb0RlTXo4Vzl3M3J0eWNrQUJoQ3NmVVU4d1d6ejltOXJDMzlETXMrL2tubm5oRjBBOGRPVTV5VGttaGVINitFZXpQd1BkbFlVWlJjclVUeUYwTmVxYmJhNmd5TWkySWt2ZlB2Z2F2SlZxbWswbUhZaytva0crbXdKMDBFWjlqVkpVSUtpUk5Sb2k3MjBkNERrcUtxaWttTHErcURIWllMcytSVWVuTWNjYlpvVTZYYjUxenk3WURmSTkxTWRDaG1yWEFEcXlwZUFYRmV3WE92bytoS0Jpczk0QUw5c3BXd2U0RlJaR0t1dWtqVHF6QjlmbUpOVStraGZCRW4xd2pkYWVERTJ0MnVmYkpWY3Y1UVA3eFZWV2I0UlJmWlFWNXZPNU5wb2dnVHpCVnRTRk83VkszSTNZdms5U00weXg2akVNTGRwcHIzRFNOQkpqdVBhT295RXpkRG5YbFFoT2w3c0dyRStkTFVjK21oN0lZTHR3WUptNkk3QTdGTjE5SE1QWkNldzVCR05qWVB1dTFqY1RCVzhNQUpzbW5ra2dkN2tKUk9IM3lUSFFIa1puWEJMWGZJZlo2OTI3M0tZYW03WDA2dWI5S1o1TytzcEkrSUtNb3FnOGVVaFNJc2c2RkMrekRGMFVKM2FGSXNiMy9zaXE3VHlQREpmaGJ5RWc1L2tQQjk4K01PODJBZWs3ZzJjRi9mdVJwMHZKWm9hZUo4MWRpeno2ZXQ0TlBCZGM1dHhYMCtkR25tZTU4amcvY25qTFo1alpuT01HVEZzMHhmNldmUEl1TnY0T0gvTk1JL1c5emtRZGZ5RDV3alZrYUpzQkVYdUJjcmJuS1E0N0MyTnRpZzBHUG9kMHRRWEF5ODU2N2RDUHowcXhoVDJUZjVNV0MxQll5Zks1ZDZBay9qVjhjKzJyU0UvZzQ3VzEwdzB0djIraVhsNmZ2d3pUMlFDSDF5N0xRa3N2VExqYXF6cjQrbUhMbktOdXZraG9IVjZCcE5OTWJqbmNOWTlPQmpYY2Q2aXZ6dzdzWFovOXBCUEEvRkdIL1d2MzVpL1NtR2JMK1YzRStWWEdPdi9EMGJsWTJMMkhuOE55MGJLKzNzOU9XbjA2dERucEZaVU5HT3VoSkhlVnluNVdGSFd4L2tJaWxNUGE5Z0J5QUVKc0FQcjZWQjd5VHNSMFh6V1YrMWhoby9rQU8xV3ljSFZid3picDF2aERrd2Z5b1ZuNjNXajZ4L2xUVi9FN2RmQUxEWGUrRC9mZnprM1dJTWg5T3d5dzRpTStIOHJ3c2g3MzcySDI4OExGSVdkWm1mSVU4NjJvMzFidkNPb0lYRkx2MGtlbjVpOHAyU3ZkeXBFcnZiYnVuTFNZQU1FbW1vUTJURHZWdjZvbVdvV21yc1pmQ2h3REFKNXI2dllJc2NmU1JtU1NGcWllcEdkam1UcFNuc3FDVGFVdUpxa094d2xtSlNmTVMxNzVyQ0dDNkNlT1ZGemhmVnJmSkZ5OXMrQW14V0hXbWovQXE2RjBsbHFGYXdHNllwTHRWeGNpMjRBZ25vRFZ6T08vY3Nmb1BxdGZ0M3cra3UwN2hYS2dyTS9Jbzh1T1JPNE1yVTFVemF1UjcrTm1DZU5ySEdENTdyN3MzVlRkdVQ1cUYremxJREQvSWYzWmQ1S1BjK0RDUERETGZndkYrVitFZjFGQitrQmFFTjRCNXV6UVJPbUxxeitDbzJRQS9tL1FpMjZjdmFEY01WM3Z6MmZkSFp2UUZqWFdKN3REajBDSTNPRkszc2VqcTQ5OWFhQXdFbTNwcllaazFkSFVjV2o4eDBjTndaaENFS2ZtclVyd24yb1hJLzVLNFY1amJKN3J3QTVkZWtLUW1RaGZrajZ6NDVkQ0d0dU56Q0orZko3aGlLY3V3ZzNoMWJybGZYRlU0Q2gwSEZ4a2FnN3JROTAwc2hIOC9sYmNkbnVqZkcwRXdkZzZkNmhOOW1jWG90L092UHpTN25oV0NCTWEvdlF0UlJZcmY2cEJ4REZPTktKUGZ5T1EvVDFMb2Qwb2VyNUx2Nk1RU0VBWUJCS2tNeVRUMXR4dm1HS1k0WUloZmZCaGtLcWtmakhsUFI1Y0dZVUhEYTZkbW5GWnRrb2RnV0xRZWRoREZ6c2NIL2NhV29KcFI3NTNhdVJOcStvS0dheGlrMkVycHB1Smk4MnVvTHYxNytZTzZjVWJ1eXhBbXlOVDJqVi9XdlcxekxaYmpibTdxWDlhdGZqYjN6VVh0TCswV3k3SmZlV2EzS0hMTkJEdU9lUVlBckg1ZXQvaU4zbThSbHFGSExvRFFGbndPWTNpSlRmQ1NqS0t4Ty9tZDNJZXNmaEczOWRhdGt2OGZBQUQvLzdDcnQwaDhXQUFB
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-16T09:50:20Z"
+    labels:
+      modifiedAt: "1773487923"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "3"
+    name: sh.helm.release.v1.cigg-app.v3
+    namespace: cigg-app
+    resourceVersion: "45636"
+    uid: a542c218-929a-4fba-b2d3-75facfd80183
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt3OGFYUGlTTEovUlUvN1pUZWVEMGxZYnNQR2ZBQU1RaGhrSTBEWGVxSkRLcFVsbWRMUk9zQmlkdjc3aTlLRkVHRFQzWjdaaVkyM0VUdU5wYXlzekt5OHMrQTMwdE5kU0haSTRGaldwUjRFNUFYcGVDOCsyZm1OZkhIQ0tQNXF3Z0Q1S1RUSkRzbFF6TzBsMWJxa2J4YjBsdzdGZEtqV0ZVUGZmYmxwdFJuNmZ5bTIwNkxJQ3hMcEoxYmRMbWkydzFLZDFzM1Z6VzNyNXViTERjdFVxMHlJWUp6QlozOUVJSFNDMlBFOXNrTXVBeXZVVFVnQTN3MHdFSGxCUnJFZUp4SFpJYU1rZ0dFRVRXaVN2MStRd05iREdKUHV3bGczOVZqSG53OFpYTU13eWxGVFYvUVZkYkJobHhoQjVCSVpOdUxGRDRtSHhJQ2hCMk1Za1Jla0hqaFNoV0ROWkUrQzNSUDZpcjdOY01acGdQZlZnd0E1UU05US8zNUJJaCtzeUk2WElIUkJ4dEFOa0k2eGR2NVYwVms5dlA1cVE0UzV1NG9EaEduTStDRmhLMW8vV01GY1UwUWF1RGVXeXRnMjhHYVc0UTVqYmVaL203VG9kdCtMdjB6bXZaVW1hNEhoTGkzZUZRS05BYkdxOURZVGw3VU5lZW53ZmJyOU1ndSt3TFNiekhJY3lRTGptUGVLNTVTbHlleUtIOUh0dm9YL3Z2dldSMk5ranFUVWNIcXVLYjlGUEpmaGVuaHcycnMxbk9UcU1vdjQvdmhWbDAxdklnODNvTTltOEJtTmM5NmFLRG1OZkorZGEvSWJVaFVCVFZZWkx1dEZvV0xZaXF6SlN2QlZaVXpWbmovQVZoVHpuSlJvZlV5ai8xREk0dDVnNk5oZ2JpeURHenFhL0xidE8vNTZCeThpelVXSk51ODZLb004TGFWdE1Pb21KU3p2ZEdNTW04c21wbFZYU2cxWG9qUmxtdWp5M1RxamVlRmJtQ1pkWmwrTmtiUTZ3Rlh5NVdTeXk1N3BMY25SbEhHaUtTSUNLUnNZYVRzd1BJRlNaZmExeERkQlkyUndrZzJZNVVuWms3OWZITkVOUXdjcjZKbVh1WjI1MEl1dlVyZW1KYXJTQ3lSWFNnR0Qxc2FyYjJIdVFOcG1wck1nMUdWMjllajBCcHJTaTR3V2lqV1pwZm91alV4dXVGSVYwWDYwZktzNDJWdCtGSC9oT1pTb3pCdXRjVTFOMG1pRGUwdFVtVWE4MDAwd3RSTjViS3RNakF4MzlzRDNlNUVxajVFeG10NzJuYTdGOTN0WU1qK0ZFN1I2U04zNkdIZUs2ZGRsd1FiYlVwcWFiWXdrTEcxSGxZVVFTM0RpalJIZzNnS1ZHZDRiTFNreGM4MngrSkdBSmY5cWN1MDA0N2ZmdFF4NVNLbU1QZDJudVd2eDNIQUQ3dC9YQU0yVElvTXJMZXNtMDJMVkhiN3FqSlJvWGJ5ZmlBeWxGNm1LaUhiN1NaUXFpN2JKRFdwN3ZkbXFLMFVnNDdGNDlnbHl5L0NNaEkwbTEvanFUNjI1ekFabXYvZHFNQ3lseWlqUkZONHl1VHZMWkliNHVXdTBlRXNjOEJVdE9vWWZDR3ZERTIxczVjQ3I0K3RhazNrdm8rSFI2YlZVR1ZFVFdWc0RoMTZwQmM4N1BMU3RNY3Ribmh2VG9JVWNvMlhkVHVjM1c2RUJwekx0MkpDSGlYWmZsMGUxMTFidjdzUHovVzdNOStuWE9rMzUveW5yNVJEVzRqbnBWZWZ1TEI2WnRxNklnZUVDUzNQYktUL3NyVUZMOUlBckxaYkxUU1lUMVYxYXdKVnNiYlJLSnM2TmM3aEgxekpsbHRMbGpXVzRVMnVpK0JiZzJsdVRNMU5ObVZyQ1lyYWR2a2FXeHQwZDhMSkh5MHJzOHh5N05yR095OE1WblBkWVRabEYvRWlJTkZuYTZETHI4ZmZqN2NTNVNYanJDRS85cmdXWU42UXBYV3Q2N0QwbnJnMTNlWVNHSGxJWmU4MzN4ek9qSlZCYWE0eVc5SERLYzJqTGo4WklsVVdXbi9NUE8xMDlwUWVVZFk3WC9OQm1LbnBSck1vbTFxa3NXa251TURKbGFUdHhLLzFPQ24xS2dDdHRqSllRWUx1RzJKc3VnZy9YbU56UXk2S2MwOVJQYVlhajFwSnJZei9EbnJYL1NJcU1ZVzl0Y09nMTIzOVc0MlBVV3dOUDNEN3VuUW1GZFJ6VEVCaXVsQzY1ZG1yZXYrUFAzSnJNRWNZM3l5SmovUXdOVDcwdE1nREtvSkZ0eUpzVHVLVEVkSHAzUE1jR2hpc2l3NXRaai8wbXpRS0ZvN0NwOUdiQWJUdmFvbUdIbkUyWm85NUlVMmEzQi9ZdzZ0a21aOTN5L2JhdnljUEk1S3dEblFNL3pTK21RYk4xK1kwR3JyVFVSMk1FR0h0dGNMTmIvbjcxMEtBSEFSZXR0YUdBc015MTBmU1d2eDlzS3JyM2RPNHRNRjBwMFJSaHV4eU4xNnE3YlBEWDg4MlJ1QkVaaVhvOHNMSGVSbFZFLzlIcHJuVk9zbzJSNkIrUkRlWWw5K2w5VmxibE54cG5ISlgrOTltYVQ4YjJPS2F3amxicnUwMS95Z1ltaDJ4aklDS0RHN0pMUnNMclZ6ZzJDak8vSVhNcDFlWDJhZyttanEvK09iZDdySnRiUVBkU2d4bWpKci82U0tUQXdFVG1FUjhOdUNHbDMvdldoTEdSS3I5UmgvNjZ0OEc4dldkYkIvYlIxTkhQNGI5dVE2bW1DR3RUR2I5cXl2U0lYcDloV3pqdllObzBjQVVFMG4wYm15NzRReDN1L3ZMTCs1bWVIZWo3S1Y2ZTNDTDNoUHI0Z0Jza21zemFxdnVHOG9RNXNBR0haRTBaYjNXNW5UdzZQZHRVeERWZ0JOdmdVS0xoOU5DcTBrUGVhSTBENkdhaXh5NXdOVk1reW1nSnI2cjhob0FWeEpvaTJobzNwTlRNSlZSaHY1YjAwNWlHV0sydmMraEtSSDF2bDQ3a05FaExWUmw3bWlMT05WbmRwWXdObXNHb3Q1MjAxTGZpL2ZGME5uOVgwdlFGcHIzQWNJWElsTVgzQ3hPY3dNOXJORG80VFVQSkVvY1ZEcjJxeXZROWs4MWszb0F2anJvWHE0bzlQeXRsZGUyTk9tZjM0ZE5DNVRrYW1hTnhvTFp5dVdFMWhFb1A4eml2VkxaUWQrQktXNk1scFNwVGMxMWxXczhKRzdNeWl4NlZ5MzNmaFpzanRNRWhYTUpwRVlkdVZmd3ZjN09YbHBxdWxPTFEzSUQ1VUVZbU4wdzFScUptZEUvYVg4dk9OTXlEakYyZmljcXcvT044MHNpUTJ5bjhDL0M2a0tYWWFJM1pEL20xdnFjQWpNTDErNVdmK1RwNDBCbUVNMmhyeVVpcDZhSlhiWGFXK2U1VVVoRVE4TFJBWlpiMUNxdzhrcE9lRzVUN0tkTWtFL0g4VlBYMUdSVk9Ia2wybFJObGdkRjRiWEx0VjRQWjNQSkQ4WDVaUlorUG8wNmRkbkFRZFVvMUVtYy9odWVVdHplTlM5ZXh3cXhkZEFsODc4V3hYRDI0U3ZWemozaUdFeHNYZVF0NXVQbThvbDUwSmpJZGFLMnhiWEpvYlRqMEZzaWJoNXI2WkJvTDNHR2lNVXRyekdtQndVa1pqa20vdThvRE9DNit1N2RQODdxWTZqalpMWkRmT0IxSGlkTGJaWllsdXZpWlViWkhGcjcxMHM5YU85WTRMMEN5b1ByUzcxVUJWdWp2MWsvbVBYd00yQXVmSS9KWDMvaEEyS283cEZUR1d0ZUZQbmZiemg4bTdBelhNREhjTmxXNGpGMEY0ZHJJNEtnRU1OWmE1OXByUGVWdnM4eXlOWXQxbWQzaTBHMzAzM0JGUkUwVWFZTnhhdHllRFdjMmJqQ2F1K0JRckNzNGE4NXNpZEprZW1Od1E2cksrSnZkZ3pPcVA4MTlZMDFteUI1V1Zzc0R0Mm5JeUFQdWtNSmhmdUxtRlYrektxdDFBeXc1SGJ2R0NMVlVaZVVvOVF3UHU5dldRZFlXODMwK05wVng5S1M4dDIrd1VsMUJBdTRHSzR4ekhJZUF3Q3Zkc0hmUm1YalNWbFA0aytzQU45eUNscmtHN3F6ZENQMHIxV0UzcWlKc1RhYWRacW5hbkg5b2RpOTRoNDRNUnNoMXdwdTJOUmRGbWlLd29DVWlZK0d2UzFsUFdzS2IwVCs2SG1lN2lTWUwxTktWS09BaUJMWVVNejBHV3hubTB1blhzLzJSdGpaR1Vxd3Q2YlVwczlSK2w2b2IxOEx1Z2JQWXI5ank5Y3VxT3RBaXFKZzJuTGN6MkVwK3VKcHJpVGJ3eEpuQnZBVnFhM1hMRDlxSjZBNERZeVNsMm15M3YrbTJJMU9tVVoybVdqY3ExbVV6TFVKMkRGckRxS0ZYbGROc1ZqYy8yc25RT0Q3ZTB5MUZlRE82Ny9qOXo0N2ttN0tIQXpiQkZuRFNhKzZWaE1oVUJFcFR4dVBsdlc4dDNIYWluZWlIWWcvMUE4a3o5anFVSm11ME1SS1FtZlUrOS9zZWsza1pmYnUwY0Q5TmQ2Y3Qyc0Exa1Rrc2F1UDdKVFhkOHU5SUxOWmorSktnQ0g1LzkzdFJVVG5FVko2VTRrOXlYNVA4bjlCeHhyWmljaEttYTZzcG1SL2Zhc3FZMFdVQkxRbzlyblVrRDdybzA5bC9xRk90Q0RpMkljd1RZS1N5Zk52SnJzaTVOR1dNNDFydVYxWm1xc29DV2g2cDVxZUw3a1BkdHN2dXdRbmZVTE9VYzdxT29uTXFQbVg1M2VpZ0kzN1F5VG5RL0g0WHAvdE0wL2ZVYUp3dGFHRXAwdVBoa201TFMwcWFIM1lsOG5oeWxONWRiRHJ3OWFWL1d3N2FDMmxnemtWSmVGa09ob3NsYlQ0dFY3T0RqbzZaNFQyTTN4ckhKN1VZZC9aZTllbkNPWHRvWE1aSEJyZFh3aFgrZnlHM2FlT2d5M3JpdkZOc3IrMnNyRHVRWnpOR3RUUWJPTzFJbC9uMXpvWndyRzFuT1I5ZVg5SXdZOTVzWGFhWFZRNmxWT1Y2dzgvc3g1aWFiV0piWGdOMzZGVmxicFd6RlhvdEM2K2FJbXdYY251RjhmUER5T0pSMXExVGdJc29iZGxPVkdicDhNUGRPVlE0bDBLRTg0M0tKN1JFMjNDeDk5MmQ5NjZzbHZabGlXT3lJdUc0ZkNEakN2L2lvTDJCYzV4SzFubVpleW9Xdm9TK0YvODFoNXRhaWsyNTZnd1ZJK1NmREpndWNQUDZTTnNMRjlYZ2NudG8wanM2L3BNRFRzMGI1L1dYZTZKazRCcHl6OTE0ZExEL3A4anVoSmw4N1A1L2VzLzN3MFh0cklxd2taOVplNnNyNGhwNEt5ekwyNGE1N1Bib3M0RWhEejF0amtNSWFBNTc4bmRTRCt2cUxrVnV1czNkT2YzUmc2bzYzVWNIR0VlSExaODZaTEp2engyMjFPVnl6cEJCSzhzT1NmU3hlOVM1ZG9TVDhjZnZHRVpNWDd0L21hRVV0TTRkeHRSMStKeUJIRXAwUlF4VStXMmd5VzgybE9xOExjL2dmeS90MkIvTXlNTlZ0bmRMK0V2cnlwODJrRG85aktyYlluMjk5ZEx2SlRoTzR0akkzdy9TMDEzbUtoU2ZOWDNhOHpPam5qMXhwVVNWeDVFbTV6cHlHTGVyeVZCZ3VHQnR2dks3bGhyWFRuVWx5SFFOK3lsdE1LUk5ycjFWbVdHa0tmeERzeVFwVTZoYXpJb3pHdVQ5ZGJYV1YvNU1Lb3ZPTWRKZXk3ZzEzT2lTaG9BbjVCMStIQjlIMDZ6bGw3K1BBOE9kM2ZJREVjZmVOWlJwWkhpRnpuNVdidkhCMU9sUTFuUmdvRjNPVVBwYVF4N2VmQ2NlR3c2UDRjbGFScTlGREkzNWtjZ0Nibm5MRDNlRHpxSnMyK25ha1JSWGJmWG9nNEovYjNCY2pSVWtrME9ScmdTN051aXV4Y2RveXRqV0dHa2Y1dlhkZVBSZlAzazZPRXV2a08rZ29FV1NLRjErQzJEUmtzS2xzOHBJMlFXWVlqVFR1R0w1WVlyKzJVMnJHTTdwcW1WUm54Q1hjbnJuZkt0MUlHV3pNeXZQRURCU3BNa0NaYlQ0WFBhZmsrOSt3cmlwbnNlWEl6WnBPL0VPNDJxcHQyZmtYWFU1YkdvWFJ6Q3VoK1BuNlhoV0NLUG9nOUdINFVxVXliVFQ3RHhUTm53YzVWZGs5MFloTXV0aHV3Q2JUMnVwQllhYmxkcmJ2UnNEbmhUVnltb2ZsL1NIOGtWSlZ1YTNwb21PUyt0YW5NNHVyZFQ4VG5aUlpiUi9PWEsyR3Q3UEtlbFJ2UGVMMnNteUpzeHdvODk3cnE2TXQrWXVONHRydVlVTnVQckZvenp2a2dyOVhZN0dTSFBSelY3dFUwNk1teGRvUnRYWTlUQlArZmtMdW5FMW1weWR5QU9QWGg1a2FVTWVJL0Q2M3FYYjkzV1pUM3ZjY3RWK2xBYTViRlVtazIyc3ltOVJmWXhVWFI3YStJMGN6bDRXUG5rR1hNblZsZnJGc2w1RngwRjdvdVIzY1hoUnFZeFBockw2YkxsOGFKdms3Nzlla0dzZEpUQWlPNytSeFdnZmZ3UytGK3VPQjhNblA0ekpUb3VpcUFzU2V1djZGd2J1ZTE5SGovTUZXYUFnTzJUZ1J6RzI1N3F0My9lK1BqMktkU2oycHNVMElJVHVkRkNEQUk0Vmg1aVlzQUczbkEvRWMrQ2V1dk81L0NqZTEyblRvMmpqaDJZZHNrRVk1ckwrV25pOEgzd2RDRklkUytpYkNjaS9VL0hyQldrSDJUYzlvS2NiQ0pwa0p3NFRlRUc2K3BzSXN5OWZSR1NIdlNCZHg5djlUVitRc1I1YU1PNC9MWmV4ZzV4dE5nQitnaUdBWHF4YmtPeDhvVXFZS1hUOU1EMEYxdjc5Z25UYzdQTnZaSkFnOU9RakI2UmtoK1JmQkQ5K0NtRUV2Wmk4SUVNWStKRVQreUYrRjlsT0NHRmswemZYd0xFdXkwUEhXMXBraHpUYnQ4d2Q4L0tGaGk5M2RBc3dURXUvYTk5QTJMN1Y0WmMyQTlqV2x4Y0szdDJSdjJkNE1WZDlQL0hpakxNUVJuNFNnbHlka09NNmNmWUpCQWsrZDRweXlRdlN6WGdpT3lURDNrNmRITTIzQkVaMVVJYmRCNldaT3d6Nit3VVp3WER0RkJzRU5kMHN2dlRTUjBrVXc1Qi95b0JOQTRQaC85WlZwUkphcGE4ZG1pVXZkaHBTVTVZTE1vcjlNSWVtT1llOElKTUloazNWSTh1MDVJanAzRkYzMUgrRm9sUThscHJDdnJUMTFrdWJmbW5SUmt0L29WbmFiTk5mN3RvQUFQckdZRXpqenFSdUdGUC95MmhLZmhSSE5hWElRekNzN1VkeDdXdGJWOGdIT3NLYlY1YzFNRlNwUWk4bzNlanBkZjVQcDAxZWtLK21BWlloSWp2WnAwNnBZOTlRNS9xNlVqanNBNi8zZERMNmhvWU95c21WNks5ZkhjK0pyNkp2R0U5ZkhIUVhBMkxSN1UwR0JEOGtoTWNGTVZENCtXSk9RQzhPSFJnUmYzLzJDSUlnSEpPWUQwUytPeUdlUkg3YUZWWGlZYUJlNU8rK0pib1hPM0ZLOE1KaXdBM0VESTJ3bkV5SS9talFmeUQrWGdFOEp4VFZnZ1QxajJJbGxnRG1tNUM2WW4vVUZmL09zT3cvcXVVRmtPZkhNQ0lXQTJWUlBBQWgxR05vZnRWallzRlBCL05GZC9wRTNBK0czZVZrUWZTWG9qZ1FGbCtyTjhXaUpEQy9ZOUd6OTQ5L1BudlpBV0tYSFFVNjJQdkdIZFlDWUVOWEw3LzQ5cEpMZUJmRHJteUlYTWZ5L0JEdTBrOCs3YzFVUmFRMFpaeUF0RWNaYVMvUUdIWU4zS1ZsTWpZeW5KNWp5aWpTc3N1cnZRME8rN2hNQXVuTkE1LzJsbnIydlFXQkJrVTdreDhKdnBaOWE4Mk1ESVl2MitHQjRZS0lINDJSZ2RNTlJVTkZLcmYvbmhzbVd0ZC81VGtXYVV4ZVB2RjllNU9uSHpiUytyMldyb2crM3g4RUU2ZjNaTGh2TE0rMUUyMmVwWDhaRDFtcnkrbEZ1c3lpaWVVbjRsQjRXV1lUa3lXbXQvb1dtN1FTRmp3bkJzQ2JQa3hjTXpEN2QvbS9IUElNdDUxcU16OVJ2U0NkYlBKL2RkbE1qTllZOVIzVzExSU1hM3UxWjF2VHZWbjNuYWsxeTI3UHRCT2V5MUpBR3ZSNzJkVXFzUEcvVFR5aEJicit0NGs3dHZYc2J6SE8vMjZudWd3ZUhyeE1wcktxakFPakpXMzVBUnFJeXZSaDR2VlNnd21RMnBvOVRGeTAwdVRCdXUvNGljblJHK0Mydi9VZGxnR01zTmE0NVRxZitQeUtUVmozbkJlWTJmZmw1ZVd6OXpkaW5ubWhEbEhxelBWWlYrS2V2ZDJYTVR2RW1uNzJWbzVuZG9oK0JqWFZnMmV2L0Nab0J5czIxcmJkSHBmVmg3MHRvbS9vMmF1VzFIMUFoL2ozWlc0ZjU3dUNqOXpCejdtRXM5M0NVZGZ3dys3aFIxd0VYb1BkeE1jSDNyamFldXFRNTNsZ2VmK0lLMXdsY0JSQWtBSGkrTk1ocXZDREgwVVFRUkQ3WWZhZTBJUGdtSzRVR0RFSURtZFJEa3hjRWtIb3h6N3dVWWRZOUo5S09XR1FEb0Z6by9KSm5pZzgxWjZmWlFJL0lZd3kydFdZQnlYYkhVTHdQWGpJL0NudWExZHVqa2dnWXdySDFHUE01czgvWnJiWlcvb1JsdDMwRTArOEpPaTdqaHduT2Nla2tEOC8zd2oyWitEN3N0Q0RJTHJlQ2VTK0FqM1Q3ZFZVR2VrR1JOSDdaMStCVnhJdDBzbW9ROUJIVk1qVlkyQlA2b2pQTWFwU0JDV1NPaU9adTl0SGVBNUtncWdveHYvN0c4RjdUa3hVQlFJUis4UkdkL0t2K3QvM1NqRHM5ZnNsVEgzRHkwS2dlTTNsaXg5ZW1zYnVKVUZrS1dtSE1KSW9OZnkzRG4zVnVxMi9CcjdyNnA3WnFUL0RPQ083K2VRU05KLzhlLzhCUVVCZys4UXpLZXRPN0hoV3hzQlRidTN6MlFUelpVQWloTHFaWGwxZFBaUE4xWWtYTzRqd0FIRzVyWnhFWnFiL0pFeS9DVnh0ZHQvRGtTUkhTNlF3dmlBaUJHR0E5MmVpby9zUU9RVEJORitZaGU4NXNrdU5EU2ZLTi9zZmpMa0VCNGNuYzNtT291K2QwZkVhdkhOdTdkM0E5MVJWZEIyaVh0RHR3T3JlSTZkNHIwcmREeFFFQWIzMUViVXIrajExdVdWdGticWpQN0xtNlZFOHR1WTU2d1BWejZ5MlJ1aE9CMGZXN0FxbW82dVc4NEg0L2F2S1h0RXh2b28yd09HNmsweGxnanpDVk5sTE9yWkwxVlBhdll4aVBZeVQ0Q24wRGJobnNYWWNCeHlNRzFZYzZMSGRJYTV0cUtPNFljN0JrZk1saUJmZFFVa0lGM1lJSTl0SFpvZG8xMThITUhSOGN3NkI3NW5ZeVZacmE5bWZzNFllaktKUEpaRm83cEo3UTBkSDl4RHBhVVVRK3c2eE43dDN1MC9ZanAxUEovZG42YXpUVjdSREdtVGtuWkZPMDFlQklPa1FMRVc1elJkNUg2UkRaQjJUL1pkbDcrUTRNb1k5alN6cnFYeFhCdlZISmcvMXJPaWM3R0VILy9ucFE1Mld6OG9mNmpnYkNjUjN4WjU5UEtlRFR3blhPYmVmOS9uUnA1NnpmbzRQM0I0ejJmbzJaempCb3hiTlVIK21uenlMamIrQ2gvekRDUDF2YzVHTmI5VTNYR01TK3hIUWtlTloxMnVtOUpBalAzUzIyR0RRazI5MkN4Q2N6THpuTHUxQXY5UXIyQ01sVlBaaWtSV0lJbnlwWE9nUlA0MWZIUHJxckxIemNkcGJHMmtVM3JZMjlDaE8zNFZ4NklCYzZwZEZ0U3dXcDUxdlZKNTlkVERGemtHeVgrcldEaTVIVTV1STFCenZHb2E2Qld2dk9zUVg2cnQzejgvKzB3aG9mMWVFL1hQMTUwL1NtM3JJK24vRitWVEZPZnpXMnJ0WjJieUFuY056MDdLOUJ0MU9XMzQ0dFdvMC9JcXVtdEJvTEI3a2NwK1ZoVFcyYnlSaU1ReGR4OHNPZ0F0MUFKOU81UUh2Wkd5SFJYT1JuOVdtMHQrUlE5VzduODBLdmw2M3poZWNPSmdmMU1ydlZzdEgxaCtybXQrcG00OWcyRFc4VHV5L241K3NmWlM0Y09vblhpTStOK1Y1V1V6czk3RzdlT0ZUbnJLczlmQWFPY2IxYmpSN2pYVUVMOGgzNlNQZGNSZWw3UlR1NVVDVjN0dDJUMXQwQUdBVVRYMFRSaDNpWDhRektVTGRsRU1uaG84ZWdNOGs4V3NKV2VEb0l6MktjbFdQWXQwejlaMG9qMlZCUjlPV0FsV0hvTG16RXBQNlRieDkxK0RCZU9PSEs4ZXpybFozMFpYajEvd0VuNjg2MDBjNEpmU3VFa3RRSldEYmorTGRxbnp1bm5PRUU5Q0tPWngzUnJXZWFxL2JmeGdJOTUzY3VSRFhldUFRMlMvSTdneXVTRlgxb0pidjRXZUx6Tk0raGZERmVkdTlLYnR4ZTlMTTNVOGpNZndnLzltTkFnNXk0MlllNlNXdUFjUDlyc0xmaUtINEtDd3kzZ0RtN1ZKSDZJQ3BQNEtqK2hUamJOTHpiSis4SUczZlgrME4yZCtmZTVJWEpOWWxza09PZlNPN2hoUGJ0VVhYSC85Z1JtMnFXOWRiQTh1c3BxdGozL2lCc1N5RzB6M1BqN08vU3NWN0ptMkkzS3ZJdnNiY1BwTzVIN2gwdkNqV0Vickkva2p5bncrdWFUcytCLy9sWllJcmxxSU1hOFNyYzh2OS9MN0pRZWhvM0VhcFRWdUw1ai94citmaXlzb3orV3N0Q0laVzA2aytrNWRKaUg0NS93N0xmdnM5UnhEQjhKZDNJY3BJOFVzVk1nNWh5amx6OUV0MmZTT05ZdWgyQ2g2dm8yL295QkxnZXg0RXNRaXprZmd2dDlRaFRIN0FzTjdhUHhsa1NxazNadlhIbzB1Tk1LL210V005ak1zMnlhTTN6RnNQTzRoODU4T0RQckVsS0M4YTdKM2F1ZGNNeUFzU3JxRVhZeXNsNjRxTHphK211dVN2eGE5cWgwbDI2U2xqSWh1OW4vaDU3VHVhdXIyaGIzZS9ybDMrZFBiSk5YZFg3ZHN2OU0yWEx6ZTdSWUd0UjlodnpCTUFZUGtUMi9udmRIOE5zQWlkN0JJUGFjQVhQNFNYMkFJdnMrc0UySnY4bXQxcExYOFYrK2JVemFEL0N3QUEvLytJMUwxZGdGd0FBQT09
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-16T10:20:34Z"
+    labels:
+      modifiedAt: "1773487923"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "4"
+    name: sh.helm.release.v1.cigg-app.v4
+    namespace: cigg-app
+    resourceVersion: "55583"
+    uid: 824e4bc4-bc1c-4470-bf33-0ebffee889ee
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt4OGFYT2pTckxvWCtFeE4rTE94UE1DeUhJYjNlZ1BRcFlRc294dEpMR05UM1JBZ1FHcldKcEZFcHJwLy82aWlrVUl5YmE2MjJmdXhNU2JpRGt0UTFaV1psYnVXZEkveU1Ed2JiSkhBczl4em8wb0lzOUlMM2dKeWQ0L3lCY3ZUdEp2bGgzQk1MY3Rza2N5RkhOOVRuWE82YXM1L2FWSE1UMnFjOEhRTjErdU9peEQvMStxMit0UTVCa0pqVGRXWGMvcGJxOTczYnU2dWFCWjZvcWxPaFJUcjdKc2FLY1lIditSZ05pTFVpOE15Qjc1R051UkVYdUJRMlNSRXh1V1RaNlJTV3FrV1VMMnlNZ09MQzl3enF0WFA4NUk0QnB4aWhqdzdkU3dqTlJBbncvWlhObHhVbXhBWGRBWDFNRzJmV0pzUTUvQTJJaVhNQ2J1TXRPT0F6dTFFL0tNTkNKUHJoR3NHUHdrMmoyaEwraHJqRFBOSTdTdkVVWFFBd1pHL2VPTWhDRllrcjBnZy9DTVRHMC9nZ2JDMnZ0N1RXZjk4UEtiYThQSWpwT0xOSUtJUnN3UGFYZVMxWjBUelhSVm9vRi81V2lNNjRMZ3lUSDlVYW8vaGQrbkhab2RCT21YNll4YjZvb2VtZjdDRVh3eDBobVFhaXEzbnZwZDExUVduakNnMlplbjZJdWQ5N09uQWtjMlJ6aG1YUG1jY25TbHV4VEdORHR3ME44MzN3ZHdBcTJ4bkpzZTUxdktKaEY0ak92dXptTjNhM2paTjVRdUZBYVRWME94Z3FreVdvTkJGOE5qR21lQ00xVUxHb1ZCZDZZckc2aXBJcHd1TVM3blJhVlN1NU00MDZVWWF1cUVhankvc3p0Skt2QnlwZzhRamVGZEtZdGJrNkZUazdseVRIN2s2Y3BtTy9EQzFRNWVncm9QTTMzVzl6UUdCbnBPdTJEY3p5cFl3ZXVuQ0xhUVRVcHJ2cHlidmt6cDZuMW1LRGNyVFBNOGRCQk5odEo5TmNmeThnQlh4WmVIWlllZkdSM1owOVZKcHFzU0JIazNNbk0yTWdPUjBwVHVhNFZ2Q2lmUTVHVVhNSXMzWlUvK09EdWlHNllCbG5aZ25SZlc1dHRCZXBIN0RTM1JWQzZTZlRrSERGeVpyNkdEdUFNNXk5dy9SYkdoZEpjUEhqZlVWUzR4T3pEVmxTNDE4R2xvOGFPbHBrcnVneE02NWNsZUMrUDBpOEREVEdNMnRNNjNOVW1uVFg2VGFRb05CYStmSVdxbnlzVFZtQlNhL3RPZE1PQVNUWmxBYzN4L1BmRDZqakRna0dSK0N5Zm9jRkRiaGdoM2p1ZzNGTkVGMjBxYXVtdU9aU1J0VDFQRUdFbHdHa3dnNERlUnhveHV6WTZjV1lYbU9NSllSSkovdFhnMngvd08rbzZwakNpTmNlLzNhZTQ3QWo5YWc5djNOVUFQNU1Ua0s4dTZ3bHFzK2FOWGc1RXp2WS8yazZDcGNvbW1TbkMzbjB4cGl1UmEvTEN4MThiVmZEa0JtTWZ5MlNmSURlTVppMnRkYWZBMXVIZG1TamV5QnR5cnlYUXBUWUdacmdxT3hkODRGak5DejMyekl6alNVS2hwTVJEOFVGeVpnZVFpS3dkQkUxL2ZtYzQ0VE1PRHgzVTBCVkpUUlY4QmoxNXFIcDNyeW1ocFA0WE9qaStFajNaMUJ1a1p0d0lkS1FDK3ZIMTRIZEpObkFLbWowNDFwTGZPL25waFFEbUFjZTcybi9WVFlVQy83dVBBdE4yMG53a0REbXFNdXhJR0V4WFJheWpkUU9BUnpSeTJCYzBmYmZVWlIybktKRUVlWWVwZGVZYzQrbzZsZENsRFdUdUxvZlgwSkl0em1XSm4waTIxbElhVGw4VndORi9RMXVOaStlU0FzYmd4Qi8zVUdQVHh1OW1RbmN1RGZpclBpcjlsV1J3dHZINnFsKy9ueTVFb3pmcXBsdmNEbFplb1NjN2RDTHlWNjJyZm1hcEQ1Q1VvNEVNSXRvbWo4emR0T1RUNVc1UThPS2JQVXNKNEFqVkY2Z3BqQ0szQjJnSE1CdW9xRjVrK2NPNkR0L2tzNFByTy9jRTVJTjJWVnFhL2VJK0c0UkdaT3NDWFhYMjhkQVZucC9NYXcyWVdQNHBNNU1NYXR0RFFyeTkyanVnVkUwdVIzbzgyeUN2UDZOb25OUG5hNlIrT1JvcW1iR2gwenJYdERycVJxWXdDZmRaRi9tWUZHRWlablVrWDJkZEQ4T0VhU2xNQWpsd05XUlR2WkE3WjY1UEpiQ0t0c3p4bC96WGlhY0d6eU9maC9adDhBSjdOcmZHQkxUYnNldkprZGlaVUliZCtKdnVqeEZMazdkU3ZmVVRXbFBrQzRhdDhaWDIrY21hOWhrVlVIVXNyUlJtbDV1QTRMbDNwTXNKNDdaZ284cUoxZy83VkFjMGR5UVdCUklNUmw1dk1CTFp0MnhoTEZCaGEwTG9ORDNRSzhDUEt1QTJkS2VOQ1RkbFFScit0ajl6NnQva2Q5QjNkSDBYbVdNNTFXUXFSYnpKNE50RnZRK2VoQlFkNE9UY1VkcmxnWkNUekpZcEo5L04rVFhlVGI1T0hqSTU4WjBkOEFqN3I2Zk1XZjd4TFdXTnVyS3RQMXdjMk9PWmNpM2V1aFFFYjZzb29zWGpuaUd6WTNMcDlKeWI2RGY4TnVSWEtIbDlVeWpsR0s5WlhIL25GVVNMeGNxS3BjSzRyNHNyMHBlMkQxMi83NmJXdVRpS1RrWm93VkJObTcveVIzZk5JTjhYdFlqeFphZjZpeFM4WFdtTnBMVEV5ZGVqM3ViV21TdUdEMTE4WnZPeWFZeWs4SWl2RTIzdTJkV0FmYlIzOUZQNmJ0SThuRURBc0RYd1I3c2Y0NHYrbjJCYlNRN01qNXhvamIxczJ0cm4zRG5YNC9RelNqWXo5MUxGSW1xSC9oc2hDd0ErUmVidWF2NEZGSWg2NWdJZUtyazYyaHNKbUR4N25XcXEwQW96b211aDRVZHJwMUdtbllIWW1rZTFqMDBQdWJQbWt5cFRaRVY4MVpRT0JFNlc2S3JrNlA2STBiQmExdTIrNGR4clJrR3JOZFY3RHZRZTdOS2VnUVY1bzZpVFFWV21tSzlvdUZXM1JETWJjZHRyUk51WDc0Mmx5OGU1VFFwQ3B3R3poeTJ1VGg2K2FlditlbW1LWnQrRExzTUtsbXVyT1RrcUZmWGV0emJyNzhIbXBMandOcmZFazBqcUYzS1l6anJKVkR2RTQwMVZ4WmFtVFY3MVVxNTM2TmN5MUtoZDRjVzNWNnNkUmhkejMzWmcxaG10VUFNbXFGSms4dk5iUXY4elZYcnByK1hLdUtSWnN3WHdvSTRzZjVUb2pVMDgwSisrdjdUN3BpQWNGbWJzRkt6UC9kVDVwYUNwc2J2OGI4RHBYNUJTbEpCL3k2L3hNWVpuRXEvY3JTdXQxZUdjd01FUFJjTUhJdWVYRFYvM3BKUFBkcWFRcVFoRG9rY1lzbXBWZGRTUnZSbTVRN2FmZVoxakVzN2VxdXMrb25JcE1ZdWV0S1FlTUp5dUxaMTlOWm4wdGpLVGJSWjE5Zkp4MU5Ha0hCMWxIcFViUzA2L2grZnIxK0xGYTVybnZPVEZ1UTUyRE1IanhITitJTG5MajFDTitZdGhNOTJFd1YwYnJ6MnNXU041VW9TTzlNM0V0SHE1TWo5NENaWDNYVUIrc3NjQWZaVHF6Y0NhOEhwbThqSEZNQi8xbGtjRGh3SGY5T0d1S3FZbXp1d1hLaGpkUWxLaThIYllzeVVmUHpLcnRNZytkbHdGdUdUa1RIaWRJMEVTSkVVNEFpcy9pWUxkK091UFFNU0F2ZklySVgwUHpBMkZyL29qU0dHZlZGUHJNWjcwL1RkZ1kxeWhEMVdEcE1yWjFsdVc3ME9TcERERE95dURabFpFTHFFTFA5UmxkOXJBMnliVDRtd2E4bFd1S0JKdGh0M0JWcks4dk41R3BRS3JLQWkxZVRnRy9jUzIrY3FuY0Z2RHk2eTY3MjZ0WXRvMnNMOTI1WGoyeFZjdmQ2eVR3TUVWdTd0QmU5aFNocktUYVZZMjRNaFhhTmYybmEyR1VlTHEvNlZyTXFDdEFhcjhENDF2YmRoWTZuZlc5cVNybjVpMzkzcjdmZFg3eUtxdVRCSjJEY0J6SFZsY0Z0aFc2bDVyWHBaR2R2NzJPYzBGSDdKaWR5ZkpSM1E4WE9pOWtnQjl0UWNkYWdVSlIyeFY5S2d5RTFPVFoxK3I4SHhWc1lGdGJGU2xkb2E2blRDbnJHWXNNOCtoNlpJU21MNzlhb3dsT0lYVDFuaFZmKzBkZ0o2bWhXTG1tU3JCWjZRc0RqakdaRFcwcXNvZzdkT00zTzByVmVoUWVVOUFaSmEzc084WHJSM1dGNUp0ajJOSFU1UXJEN25RczExVVIrVm1xcXFZZlBPN1JYT3F1b1d4bzRDL3VhcnhqZldXTzVWUlhtelJSVHRVVE5oVVlBSDlFb1JSeXFvb2JzOS9TSzErUGRJcDJRYnVDL1Z5SCtiWUQrdXdvdmpZN0lxVjNKaENzbzUzbDhtSmlJWTFSSjVQRmJlak1mVGJUMytpeElzNStJWEhlV3Z5STBoV2ROc2NpdEhBL0ZkVjJVbTJSMDFrVmVmdTBlSHVmNzA1UVFwWUxyVkZaQzk0dXFQdXQ4STdFVWlPMVh6S1kyRC9mVVovWFZJNFFsVzlLOFRlNWIwaitYOURGQmgzSnRYZ1owYlhWVlp3UGJYVjF3aGlLQ09lbEhRQ2UzVnE0SzNsLzBKbS9mL3BmNm41akc1Y2c0Z2t3TXZWR3ZFRmFteHBLdDdDbkpZcGxJbHg4ME0wNW9UdlpzSlJUNHBUa1RmM2kzYTkzOWxxYVAraWpWSjg1akZrMWpVOXpXbHhJOUdTMG9GbDVRY216d3c1S0VZdU8waHZnbU5YcWJ1Nzd4OFdRbmN0RGF5YkpZck1MZnREMXNERGV3eTdza1JoMjBsN05pY1VwZStpOFVIZkE5c28zbjAwc2hZWnpoYVhOaHJkNTk3eHpaSzhzTHVrTzVNblRLMHZwVW91cWU5blJYZUNoR0NTc2RqWWtic3dCaS9NOW5ET1ZORHd4RzlkUTZJV3UwR3NUK1FPMUx0VmJmcWJzTWg3YUpyTGxGZkJIUVYzaTFqVlhxZGVLK0txcjRuYXVzRXVFWHhnbGpnRHhwRUFGUHFUMEJadHB6TUlUUnJ0enFIRXV4RVJEYTZ0OU81SnIrc2o3N3M2NzJibDZhSGZGVkJtQ3pxR01hL3p6ZzlZR3lvOXFXUmNsN2x2MXowc2NCdW0vNThCVXo1RXAxMTJoY2l6OW13SFRCMzVSRytsNzRhSWVobTRQVFhwSHgvL20wRlFQSmtYdFZaVGVWSzN1bFdyekxia1hianc1MlA5VFpQZUdtWHorY09wZ3ovZkRSZU9zeXJCUm5CbTdOVlJwQllJbGt1VjF5MXgyZTN6Q2dLcHhUbGs1Uk12QVdFN01FYmN5ZWZocXQ4dXNWc0pXdWUrREljemg0S0pKOS9zTis2YnN4a1dLYjZuY0p3eFozT3RUaHd0TnVYem1nQWtQM25ub21rTUptdnlvdTVlYXZQYnZXclJCNE1PVlBoSWhva0VmMzE4THQ4UDFVVG54bThqeTVVOGJ3dGpPcVlPNHBnNGZIVWkxemd0bWhpcEZtcklaNnNyR3RlVW1iNHNUK045TE81cjZqaThtR0o4MmtQdnpkT1U5SFJCUEdFaUsvWENmNzZyanJlNzd6YksvUlprMGRFMWwvWll0TnRjN0x3TXVRM0VTeFViaGRwaS8zV0d1US9GSms2YzlQelBtM0trdlovamlnRkxveUdIY3JxZENrZW1EbGZVcTdOcHBQSnNiYW9SMURma3BmVGlpTFo3ZGFzd28wVlhocmwyU1ZDbFVJMmFsbUFabGYxMmpkVjA4azZ1aWN3TDExeXB1amRhR3JFTVFpRVYzSDhYSDhUMXU5eFh2MHdpM29JWVNpcjByVzZHaEdaUTYrMW01eFFjVHAwTlowNUVKZHpsRDVXdE5aWFQxazNoY2UzUU1qMHdCSDc2V01UUVZ4bElYOEl0clliUWJrcFpsMjA3WGpxUzRXb2VqRHdyK3ZaWkxQVktRTFI0bWhocnRXcUMxalk4WVhaMjRPaVB2dzd5K0c0Lys0NmRPQjJjWmxQSWRsclRJTW1Vb204Z3UyMkNvZE5ZWUdjbWthclcycm0xK21LSi9kdE1xdFdkMDNiSm90cWtyT2IxenZ2VTZrSGZ4bVZWbkNCZzUwUldSTWp0Q0lmdlB5WGMvWWRUVXpPT3I4WnE4blFhSGNiWFMyeFB5cnFZYzFsWGVWY2JSdStQbjZRVk9iQ2ZKQjJNUDA1Y3BpMkZ6Zko1NU4zNFlGOWR1OThZZ1NoZGZEQVRyVDJ1cFJhYVBTKzN0M20yQlFFNGFaWFdJU3ZwRCtjSU1sL21kKzh4QXBYVWpUdU1MU3cyL2d5OHBqZmN2WEQ0dFI3Y3pTbjZRYnNPeWRuS2NLVE5hR3pQT045VEoxdW8zUmg2NzNNSUYvUEt1blhmSnBmNHV4aE9vKy9CcXIvYXBwc1h0MXZPNEhya2U1aW0vZitrM3JjZVNUMi9rZ1VjdkRuWnBVNWxBOFByZVJkNzNkVm5JT1g2eFpCL2tZU0ZiamNHeVRUVmxrelJiOS9YRnNYWFl5dUhjUmVtVG40QXYrNGJhdkZqRjFYUWN0Q2NxZnVlSGwzbnFNWUc2L0d5NWZHaWI1STgvenNpVkFUTTdJWHYvSU11eFB2b0l3aUExdk1DT0g4TTRKWHNkaXFMT1NEdFlOYitFY010OUd6L001bVNKZ3V5UlVaaWt5SjZidG43TGZYdDhrSnBRM2FzTzA0SVErL2ZEQmdUd25EUkd4TVF0dU1Wc0tKMEM5OWlmelpRSDZiWkptNUVrNnpDMm1wQXR3aENYemRmaXcrM3cyMUNVbTFqaTBNcEE4VDJOUDg1SU44TGZIckVEdzRTMlJmYlNPTFBQU04vWVNEYitRa2RDOXJwbnBPOEZ1Ny9wTXpJMVlzZE9CNCtMUmVwQmI0dUh2NDkyRE93Z05SeWI3SDJoS3BoNzJ3L2ovQzB3OXNjWjZmbjQ4ei9JS0lQd01ZUWV5TWtlS2J5SVlmb1kyNGtkcE9RWkdkdFJtSGhwR0tOM2lldkZ0cDI0OU5VbDhKeno2dERSbGc3Wkl5MzJtcmxoWHI3UTlzc04zUUVNMHpGdTJDdmJacThOK3d2TGdHN255d3RsMzl5UVB6QmV4TlVneklJVWN4YmJTWmpGb0ZBbjZQbGVpaitCS0VQblRsRStlVWI2bUNleVJ6TGQ2M3V2UVBNOXM1TW1LTlBkQjZXWkd3VDY0NHhNN0hqbGxSdEVEZDBzdjBnemdGbVMyckh3aUlFdEU0R2gvelpWcFJaYXJhODl1a3VlN1RTa29TeG5aSktHY1FGTjh4NTVSbWFKSGJkVmo2elNraU9tYzBQZFVQOFJpbEx6V0dsSzk0VTFPaThzL2RLaHpZN3hRbmRwaTZXLzNMQUFBUHJLWkN6enhxS3VHTXY0dDlHVTRpaU9ha3FaaHlCWU4welN4bGZCTG1BSURJZzJyeTlxSUtoS2hWNWd2amJ5eStLZkhrdWVrYStXQ1JZeEpIdjRVNi9Tc2Urd2QzbFpLeHp5Z1pkN09wbDhoeU1QRnVUSzlMZHZYdUNsRjhsM2hHY2dEZnZ6SVRIdmM5TWhJWXdJOFdGT0RGVmhOcDhSZHBER25wMFFmMzBPQ0lJZ1BJdVlEU1doUHlVZUplRytMMm5FM1ZBN0s5NTl6NHdnOWRLY0VNVDVrQjlLR0kyNG1FNkp3WGc0dUNQK1dnTThaeFRWc1FucWIrVktKQUhFTnlIM3BjRzRMLzJWNlhiL1ZpOHZnWUl3dFJOaVBsVG41UU1RMjBacVc5K01sSmdMOThQWnZILy9TTndPUi8zRmRFNE1GcEkwRk9mZjZqZmxvaXl5Zm1MUmMvQzMvM2tPOEFFaWw1MUVCdGo3RmgvU0F1RGF2bEY5bWU2bGtQQXVobDI0TnZROUp3aGplNWQrQ2puM3BLa1NwYXVURE9RY1plWmNwRFBkRmZBWGpzVzQwUFE0ejFKZ2d1OGw1OXdhaFgxVUpvSDg2azdJdVlYQnc2MHdGbWxRdGpPRnNSanErSnR3Vm1JeVF0VU9qMHdmSk1KNEFrMlVicWc2TEZPNS9mZjhLTlA3NGF2QWQ2SE9GT1dUTUhEWFJmcmhRbjNBZFF4VkNvWEJNSnA2M0tQcGI3b0N6MmI2REtkL21BZmM2dks0eEZDNmNPcUVtVFFTWHhaNFlySkE5TmJmakpPWDRsemdwUWdFOTNkVDM0cXN3VTN4THc4RDAyZHovU25NdENES3ArdmlYME94TXJNemdRT3ZHK281Z25XRHhyT3Q1Vit0QnQ2OTg4U3dxWW5vNW5FS1NJTUJoNjlWZ1hYNGZScUlIZEFQdjAvOWlXdmd2NlcwK0p2TkRRWGMzUVZZcG9xbVRpS3pJMitGSVJ4SzZ2M2ROT0J5azRtZzFubTZtL3B3cVN2RDFjQUxNNHVuMThCbnZ3KzhMZ01ZY2FYemkxVXg4ZmtEbWJBUmVDODJ0dS96OC9QbjRDL0VESHVoSGxIcHpPVkoxK0dlZzkwWFBIdkVpbjRPbGw1ZzlZZ0Jocm8zb3VlZytuWnBEeWsyMHJiZEh1ZjFoNzB0a3Uvd09haVhOSDFBai9qbmVXRWZwN3VDajl6Qjc3bUVrOTNDVWRmd3krN2hWMXdFV29QY3hNY0gzcnJXK3RZaHo0ckE4djRSMTdncTRDU3lBUVpFOGFkSDFPRUhQVXBzYUlNMGpQRjd3b2lpWTdwU1lrUWdLSndsQlRCeFRrUnhtSVlnaEQxaVBuaXM1SVJBZWdUS2phb25SYUx3MkhoK2tnbjhoakNxYU5kZ0hsUnM5d2d4RE94RDV0L2l2bkhsNW9nRU1GTW9waDVqdG5qK01iUHQzdEt2c096bm4zamlGVUUvZGVRb3lUa21oZUw1NlVhd1B3UGZsNFVSUmNubFRpQzNOZWlKYnEraHl0QXdiWmk4Zi9ZMWVDM1JNcDFNZWdSOVJJVjhJd1h1dEluNEZLT3FSRkFoYVRLQzNkMCt3bE5RRWtSTk1mcmZYd2doOEZLaUxoQ0lOQ1RXaGxmOGZNQXRWNEVocnorb1lKb2JucGNDUld2T1g4SVloWS9ZTnF4OEIwSVFPREhkMlY2UDdqYmZndEQzamNEcU5aOFI1MFRpdGg2Y2c5YURmKzc5VFJBMmNFUGltVlFNTC9VQ0IzT0FwR1VhaVUya3FNaEpMaTR1bnNuV0tpSUxVZzhTajN4Vm9ILzlyMGExVGtUSmQwaWN1OFIvbGEwRjRueUJQNk95bnppMzhHZXhmejhremdIeDM4L1BWdnJmeEQ4Sko3WWo0dng3RmYvK2g3REM5cTRsc1hOTUZ3cEhCQllia2R2cEdaRkEyNDRRRDh4eGt2RjdnbWsvdGtyM2RXU2YyMzFCRkp2OUg0UzVXZ0FPai9mOEZHdlpPK0xqaFh6djFBSytoZSt4TGd0N1JMTXEzSUUxWFZCQjhWNnB1eDl0Q01JT1ZrZDB0enpacHVSd2I2VVpMWTZzZVh5UWpxMTV4czJrNXBrMTFpQk5PYkptVjNVZFhZVjA3ZWRYVlNwOGpLK3lsM0M0N2sybXNDQ1BNRlUxcEk3dFVqZW1kaStUMUlqVExIcU1ROVBlczNnM1RTUGVUdmU5QUJFWnFkc2pMbDNiZ0tuYmVuWGtmQW5peGZCZ0Z0dHpON1lUTjRSV2oyQ2JyeU03OWtKclpvTXdzSkNucnRjMlVraHZaUWQya253cWlVUjdsOEtsZWdhOHRhR1Ixd1IxM3lIMmF2ZHU5d25ac2ZmcDVQNHVuVTM2eXA1S2k0eWl2ZEpyZXlzUVpUMmlTMUYrKzBYUlRPa1J1TzJ5LzdKcXdCeEh4blRmUm9ZYk16K1ZodjJaR1VnenRUb2xCZG5CZjM0TzBxVGxzNUtRSnM1V0Z2SlRzV2Nmejl2QnA0THJuZG9VL1B6bzAweDhQOGNIYm8rWmJIT2JFNXpnVVl0bXFIK2xuenlKalg4SEQvbW5FZnFmNWlKYlg4dHZ1Y1lzRFJOZ1FDOXdMbGRNNVNISFlleHRrY0hBeDlEcWx5QW9tWG5QWGJxUmNXN1VzRWZxTVB4aWpxdE15WDZwWGVnUlA0MWVIUHBxM0IzNk9PMXR6RVZLYjl1WW5KU243OXRwN0lGQzZ1ZGx5UzJWcDExc1ZKMTlmVERsemxHMlh5ODNEcTVBMHhpck5CenZ5bzROeDI2ODZ4RmZxSi9ldlRqN1R5T0EvYWtJKzYvVm4zK1IzalJEMXY5WG5FOVZuTU92dnIyYmxjMUsySmw5YWxxMjErWGJhY3N2cDFhdHJtSFptaE5iM2NtRFhPNnpzckRXOXExRUxMVmozd3Z3QWZDeEFlekh0L0tBZHpLMnc2TDV2ZjdQaHpsVXM0WGFydUNiZGV0c3prdkQyVUd0L0c2MWZHVDlzYXI1bmJyNUNJWmQxK3lOL2ZmemsxVUlNOSsrRDdPZ0ZaL2I4and2eC83NzJIMjA4TEZJV1ZaR2ZBazk4M0kzMzcxRU9vSVdGTHNNb09INTg4cDJTdmR5b0VydmJidW5MUVlBZHBMY2g1YWQ5SWkvRTgra1pCdVdFbnVwL1JBQSs1a2svcWdnU3h3RGFDUkpvZXBKYWdTV3NSUGxzU3pvYU5wU291b1JOSDlTWXRLOHpyZnZHZ0k3WFlmeDBndWNpK1ZOY3VHRkRUOGhGS3RPOUJGZUJiMnJ4REpZQzlnTmszUzNxaGplRnh5aEJMUm1EdVdkU2FNeHkvVUhkMFB4dGxjNEYrTFNpRHdDLzhEdHp1REtWTldJR3ZrZWVqYkhudll4dGwrOHplNU4xWTNiazJiaGZscUo0UWY1ejI2ZWNKQWJ0L1BJSVBOTk85N3ZLdnlGR0VrUDRoenpCaEJ2NXdhRUIwejlHUncxUnlFbmsxNWsrK1FaNlliaGNtOVMvLzd3bER3amtTNlJQWElTbXZndVQrbzJGbDErL0lzYmpkRndVMjlOSkxPR3JrNUM4eGRtdXdqT0NJSXd4WDlWaXZkTXVqYjBMeEwzRW5IN1RQYUlLTGJQdlNCSkRRalAwT2Z5WjRzYnVvNU9JWHg1bWFKNnBTekNXdEhxMUdLL3VMSnlFRGhhRjFvYUE5dHlkRUQ4L2JtODlmSk0vdEVJZ2JIVGRxblA1SGtXdzYrblg0UFpiNzRYQ0JJNy92b3VSQlVudnRZQjR4Q21HbFVuWC9FTmtEeEpiYjlYOG5pWmZJZEhsb0F3Q0d5UVNqYWVLbnk5cGc1aGl1TzFtNDM5TjBOTUpmWFd1UDk0YkdrUUZqUjhkbXJFYWRVa2VRaEdSZU5oQjFIc2ZIalFiMndKcXJzS2U2ZDI2azBGOG95MFYzYVFJaHNsRzJxTGJHK251T1FmNVE5K3h4bStOWVZad0xQN04zNzV1MHQxcmp2ZG02djZoNzlCNkVmNHA3K0xOUWk5YXlUSUlVaFpFSGlCUS82b2ZoMzhXNFJrNCtFTFBxUnB2NFN4Zlk0TTZ4eGZOVUJPNGc5ODM3WDZGZTd1VzdlRy9sOEFBQUQvLzNkQzVnWDJYQUFB
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-16T10:26:48Z"
+    labels:
+      modifiedAt: "1773487923"
+      name: cigg-app
+      owner: helm
+      status: pending-upgrade
+      version: "5"
+    name: sh.helm.release.v1.cigg-app.v5
+    namespace: cigg-app
+    resourceVersion: "46019"
+    uid: 49bf20ef-2c9d-4529-ac64-0195d9e3e09d
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt4OGFYUHFTTExvWDlIVC9USVR6NHNrakcxeG96OEFCaUVNc2hHZ2JkeHhRaW9KU2FhMEhDMWdNYmYvKzR2U1JpR3d6VG5IM2JkajRrM0U5TUZTVmxabVZ1NVo4Ry9TMXoyTDdKREF0ZTFMUFF6SkM5TDFWd0haK1RlNWNxTTQrV1phSVF3eXl5UTdKRU14dDVkVTY1SytXZEIzSFlycFVLMHJocjYvdTJteERQMS9xWGFuUlpFWEpOUlByMktvQmQzcVVIY2RtcnFpV2FiZFl1NnB1M3FWYVVFcnllSHpQMklRdVdIaUJqN1pJY1VBUWtNSGF5SUppQnZ5Z293VFBVbGpza1BHYVdoRnNXVmFKdm5IQlFrY1BVb1EzWjZWNkthZTZPanpNWGNiSzRvTHZOUVZmVVVkN2RZbFJoYjBpQndic1FvaTRqRTFyTWkzRWlzbUwwZzlkS1Vhd1liSm40VDdKL1FWZlp2alRMSVE3YXVISVhTQm5xUCs0NEtFQVZpVEhUK0Y4SUpNTEMrRU9zTGErVmROWi8zdytwdGpRY1RkVlJKQ1JHUE9EMm0xNHMyakhjNDFSYVNCZDJPcmpPTUFmMlliM2pEUlpzSDNTWXRtKzM1eU41bjMxcHFzaFlhM3RIbFBDRFVHSktyUzIwNjh0bVBJUzVmdjAreHFGdDVaV1RlZEZUalNCY0l4NzVYUEtWdVQyMnQrUkxOOUcvMTkvNzBQeDlBY1Nabmg5anhUZm90NUxzZjErT2l5K3pXYzVPbHlHL0w5OGFzdW0vNUVIbTVCdjUzRDV6VE9lWHVpRkRUeS9mWmNrOStncWdod3NzNXgyU3VGU3F4V2JFL1dRcUFxWXdwNy9taTE0b1RucEZUckl4cUR4MUlXRHdaREp3WnpZeHZjME5Ya3QxM2ZEVFo3ZUJGcUhreTFlZGRWR2VockdlMkFVVGV0WUhtM215RFlRallKclhwU1puZ1NwU25UVkpmdk56bk5pOEJHTk9seSs5VVlTZXNqWEJWZmJpNjcvSm5la2x4TkdhZWFJa0tRdFVNalkwUERGeWhWYnI5VytDWndEQTFPY2dDemZGZjI1QjhYSjNRREdZUGxtNWVGa1htV24xeGxIcVlscXRJTEpVL0tBQU0zeG10Z0krNUF4akxUV1JqcGNudjk1UFlHbXRLTGpSWk1OTGxOOVQwYW10eHdyU3FpODJRSGRubXl0L3dvdWVNNW1Lck1HNjF4VFUzU2FJTjdTMVdaaHJ6YlRSRzFFM25zcUV3Q0RXLzJ5UGQ3c1NxUG9UR2EzdmJkcnMzM2UwZ3l2NFFUdEhwUTNRVUlkNGJvMTJYQkFidEttcHBqakNRa2JWZVZoUWhKY09LUEllRGVRcFVaUGhndEtUVUx6Ykg1a1lBay8ycHliSmJ6MisvYWhqeWtWTWFaSHRMY3RYbHV1QVVQSDJ1QTVrdXh3VldXZFpOcnNlb05YM1ZHU3JVdTJrK0VodEtMVlVXRSsvMGtTcFZGeCtRRzJGNXZqdXBKTWNoNUxKOTlnZHh5UENOaHE4a1lYLzJwUFpmYm9kbnZ2UnBNbTFKbG1Hb0tiNXZjdlcweVEvVGNNMXE4TFE3NG1oWWR3UStFamVHTERySnk0T1A0dXZaazNzdHBlSEo3TFZXRzFFVFdOc0NsMTJySjh4NFA3V2pNOHBibnhqUm9RZGRvMmJmVCtjMU9hTUNwREpzWThqRFZIbkI1MUh2dDlPNGhQTi92Sm55ZmZzVnBLdjVQMmF0aldKdm5wRmVkdTdkNWFEcTZJb2FHQjJ6Tll6TisyTnVBbHVnRFQxb3NsOXRjSnFxM3RJRW5PZHBvblU3Y0cvZDRqNjV0eW0xS2w3ZTI0VTN0aVJMWWdHTjNKbWRtbWpLMWhjVnNOMzJOYlkyN1ArTGxnSmExMk9lNTlzWkVPaTRQMTlhODE5YVVXY3lQaEZpVHBhMHV0MzMrWWJ5YnVEY3BiNS9ncWQrMUFmTUdOYVZyVDArOTU4U040UzFQME5DREt1TnMrUDU0WnJRRVNtdU40WkllVG5rTzd2alJHS3F5Mk9ibi9PTmVWOS9UQThvK3gydCthak0xdlRCUlpSUHBWQjZ0Skc4WW03SzBtM2kxZnFlbFBxWEFrN1pHU3dpUlhWdklteTdDVDllWTNORFBvNXpiMUU5cGhxTFdrbU9SbjJtZnRmOUlpbzFoYjJOdzhEWGZmNGJ4TWVwdGdDL3VuZzdPaEVJNmptZ0lEVS9LbGh5Ym1ROGYrRE1Qa3psRStHWjVaTVRQMFBEVjJ6SURvQXdhT29hOGZRZVhsSnB1NzU3bjJxSGhpZER3Wi9aVHYwbXpRS0VvYkNxOUdmQllWMXMwN0pCektIUFVHMm5LN1BiSUhrWTl4K1RzVzc3UEJwbzhqRTNPUHRJNThNdjhJaG8wUjVmZmFPQkpTMzAwaG9CeE5nWTN1K1VmMW84TmVpRHc0RVliQ2hESlhCdE5iL21Id2JhbSswRG4za0xUazFKTkVYYkwwWGlqZXNzR2Y3M0FISWxia1pHb3B5TWI2MjFWUlF5ZTNPNUc1eVRIR0luQkNka2dYZ3FmM20vTHF2eEdvNHlqMXY5K0cvUEp5QjdIRk5MUmVuMjM2VS9ib2NsQnh4aUkwT0NHN1NVam9mVnJGQnVGV2RDUXVaVHBNcnMrZ01IeDRaOEx1MGU2dVFOMEx6T1lNV3p5cTQ5RUNneE1hSjd3MFlBYlV2cERZRThZQjZyeUczWHNyM3RieE50SHRuVmtIMDBkL1JyK2NSdktORVhZbU1yNFZWT21KL1Q2RE50Q2VRZkQwc0FUSU1nT2JXeTY0STkxdVB2YmJ4OW5lazZvSDZaNFJYSUx2WGZVSndEY0lOWGt0cU42YjdCSW1FTUhjRkRXbFBGT2w5bjB5ZTA1cGlKdUFDTTRCZ2RURGFXSGRwMGU4a1pySEZwZUxucmtBdGN6UmFLTWx2Q3F5bThRMkdHaUthS2pjVU5LelYxQ0hmYXhwSjlHTkNRcXZzNmxheEgxL1gwNlV0QWdMVlZsN0d1S09OZGtkWjh5Tm1nR285NXUwbExmeXZlbjA5bmlYVVhUblpYMVFzTVRZbE1XUHk1TVVBSS94MmgwVVpvRzB5VUtLeHg4VlpYcFJ5YWJ5N3dCWHg1MUwxRVZaMzVXeXVvNVczWGVQb1RQU3BYbmFHaU94cUhhS3VTRzFOQlNlb2pIZWEyeXBib0RUOW9aTFNsVEdjeDFWV2s5SjJ6TjJpeDZWQ0gzUXhkdWp1QVdoWEFKcFVVY3ZGWFJ2OHpOUVZwcWVsS0dRbk1ENWxNWm1kd3cweGlKbXRFOTZYQnRlNlloSG1UaytreFloZVdmNTVPR2hzeG0xdCtBMTRVc0pVWnIzUDZVWC90SENzQTQybnhjK1ptdmcwZWRnU2lEdHBlTWxKa2VmTlZtWjVudlhpVVZBUUpmQzFWbWlWZGcxWkc4NjdsQnRaOHlUWE1SejkrcnZyNml3aWtpeWI1eW9td3dHbTlNam4wMW1PMHRQeFFmbG5YMCtUenE0TFNEbzZoVHFaRTQrems4NzNsNzA3ajBYRHZLMjBXWElQQlhydTNwNFZXbW4zdkVNNVRZZU5CZnlNUHQxeFgxb2p1UjZWQnJqUjJUZ3h2RHBYZEEzajVpNnBOckxQQ0dxY1lzN1RHbmhRWW41VGdtL2U2NkNPQ28rTzdlUHM5eE1lRTQyenNndjNFNmloS1Z0OHN0Uy9UUU02TnFqeXdDZTlYUFd6djJ1Q2hBOHFDNjZ2ZnFBQ3YwOStzbjh4NDZCdVNGenhINWEyQjhJbXpWRzFJcVkyOXdvYzg5MXYzVGhKM2pHcWFHeDFLbHk5aFhFSjRERFk1S0FXTnZkSTdkNkJsL20yZVdyVm1peSswZEN0MUcvdzFWUk5SRWtiWUlwOFlkMkhCdTR3YWplUXNPSnJxQ3N1YmNsaWhOcHJjR042VHFqTC9aUFRpait0Tzh0N2JKRE52SGxkWHl5RzBhTXZTQk42UlFtSjk0UmNYWHJNcXdib0F0WjJQUEdNR1dxcXhkQmMvd2tMdHRIV1Z0Q2QvbkUxTVp4OC9LUi91R2E5VVRKT0J0a2NLNHAzRUlFTHpTRFhzWDNZa3Y3VFNGZjNjZDRJWTcwREkzd0p1eGpkQy9WdDMyVmxXRW5jbXdXWjZxemZuSFp2ZUNkK25ZWUlSQ0ovd3BxM2t3MWhTaERWb2lOQmJCcHBMMXBDVzhHZjJUNjFHMm0ycXlRQzA5aVFJZWhHQkhNZE5Uc0xWaEx0MCtudTJQdEkweGtoSnRTVzlNdVUwZGRxbTZDUloyajV6RlljVldyRi9XMVlFV1c0cnBXSE0yaDYzbGg2cTVsdWdBWDV3WnpGdW90dGEzL0lCTlJXOFlHaU1wMDJiNy9VMlBqVTJaaGpoTldEY3EwV1V6SzBOMkFsckR1S0ZYdGROc1ZqYy8yOG5RT0Q0NTBDMUZlRE82SC9qOXI0N2syNnFIQTdiaERuRFNhK0dWaE5oVUJFcFR4dVBsUTJBdlBEYlYzdW1ISWcvMUU4a3o4anFVSm11ME1SS2dtZmMrRC9zZWsza1ZmYnUwOERETjlxY3RPc0F6b1Rrc2ErT0hKVFhkOFI5SUxORVRhNVhDMlByeDd2ZWlwbktJcUh4WGlyL0lQU2I1djZEampHekY1Q1JFMTA1VGNqKyswNVF4bzhzQ1hKUjZqSFVrajdybzA5bi9VcWRhRVZCc2c0Z253RWhWK2JhWFhabHphY29ZeGJYQ3I2ek5USlVGdUR4UnpVOFgzVWZjdHF2dXdUdStBYk9VYzdxT292dGVmTXJ6dTlGUlIveW9rM09rK2YwdVN2ZVpwdS9CYUp3dGFHRXAwdVBoa21hbEpTWE5qN3NTUlR3NVNlOCtOaDM1K3NxL0xRZnNRaHFZYzFFU1ZzdkJjTEdremVmbGVuYlUwVEZ6dk1meFcrUDRGSXR4WisrRlR4Zk8yVVBqY2o1eXVJTVNydlQvQzVtbGphTXU2enZublNGN1pmT3k3a2llelJqVjBoemdzckV1ODV1OURhRll5K1k1SDFwZjBUQmozaHhkcHBkMURxWFU1WHJEenh6R0dNdzJrUzF2Z0RmMDZ6SzN6dGxLdlphRlYwMFJkZ3VaWFNQOC9EQzJlWmgzNnhUZ1FVcGJzcW5LTEYxK3VEK0hHdWRTaUZHK1VmdUVsdWdZSHZLKysvUGVsOVhTb1N4UlRGWWtGSmVQWkZ6alh4eTFOMUNPVTh1NktIUGZpNFdyS1BDVHYrZHdVOHVRS2RlZG9YS0UvSXNCMHdOZVVSOXBCK0dpSGx6dWprMTZUOGYvNW9CVDg4ZEYvZVc5VXpKd0Ria1hiancrMnY5TFpQZU9tWHp1L245NXo0L0RCWFpXWmRnb3pvemQ2WXE0QWY0YXlmSzJZUzc3UGZydDBKQ0h2alpISVFRMGh6M0ZPNm1IZEhXZklqZmQ1djZjL3V4QkZVNzN5UUhHeVdITGx3NlpuTnR6aHkyNFhNNFpNbWhWMlNHSkFYS1BPc2ZHS0JsLytvRmh4UFMxKzdjWlNsbjJ1Y01ZWElmUEdjakJWRmZFVUpYZkJwcjg1bGdTenR2eURQNFAwbzdEd1l3OFhPZDd0NFMvdGE3OFpRT3A5NGRSdUMzaTYrMVZ2NWVpT0lsaUkvOHd5Tjd2TXRlaCtLenAwNEdmR2ZXY2lTZWxxanlPTmJuUWtlTzRYVStHUXNNREcvT1YzN2ZVT0RiVGxURFhOZVNudE1HUU5qbDJwekxEV0ZQNHgyWkpVcVZRV014S2Nocmt3M1ZZNjZ0NEpsVkY1eGhxcjFYY0dtNTFTWVBBRjRvT1A0cVBvMm5lOGl2ZUo2SGh6Vzc1Z1loaTc4YVNhV2o0cGM1K1ZXN3h5ZFRwV05aMGFNQjl6bEQ1V2tNZTN2d2dIc2NhbnNLVHQ0eGV5eGlhOENPeERiamxMVC9jRHpyTHNtMnZheWRTWExYVm80OEsvb1BCY1QxV2tFd094cm9TN3R1Zyt4WWZveWxqUjJPa1E1alhEK1BSZi96azZlZ3MvVksrZzVJV1NhSjArUzIweXBZVUtwMVZSc292d0pTam1jWVZ5MDlUOUs5dVdpWFduSzViRnZpRXVKTFRCK2RicndOWk96K3o2Z3dCSThXYUxGQkdpeTlrL3pYNTdoZU1tL0E4dmhxeFNidUpmeHhYSzcwOUkrL0M1YkRGTG80Z1hJK256OVAxN2NpSzQwOUdINFluVVNiRFp2bDVadTNvYVZSY2tUMFloY2h0SDlrRjJINVpTeTAwdkx6VTNoM2NHUENsR0N1ckExVFNIOHNYcG5tWjM1cW1PaXF0c1RpZFgxckIvRTUrVVdWMGVEbHl0aDQrekNucFNYd0l5dHJKdGlmTWNLdlBlNTZ1akhmbVBqZExzTnpDQVJ4Kzhhakl1NlJTZjVlak1kUThlSE5RKzFRVDQrWUZtbEU5ZGozT1UzNzlnbTVTanlabjcrU0JKeThQdG1sREhrUHcrdEdsMjQ5MW1jOTYzSExOUGttRFFyWXFrOHMyVWVXM0dCOGoxWmVIdGtFamgzT1dwVStlQVUveWRBVy9XTmFyNlRocVQxVDhMbzR2S2xYeHlWRFdYeTJYVDIyVC9PUDNDM0tqdzlTS3ljNi95WEswano2Q3dFOTAxN2VpNXlCS3lFNkxvcWdMMHZJMytCY0dIbnJmUmsvekJWbWlJRHRrR01RSnNtZmMxaDk2MzU2ZlJCeXFmZE5pR2hCQ2R6ckFJSUJySnhFaUptckFMZWNEOFJ5NDUrNThMaitKRHpodGVoeHZnOGpFSVJ1RUlTN3gxOExUdytEYlFKQndMRkZncHFENFRzWHZGNlFUNXQvMHNIemRnSlpKZHBJb3RTNUlUMzhUcmZ6TEZ6SFphVitRbnV2di82WXZ5RVNQYkN2cFB5K1hpUXZkWFQ0QWZyWWlZUG1KYmx0azU0NnFZS2FXRjBUWmUyRHNIeGVrNitXZi8wMkdLWVRQQVhSQlJuWklmaVVFeVhOa3haYWZrQmRrWklWQjdDWkJoTjdGamh0WlZ1elFOOWZBdFMrclEwZGIybVNITk5sYjVwNVozZEhXNnA1dUFZWnA2ZmZzaldXeHQ3cDF4ektnM2JwYlVkYjlQZmxIamhkeDFROVNQOGs1aTZ3NFNDTlFxQk4wUFRmSlA0RXdSZWRPVVI1NVFYbzVUMlNIWk5xM1U3ZEE4ejIxWWh5VWFSK0Mwc3c5QXYzamdveXRhT09XRzRTWWJwWmZldW5ETkU2c2lIL09nVTBEZ2FILzRxcFNDNjNXMXc3ZEppLzJHb0lweXdVWkowRlVRTk9jUzE2UWFXeEZUZFVqcTdUa2hPbmNVL2ZVZjRTaTFEeFdtdEplc1hwcnhkS3JGbTIwOUJYZHBrMld2cnRuQVFEMGpjR1l4cjFKM1RDbS9yZlJsT0lvVG1wS21ZY2dXQ2VJRSt4clcxY3dBRHBFbTllWE5SQlVwVUlybUczMTdMcjRwOE9TRitTcmFZQmxCTWxPL3FsVDZkaDMyTG0rcmhVTytjRHJBNTJNdjhPaEN3dHlKZnJiTjlkM2s2djRPOExURndmZHhZQllkSHVUQWNFUENlRnBRUXdVZnI2WUU1YWZSSzRWRS85NDhRbUNJRnlUbUE5RXZqc2hua1YrMmhWVjRuR2dYaFR2dnFlNm43aEpSdkRDWXNBTnhCeU5zSnhNaVA1bzBIOGsvbEVEdktRVTFiSUk2cC9sU2lRQnhEY2hkY1grcUN2K2cybTMvMWt2TDRIOElMRmlZakZRRnVVREVGbDZZcG5mOUlSWThOUEJmTkdkUGhNUGcyRjNPVmtRL2FVb0RvVEZ0L3BOdVNnTnpSOVk5T0wvODc5Zi9Qd0FrY3VPUXgwY2ZPTU9hUUZ3TEUrdnZ2aTJLaVM4ajJGWGpnVTkxL2FEeU5xbm4zeldtNm1LU0duS09BVlpqekt5WHFneDdRM3dscmJKT05Cd2U2NHB3MWpMTDYvMnRpanNveklKWkRlUGZOWmI2dm4zRmdRYWxPMU1maVFFV3Y2dE5UTTJHTDVxaDRlR0IySitOSVlHU2pjVURaYXAzT0Y3YnBocTNlQ1Y1OXBRWTRyeWllODcyeUw5Y0tEVzc3VjBSUXo0L2lDY3VMMW53M3RyOHh5YmF2TTgvY3Q1eUZ0ZGJpL1c1VGFjMkVFcURvWFZNcCtZTEJHOTliZllwTFd3NERreEJQNzBjZUtab2RtL0wvN2xvRzk0YktiTmdsVDF3Mnl5TGY3VlpUTTFXbVBZZDl1QmxpRll4OGVlN1V6dlp0TjNwL1lzdnozRHBqeVhwNEEwNlBmeXExVmdHM3lmK0VJTGRJUHZFMi9zNlBuZllsTDh6V2E2REI0Zi9WeW1zcXFNUTZNbDdmZ0JISWpLOUhIaTl6S0RDYUhhbWoxT1BMalc1TUdtN3dhcHlkRmI0TEhmKzI2YkFZeXcwYmpscHBqNC9JNU1XUGZkbFpYYjkrWGw1WXYvWDhRODkwSWRvdEtaNjdPdXhMMzQreTlqZG9nTi9lS3ZYZC9zRVAwY2FxcUhMMzcxVGRBT1VteWtiZnM5THVzUEIxdkUzK0dMWHkvQmZVQ0grSi9Md2o3T2R3V2Z1WU5mY3dsbnU0V1RydUduM2NQUHVBaTBCcm1KencrOGNiWDF2VU9lRjRIbDR5T3VjVlhBY1dpQkhCREZudzVSaHgvMEtMYWdCWklneXQ4VGVoaWUwcFVTSXdKQjRTd3VnSWxMSW95Q0pBQUI3QkNML25NbEp3VFNJVkJ1VkQwcEVvVm43UGxaSnZBTHdxaWlIY1k4cU5qdUVFTGdXOGZNdjhjOWR1WG1oQVJ5cGxCTVBjVnM4Znh6WnB1OXBaOWgyY3UrOE1RcmduN295RkdTYzBvS3hmUHpqZUJ3Qm40b0N6ME00K3U5UUI1cTBEUGRIcWJLVURjc0dIOTg5alY0TGRFeW5ZdzdCSDFDaFR3OUFjNEVSM3lPVVZVaXFKRGdqT1R1N2hEaE9TZ0pvcVlZL2UrL0NONTNFNkl1RUlna0lMYTZXM3pWLzZGWGdTR3YzNjlnOEEwdlM0R2lOWmVySUxvMGpmMUxnc2hUMGc1aHBIRm1CRzhkK3FwMWk3OEdnZWZwdnRuQm55R2NzZE44Y2dtYVQvN244QUZCV01BSmlCZFMxdDNFOWUyY2dlZkMydWV6Q2VMTHNJakkwczNzNnVycWhXeXVUdjNFaFlRUGlNdGQ3U1J5TS8xdndneWF3UFZtRHowVVNRcTBSR1lsRjBRTUxTdEUrelB4eVgySUFvSmdtaS9NMHZlYzJBVmp3NDJMemY0UHdseUJnK09UdVR4SDBRL082SFFOM2ptMzltN2dlNjRydWc2QkYzUjdNTng3RkJRZlZLbUhnWUlnTEg5elF1M0tmZzh1dDd3dGdqdjZFMnVlbjhSVGExN3lQaEIrWnRnYW9Uc2RuRml6TDVoT3Jsck9CK0tQcjZwNlJhZjRLdHNBeCt2ZVpTb1g1QW1tcWw3U3FWM3FudEwrWlp6b1VaS0d6MUZnV0FjVzZ5Ukp5RmxKdzRwRFBYRTZ4TFZqNlRCcG1ITjQ0bndKWXFXN01JMnNoUk5ac1JOQXMwT3crT3ZRaXR6QW5Gc2c4RTNrWk91MVdQYm5iaXpmaXVNdkpaRm83bEo0UTFlSER4YlVzNXFnOWdmRTN1emY3VDhoTzNhL25OeGZwUk9ucjJ5SE5NZ29PaU9kcHE4Q1lkb2gyaFRsTlY4VWZaQU9rWGRNRGw5V3ZaUFR5SmoyKzhqeW5zb1BaVkIvWnZLQVowWG5aQTk3K0s5UEgzQmF2aXAvd0hFMkVvZ2ZpajJIZU40UFBoVmM1OXgrM3RkSEh6eG4vUm9mdUR0bHN2ZzJaempCa3hiTlVIK2xuenlMamIrRGgvelRDUDFQYzVHTmI5VTNYR09hQkRIUW9ldmIxeHVtOHBDaklISjN5R0RnYzJCMlN4Q1V6SHprTHAxUXY5UnIyQk1sVlA1aWtSZUlvcldxWGVnSlA0MWVIUHZxdkxIemVkcUxqVFJLYjRzTlBjclQ5NndrY2tFaDljdXlXaGJMMHk0MnFzNitQcGh5NXpBOUxIV3hneXZRWUJNUnpQRnVyRWkzTGV4ZGg3aWpmbmozNHV5L2pBRDJoeUxzWDZzL2Y1SGU0Q0hyL3l2T2x5ck84YmZXUHN6SzVpWHMzRG8zTFR0bzBPMjE1YWRUcTBiRHIreXFDWTNHNGxFdTkxVlpXR1A3UmlLV1dKSG4rdmtCY0pFT3JPZjM4b0FQTXJiam9ybk16N0NwOUEva1VIajNzMW5CNDNYcmZNR0pnL2xScmZ4aHRYeGkvYW1xK1lPNitRU0dmY1BybmYwUDg1Tk5BRlBQbWdhcDM0alBUWGxlbGhQN1Erd2VXdmhjcEN3YlBicUdybkc5SDgxZUl4MUJDNHBkK2xCM3ZVVmxPNlY3T1ZLbGo3WTkwQllkQUN1T3A0RnB4UjNpWDhRTEtWcTZLVWR1WWozNXdIb2hpZDhyeUJKSEgrcHhYS2g2bk9pK3FlOUZlU29MT3BtMmxLZzZCTTJkbFpqZ04vRU9YWU52SmRzZ1dydStmYlcrajYvY0FQTVRmTEhxVEIvaFZ0RDdTaXlGdFlDZElFNzJxNHE1ZThFUlNrQnI1bERlR1dNOTFWNjMvemdRSGpxRmN5R3U5ZEFsOHArUDNSdGNtYXJxSVpidm9XZUwzTk0rUjliS2ZkdS9xYnB4QjlJczNFOGpNZndrLzltUEFvNXk0MlllNmFlZVlVV0hYWVgvSW9iaWs3REllUU9JdDBzZHdpT20vZ3lPOENuRzJhUVgyVDU1UVRwQnNENFlzbjg4OXlRdlNLUkxaSWNjQjBaK0RTZHhzRVhYbi85Z0JqYlZ4ZlhXUURMRGRIVWNHRDh4bGtWd3V1OEhTZjVYcFhndnBHTkI3eXAycmhHM0wyVGhCeTVkUDA1MENDL3lQOUxRam5RVEh3U2hjd2hXcXdtcVdNb3lyQkd2emkzM2kvc21SNkdqY1JzRm03YVd6WC9pWHkvbGxaVVg4bmNzQ0VaMjA2bStrSmRwQkg4Ny93N0xZZnU5UUJCYjBXOGZRbFNSNHJjNlpCekRWSFBtK0xmOCtrWVdKNWJYS1htOGpyL0RFMHRBNFBzV1NFUXJING4vZGtzZHd4UUhiT0d0L1hlRFRDWDF4cXorZEhUQkNQTXhyNTNvVVZLMVNaNzhZZEY2MkVNVU94OGY5RHRiZ3VxaXdjR3BuWHZOZ0x3Z3JZM2xKOGhLU1Z4eGtmbGhxa3YrWHY2a2RwVG1sNTV5SnZMUk8vNkwzTGNMdXQxcFU1M1d6ZFU5VGQzZTBMZE0vZFBhSVBEQy9NZTEzMXR6ZjhYZTN0RTNkM2MzKzBXaG84ZkliOHhUQUt6cUo3YUxIK24rRmlJUnV2a2xIdEt3VmtGa1hTSUx2TXl2RXlCdjhudCtwN1g2VmV6YjkyNEcvYjhBQUFELy94VVRBN045WEFBQQ==
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-20T07:37:10Z"
+    labels:
+      modifiedAt: "1773992230"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "6"
+    name: sh.helm.release.v1.cigg-app.v6
+    namespace: cigg-app
+    resourceVersion: "56055"
+    uid: 01353037-9ec0-45a2-a86d-1dac9c17fcfc
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt3OGFYUGlTTEovUlUvN1pUZWVEMGtZdDJGalBpQU1RaGl3TFVEWGVxSkRWU3BMZ3RMUk9nQXhPLy85UmVsQ0hMYnBicy9zeE1hYkQ5Tkd5c3JLek1vN0MzNmpQY05GZEp1R2ptVmRHa0ZBWDlDTzkrclQ3ZC9vVnllTTRxOG1DckNmSXBOdTB4ekQzVjR5alV2MlpzWithVE5jbTJsY2NlemRsNXRHaTJQL2wybTJHd3g5UVdQajlDcU9tYkdOTm52VGJyQlhEYlo1ZThkOXVkMnRNaEZHY1FhZmZZaGc2QVN4NDN0MG01NEhWbWlZaUlLK0d4QWcrb0tPWWlOT0lycE5SMG1Bd2dpWnlLUi92NkNoYllReElkMUZzV0Vhc1VIK1BtWndoY0lvUjgxY3NWZk0wWVlkYW9Dd1MyWFlxRmMvcEI0U2dFSVB4U2lpTDJnamNPUUt3WXJMbmdTN0ord1ZlNXZoak5PQTdHc0VBWGFna2FIKy9ZTEdQbHpTYlMvQitJS09rUnRnZzJCdC82dWlzM3A0L2RWR21IQjNGUWVZMEpqeFE2Tkd0SHF3Z3FtdVNpeDBieXlOczIzb1BWdkE3Y2Y2cy85dDFHQmJYUy8rTXByeVMxM1JBK0RPTGRHZEJEb0hZMDNsMXlPM2FRTmw3b2hkdHZYNkhIeEJhU2Q1em5Fa000Smp5aGZQR1V0WG1rdHh3TGE2RnZsODk2MkxoOWdjeUNsd2VOZFVOcEVvWkxnZUhweldibzBndTRiU3hHSjN1REFVMHhzcC9UWHNOalA0ak1hcGFJM1VuRWF4MjV6cXlnWnI2Z1NQbGhrdTYxVmxZdFNJck5GeTRtdnFrS2s5ZjBDTktCWUZPZEc3aEViL29aREZQZURZR0hBM0ZoRDZqcTVzdGwzSFgrM2dKYXk3T05HbkhVZmpzS2VuckEwSG5hU0VGWjFPVEdCejJjU3M1c29wY0dWR1Y4ZUpvZHl0TXBwbnZrVm9NcFRtQWd6azVSR3VraThuazEzMnpHaklqcTRPRTEyVk1FeWJBVWhiQWZBbWpLWTBGeVcrRVI1aUlNZzI1T1p2eXA3Ky9lS0ViZ0FETHBGblh1WjI1aUl2dmtyZG1wWm9LaC9JcnB4Q0RxL0F3cmNJZHpCdGNlUG5JRFNVNXZMUjRYdTZ5a2VnZ1dOZGFUSmRsOFdtMEY5cXFtUS9XcjVWbk95dE9JaS9pQUpPTkc3RDZzS2hKdWtzRURhSnByQllkRG9Kb1hha0RHMk5pekZ3bngvRUxoOXB5aENEd2ZpMjYzUXNzY3NUeWZ3VVR0amdzYmIxQ2U2VTBHOG9FeHR1UzJucU5oaklSTnFPcGt4Q0lzR1JOOFJRMkFRYTE3OEhEVGt4YzgyeHhNR0VTSDVoQ3EwMDQ3ZmJzWURTWnpUT0h1L1QzTEZFb2IrRzkrOXJnTzdKRVJCS3k3ckp0Rmh6K3d1RGt4TzlRL2FUTUZENVNGTWx2TnRQWmpSRnNrMmhWOXRyWTJ1dUhNR014K0xaSjhndHd6T1lySFdseGxkM2JFMlZabUIyK1FYZ21veW00RVJYUmNzVTdpeVQ2NVBuTG1pSWx0UVRLMW9NQXQrYnJJQW4yY1RLb1ZmSHgxaWx0ZVRyV2JJKzFnV3h6a3NBbEw1SFlEUlAzaUpsdUVMMy9tYTBHSE03UEIxTDQxb3hVUHFKZmwrWFE3NEg1S3lqWnlObGZQVHN0ZU5iKzg5NHJISDJTdXdPVlUzQmpLRTBQVkhRVjlEaG4wRmp3dWlOSVo2ei9mSEl1VWxFNjJndEN6d3BBRjArMGRKT2pCeCtYYTZCYVllZDNJL1R4NVJmZ3ZYaE9uS204c0lRN2l4eEtYVkZvYmt5aWU0cS9TV2EzaVFqUjN3NGd1L3lXeURJR0hZN2FWMG1PUzVwQmR6NTBScGRtZmdnN1RoU1Q3U2dLOXY2WUdtTDFrNTJHdGRLVEtFZkFPSVRhcm8xbXZLWnpqdzYvQmVVOGdGd0o1R3BTTzk3YitMbHBteGxZM1VhRFlXMWRhN3dHOTJtb2lrYmxualN5aGE2emZ6OHAwMWl2eXZJWVFZMGhrMmlyNC9laDJzWVRZRlpKRGpTSjVrbit2OE11RTJnTlpibjdMOG1QTTJGRnZFaDJmNTFQcURRU3MyNkQ4aGxWYk9UNFROb0RKbGNicDFFZHZ1UnFjamJrVnZaWEZLWCtaemdLMzNQVGk4U2MrSG5VV29nclJTbEg0UHVhVnk2MHVURXdkb0NKSktSZGQzT3pSSE5EY21HbnNUQ1BwOENibGo1bWVwc0JoSURleVkyajJ5SzhOdG5qSHZmR25FMjFwUU5ZeHpienZxbitTVjY2dllETUpCVFhaWjg2TXBiUTJoRityMXZqYmVkZlpvR1BJWXVYdW45Q1NaNDljSDRWcnp2clN0KzYvUUptOEIwNVVSWEo5djVZTGpTM1BudHZ0M3d2am1RMWhJbk00L0hkcjNXVk1sL2REb3JRNUJ0TUpEOEk1c2I4Q3ZvUGIrblUwZDZRYzZtV244Z3k4eUhDdGdHUFFrRG9kK2NjekpadnlSeGJISWdMeWpJcWFHMGxuc3dkWHoxdndkRHJDa1NrZjhXc245ZEhmZ0UvdXYybitycVpHV3F3NFd1am0rUHp5N0xoQm5BWWhzbzY3ZHpCSzdGUW5lQ1ljcmZpVUl6QUs2RWdmZHNqV2ZpZ2I4aE12L2xsL2V6TWpzdzl0T3hQQkhGN2h2cTQwT2hSMHpjMXR3TnpwUGJ3SVlDVm5SMXVEV1VWdkxvOExhcFNpdklUV3dnNEVRbnFaeFZwWElpYUF3RDVHYWlKeTV0K2F6S0RHaE1GcHF5d2RBS1lsMlZiRjNvTTlvc1M1MUtsMTl6OFN5aElkYnE2NXlhaS9kMnFVTk9nenpYMUtHbnE5SlVWN1JkZW5kQU14encyMUZEMnhUdlQ2ZWUrYnRQQ1VOQXdjbmNsZGRBd0F0TkhiOW5zcG5NRCtDTG8rWmpUYlduWjZXWHJyM1dwczE5K0xSUWVZSEY1bUFZYUkxY2JrUU5rY29USHFlVnloYnFUbHdoYU1pcHh0VmNWNW1DQzVPMVdaa0Z6K1J5Zjk1VGRYT0ExeVNsa2xVcEFBSysxY2kvM00xZUNtbTZjcW9wSmo2QStWQkdwdEJQZFU1bW5sbGUzbC9iZk5ZSkR3cHhmU1l1dzlHUDg4bGlvTFJTOUJmZ2RhYklNVWxMUHVUWCtwNWlMUXBYNzFkcDVxTDNZSENZWkwzV25KTlQwOFVML2Zrczg5MnBwRHJCME5NRGpadlhxNlh5U043MDNMRGNUeDBubVlpbmIxVktuMUdONUpGa2w0a3lGaHdNVjZiUVdnQnVmU3YycGZ0NUZYMCtqanAxMnVGUjFDblZTSHIrTVR4dmVYc1RYTHFPRldhdG5Vdm9lNitPNVJyQlZXcWNlOFRQSkxGeHNUZFQrdXZQSzhBbFo2U3dnZDRZMnFhQVY4Qmh0MUJaUDlUVUo5Tlk2UFlUblp0YlEwRVBnQ0JuT0ViZHpqSVA0Rm1DZWZzMHJZdXBqck81aGNwR01FaVVLTDFkWmxtU1M1NkJzcFV4ODYzWGJ0YUdzWVpDVmpSbVFmV1ZKTzFGZ0oxMGQrdEhVNTRjQS9IQzU0aDg0WU1QaEsyNXBLSzNWbldoVDkyVzg0Y0pPOFBWVDREYllncVhzYTB5TU5mR1FHQVN5RmtyUTJpdGpGUzhGUWQ4cWsvWm9pKzBpVWI1WnhZS1pxb3BFcTZIM2R4VnRWeDl1UW1BZ3BsSHA1T0ZUbE9RWXloc2JGTW9YU3EvaFlLODJHVitlMVhMdHBZUnhqdlhxMGRJTlcyMFY1M2dtTGk1WTN2WlU0U2ltanFzYkNZcm9MQTJjSjl2eFg3azZPNm1hWEw5cG9pWi9hNkdhMjRQTTlUUnRPT01WRGtGOSt4NyszN1RoZUZDVm9kUmxtbWZ4ckhWVmJGMUVMcVhtdE5raVoyL3ZZNjNZV1BTQUkzaDhrbmREeGU2SUNaUTZHOWh3MXpCWEZHZGc0d3pGcnRpRElUV29qei9KeVV6c0MxU0o0eXVNTGNqcnBEMXRFVU04K1I2WW9UQWxSZG1mNWlsRUxvNmJrMFduUk93dzloUXpGUlRKVnl2OXNVdXp3RnV3d0pGbm1SZHIrTkt0b3doNVhvU0htUFk2RWNIbFZPY3JlL3p0aWxZdDJLMzVZSUJibWpxY3BYQjduU01aT0hFenpKbFJmM284RTlncWR1R3NtR2hPMytvOEE3MEZSakk4WDYydnVzY0FRVjcwTzB6SklVY3FaTU42QnpvbGFzSE9zUGE4TENDK1Z5SCtiWUQrdXdvdnVzanJZT2Q1UXFUeUNRYW93Nkg4M3ZmbXJtdFJIK2piMGs0KzRIRWVXc0tmVVpYZEJZTUp0ak1lcFNrenBVcWl4eE55OGliOTdkMkp5Z1J5OFZtdjZpTDcrZk1lQ3UrSTdIWWlORnJnaVAwL1YzcVdVVmxuMUQ1cGhSL2t2dWE1UCtFempCc1NMWXB5SVN1cmE1bStkQldWNGVjb1V6d3JMQURLTFMycG1DbXVqbys2bmFQbi85REhlWE14aVZNZUlLY3pMd1JiNGpXeG9iU3pPMXBTV0xaQk05UFZQTGpXZWQ3T3BRMVN6a25Ua25PeU0zZi9YaDM3MER6czA1cmt6dU9XUldOenpOMk1wZllZWC9PdHVRNUkwK1BPeEo1TERwSnI1ZkZyT09PUTgwL3pudXRtZHd6cDVJOGVaMzMrck01YXo3Tmw4OUgzUnd6dzN2Y2lUMFJ3ODdhcXo0Rk9HY1BYY2o0eU9EMnlqZTNGWmtLaTJkS2l3VTFiL1B1ZWFmRVhsdFpTWGZjRVdkWHB0Sms1bVgzcXFIYjBDRXhTRnp0YkdpeUFkMVdsdTlsT1ZOQnd6TzNzUTJGbmVzS3V3YkVINmhWcVg3Z1ovSzl3TEZ0RWx0ZVFiZnZWU1Z1VlhNVmVxMU1Gcm82MmM2VTFwTGdGL3VSSmVLc1U2ZENGelA2dkpWbzNOd1IrN3R6cUhET0o1RkcxcGI3TmlRYnVNVDc3czU3VjFMTCs3SWNEREZVWlF3Ynh6S3U4TStPV2hza1A2cGtuWmU0YjlVL3I2SHZ4WC9OSWFTZUVsT3V1a0xGcVBjbkE2WUwzYncyMHZmQ1JUVmczQjZiOUk2Ty8rUWdVdmVHZWUyVmw5NU1wZTZsYWdzSGNzL2RlSFMwLzZmSTdnMHorZndCMWRHZTc0ZUwybGtWWVNNL3M5YldVS1VWOUpaRWxyY0g1ckxiNHhPR1ZMVnpTb3BCV2dJSGNnVDYvQW9JZUlFT3k2eURoSzEwMzBkTitQc2pNNi9UZlhKNGNYTFFNc2hUZkZQbG42SGJjdlRaWVFwdU0rYUFIeHgyN0FwYXl4TEMxNVYrWkFyMjdibURscnBjZm1iSTlQZ2RnNGp4NHE4emtFTFd1WU9ZdWc3WGh2UTRrK3R4cUJkd1lxaFNvQ21ibnE1c2JDVFhlWnVmd2Y5ZTJyRS9sRkg2eTJ6dnh1UXZyU3QvMmpEcTdVRlUzUmJyNjYzWExwK1FPRWxpbzNqZlM5L3VNRmVoK0t6SjA1NmZHZkQyeUpVVFRSbEd1cExyeUhIY3JxWkNBWERoeWx5SXUzYWEwRW9OTmNoMGpmZ3B2ZGRuVGFHMTFiaCtwS3ZpdzJGSlVxWlF0WmdWWnpRbysrdHFyZXY4bVZ3V25VT3NMOHE0MVY4YnNvNmhOOG03K3lRK0RzWlp1eTkvSHdkWkM2b25rZGk3UWdxTGdWZm83R2ZsRmg5TW5JNWx6UVlBNzNLRzB0Y0NwWC96blhoczFEK0ZSMmFnaXhkRkRJM0ZnZFNFd3Z4VzdPK0duRVhadHRPMUV5bXUxdURabzRKL3IrVlNqUlJrVThDUm9RYTdGbWhsNDMxT1Y0ZTJ6c243TUl0MzQ5Ri8vZFRwNkN5OVFyNjlnaFpaWmd4bEU2Q2lEVVpLWjQyVGlVektWdXZCVmNnUFUvVFBibHJGYU1wV0xZdDZtN3FVMHp2blc2MkRhVE03cy9JTUlTZEh1akpoUUVQTVpmODUrZTRuakpycWVYdzVYcE8zSSs4NHJwWjZlMGJlVlpmRHVuWnBoT0I2T0gyZWptZUZLSW8rR0hzQVYyWk1ycFZtNTVrMnc4ZEJmcFYxYnd5aU5EMWlGM0Q5YVMyMUFMaFpxYjNkdXkzZ3lWR3RyUFpKU1g4c1g1eGtaWDVqbkJpa3RLN0Y2ZXpDU3MzdlpKZFVCdnVYR0orWC9mc3BJejlLOTM1Uk8xbldpT3V2alNudkd1cHdhM1pxSTQ5ZGJtRkRZZmx3bUhmSmhmN09CME9zdS9obXIvWXBwOFdIcmVkQk5YSTl6bE4rL2lKdFhJMGxuOS9JQTYxVGx3NmJMRkNHR0M3ZXV4ejd2aTZMS1MvTWw2MUh1WmZMVnVNeTJjYWFzb25xcmZ2cTR0RGFQOGpoN0huaGs1K2hLN3VHV3IrNHlWZDBITFVuU241bng1ZVVxakdCdXZ4c3VYeG9tL1R2djE3UUt3TW5LS0xidjlIRldKLzhDWDB2Tmh3UGhVOStHTlB0QnNNd0Z6VHlWdldML2ZmODE4SGpkRVlYS09nMkhmaFJUT3k1YnV2My9OZW5SNmtPMWJ4cGNBY1FrODY0VjRPQWpoV0hoSmp3QUc0KzdVbm53RDExcGxQbFVicXYwMlpFMGRvUHpUcmtBV0dFeS9ycnllTjk3MnR2SXRleGhMNlp3UHk3RDc5ZTBIYVFmU01EZVFiQXlLVGJjWmlnQzlvMU5oTEt2aVFSMGUzbUJlMDYzdTR6ZTBISFJtaWh1UHMwbjhjT2RyYlo4UGNKaFJCNXNXRWh1djJGS1dIR3lQWEQ5QzJ3MXU4WHRPTm1mLzlHQnduR1R6NTJZRXEzYWZGMTRzZFBJWXFRRjlNWGRJZ0NQM0ppUHlUdkl0c0pFWXBzOXVZYU90WmxlZWhrUzR0dTAyYnJscnZqWHIrdzZQV09iVUNPYXhoM3JSdUVXcmNHK3RMaVlMUHg1WlZCZDNmMDd4bGV3bFhYVDd3NDR5eEVrWitFTUZjbjdMaE9uUDBGZzRTY084TzQ5QVh0Wmp6UmJacHIzbzZkSE0yM0JFVjFVSzY1RDhweWR3VDA5d3M2UXVIS0tUWUlhcnBaZkRtbGk1TW9ScUg0bEFHYmdJQ1IvOWRWcFJKYXBhOXR0a2xmN0RTa3Bpd1hkQlQ3WVE3TkNnNTlRU2NSQ2c5Vmp5N1RraE9tYzhmY01mOFZpbEx4V0dwSzg3VmxORjViN0d1REJRM2psVzJ5Wm92OWN0ZUNFTEkzZ0RQQm5jbmNjS2J4bDlHVS9DaE9ha3FSaHhCWTI0L2kydGVycnJBUERVdzJyeTVxRUtoU2hWNXh1amJTNi95ZmRvdStvQmNtZ1BNUTArM3NyM2FwWTk5dysvcTZVamppQTYvM2RETDZodnNPenNtVjJhOWZIYytKcjZKdkJFOVg2blZtUFdyVzRVYzlTdXhUazhjWjFWUEY2V3hLSVM4T0hSUlJmMy94S0lxaUhKT2E5aVN4TTZLZUpISGNrVFRxb2FkZDVPKytKWVlYTzNGS2laTlpUK2hKR1pySmZEU2l1b05lOTRINmV3WHdrakJNQTFITVA0cVZSQUtFYjBydVNOMUJSL283MTJ6K28xcGVBSGwrakNKcTFsTm54UU1ZSWlORzVsY2pwbWJpdURlZGRjWlAxSDJ2MzVtUFpsUjNMa205eWV4cjlhWllsQVRtZHl4NjhmN3h6eGN2TzBEaXNxUEFnSHZmakNOYUFHM2tHdVVYMUY1ekNlOWkySldOc090WW5oK2lYZm9wcHZ5enBrcU1yZzRUbVBJTVNQbEE1NW9yNk00dGs3TXhjSGpIVkhDa1p4ZFgrVFVKKzZSTWd1bk5nNWp5YzBQQVczRXdZV0hSemhRSEUxL1B2bDFtUm9BVHkzWjRBRndZaVlNaEJpVGRVSFZjcEhMNzc0VitvbmY4aFNnMHNjN2w1WlBZdGRkNSttRmp2Y3MzREZYeXhXNHZHRG44RTNBM1RWRm9KZm8wUy84eUhySldsOE5IaHRMRUk4dFBwUDdrZFo1TlRPYUUzdXJiWnZKeU1oTUZLWURlK0dIa21vSFp2Y3YvRmJBSDNGYXFQL3VKNWdYcGFKMy9heWhtQWhwRDNIV2F2cDRTV051clBkdWE3czJxNjR5dDUreTdMNjFFRkxJVWtJVmRQcnRXQmRmK3Q1RTNhY0NPLzIza0RtMGoreXpGK2VkV2Fpanc0Y0hMWktwbzZqQUFEWGtyOW5CUFVzY1BJNDlQQVJkZ3JmSDhNSEx4VWxkNnE2N2pKNmJBcnFIYit0WjFtaHprSml0ZG1LL3lpYyt2eElRTnozbEZtWDFmWGw2K2VIK2pwcGtYYWxPbHpseWZkUjN1eGR0OWFiSk5yZGdYYitsNFpwdnFabEJqSTNqeHltOXN0b2xpRTIzYjdYRlovYkczUmZRTnYzalZrcm9QYUZQL3ZzenQ0M3hYOEpFNytEbVhjTFpiT09rYWZ0ZzkvSWlMSUd1SW0vajR3QSt1dGI1MXlOTThzTHgveEJXdUVqZ0tFTXdBU2Z4cFUxWDRJWThpaEJHTS9UQjdUeGxCY0VwWENvd0VoSVN6S0FlbUxxa2c5R01mK3JoTnpicFBwWndJU0pzaXVWSDVKRThVbm1yUHp6S0JueEJHR2UxcXpNT1M3VFkxOFQxMHpQeGIzTmV1M0p5UVFNWVVpYW1ubU0yZmY4enNZVy9wUjFoMjAwODg4WktnN3pweWt1U2Nra0wrL0h3ajJKK0I3OHZDQ0lMb2VpZVErd3IwVExkWFUyVnNBSVNqOTgrK0FxOGtXcVNUVVp0aVQ2aVFhOFRRSHRVUm4yTlVwUWhLSkhWR01uZTNqL0FjbEJSVlVVeisreHNsZWs1TVZRVUNGZnZVMm5EeXIrVGY4eVVZOGZyZEVtYTM0V1VoVHJMaTh0VVBMMDFROC9Ra0hXMVRJSWxTNEcvYTdGWGp0dVpxZmRjMVBMTkdPc0VXMmZ1ZkwrSCs1My9YUDFJVWdyWlB2ZENLNGNTT1oyVWtQK1gyUFgwZVhWMWR2ZEQ3OElrWE81anlJSFc1clJ4Qlpvci9wRXgvSDdSQ2ZzK1RXRUdGeUREVEV5Z3BLc0lJQlJTMy85Z3NITWtwZEJtcS95R0lTZ2o0dG1RL09NdWFuRS9YME8xemErY0RmRTlWUmRhbTZnWFpEcXh1L1RuRmUxWG12cU9uS09TdDlvQno5b3ArVFYxVVdWdWo3cWhQckhsNmxFNnRlY242T1BVanFxMlpkTWE5RTJ0MkJjL0pWZk5wVC9yK1ZXV3Y1eFJmUlJsL3ZPNU5wakpCbm1DcTdBV2QycVhxQ2UxZVJyRVJ4a253RlBvQTdkbWRIY2VCZ09MMnZzSUdSbXkzcVdzYkdUaTJEMTZkT0YrS2VqVWNuSVJvWm9jb3NuMXNFb2o2K3dDRmptOU9FZlE5azNqSjZtVXRmWE5XeUVOUjlLazBVb2U3NU83TU1mQTl3a1phRWRSOGg5aWIzYnZkWDhTUW5VOG45MmZwck5OWDlETU95TWhiRysxRFJ3YURwRTAxR2NZOWZKRTNNdHBVMXZMWWYxazJQMDRqNDVwdkk4dWFJdCtWQXYyUjBiK2UxcHdUL25md254Ly82N1I4VmdKUXgzbVFBWHhYOE5uSDgzYjBLZUhhNXpia1BqLzgxSlBPejNHQzIxTW1XOS9tdEJkc2ZXalIzSi9xSjg5aTQ2L2dJZjh3UXYvYlhPVEJWK0lQWEdNUyt4RTBzT05aMXl1dTlKQURQM1MyeEdEd2syOTJDaENTemJ6bkx1M0F1RFFxMkJNMVVQWmlsbFY0RW5xdFhPZ0pQMDFlSFB2cXJEUHpjZDVibTBrVTNyWTJ0U2hPMzBWeDZNQmM2cGRGdVNzVnA1MXZWSjU5ZFRERnprR3lYNnZXRGk1SFV4dHAxQnp2Q29XR2hXcnYydFFYNXJ0M3o4Lyswd2hvZlZlRS9YUDE1MC9TbTNySStuL0YrVlRGT2Y3YTJidFoyYlNBbmFKejA3SzlEdHRPVzM0NHRUcm8yQlZ0c2NsQlovQW9sL3VzTE94Zys0TkVMRWFoNjNqWkFRaWhBZEhUVzNuQU94bmJjZFZjNUdlMXNmSjM1RkQxOXVWaENWOHZYS2N6UWVwTmo0cmxkOHZsRSt0UGxjM3ZGTTRuTU93NlZtL3N2NStmckh5Y3VHanNKOTVCZkQ2VTUyVXhjdC9IN3BLRlQzbktzakxDYSt5QTY5MXM5WnJvQ0ZtUTc5TEZodVBPU3RzcDNNdVJLcjIzN1o2MkdCQ2lLQnI3Sm9yYTFMK29GMXBDaHFtRVRvd2VQWWhlYU9yWEVyTEEwY1ZHRk9XcUhzV0daeG83VVo3S2drNm1MUVdxTnNVS1p5VW05YXQwKzY3QlEvSGFENWVPWjEwdDc2SXJ4Ni81Q1RGZmRhYVBjRXJvWFNXVzRFckF0aC9GdTFYNTREem5pQ1NnRlhNazc0eHFUVkcrMDMzb1RlN2J1WE9ocm8zQW9iS2ZhdDBaWEpHcUdrRXQzeVBQWnBtbmZRclJxN1BadlNuYmNYdlN6TjNQUVdMNFFmNno2K1VmNWNhSGVhU1h1QUNGKzEyRnYxRjk2WEV5eTNpRGhMZExBK01qcHY0SWp1cGppTE5KejdOOStvSzJmWCs1TnlWL2YzQkpYOUJFbCtnMlBmUkJkbzhtdG11THJqLyt0WXZhV0xhdXQ0RElyS2FyUXgvOHdGeVZ3Qm1lNThmWnAxTHhYbWdiWWZjcXNxOEp0eTkwbXdwQ2RPbDRVV3hnZkVIK1R2SmY2YTNwT2prRi8vVjFST3FWb2dnN2lGYm5GdnY1ZFpHandIRndtZVM0ZzAvOTY2VzRjZkpDLzFvTGdhRjE2RkpmNk1za3hMK2Nmd1ZsdjltZUk0aFErTXU3RUdXYytLVUtHTWN3NVpnNCtpVzdmWkZHTVhMYkJZL1gwVGQ4WWduMFBRL0JXRUxaUlB1WFcrWVlKajllVk8vc3Z4bGlTcWtmak5wUHg1WWFZVjdOWjhkR0dKZE5ra2V2bnpjZWRoRDV6c2NIL2NhV3NMd25zSGRxNTk0U29DOW90RUplVEd5VXJxa3RzYjJkNHRLL0ZqOWRIU2JaamFXTWhXeHUvc1p2V044eURaWmxPSzVSL1laMStRUFZieTY2dldMWVp2T3UrZVYydHlpd2pZZzRqV2tDSVNwL3lEci9OZXl2QVpHZ2sxM0JvUUY2OVVOMFNjenZNcnNNUUZ6SnI5bU4xUEszcDcrOGRhL24vd0lBQVAvLzdCeU1OK1piQUFBPQ==
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-20T07:44:31Z"
+    labels:
+      modifiedAt: "1773992230"
+      name: cigg-app
+      owner: helm
+      status: superseded
+      version: "7"
+    name: sh.helm.release.v1.cigg-app.v7
+    namespace: cigg-app
+    resourceVersion: "62994"
+    uid: f3ffa399-8fbc-4c9a-aaa9-2d41681893f6
+  type: helm.sh/release.v1
+- apiVersion: v1
+  data:
+    release: SDRzSUFBQUFBQUFDLyt3OGFYUGlTTEovUlUvN1pUZWVEMGtZdDhYR2ZFQVloREJnSTBEWGVxSkRLaFdTb0hTMERrRE16bjkvVWJvUWgyMjYyek03c2ZIbXc3U1Jzckl5cy9MT2d0OUlUM2NoMlNLQlkxblhlaENRVjZUakxYeXk5UnU1Y01Jby9tckNBUGtwTk1rV3lWRE0vVFhWdUtidlp2U1hGc1cwcU1ZTlF6OTh1V3V3RFAyL1ZMUFZvTWdyRXVublZ6SFVqRzYyNlB2V0hYdkRQalNvSmtVMzdxcFZKa1F3enVDekR4RUluU0IyZkk5c2tmUEFDblVURXNCM0F3eEVYcEZSck1kSlJMYklhcC9mcjBoZzYyR01DWGRockp0NnJPTy9UOWxid3pES0VWTTM5QTExc2wyYjZFUGtFaGsyWXVHSHhGTml3TkNETVl6SUsxSVBIS2xDc0dheUo4SCtDWDFEMzJjNDR6VEErK3BCZ0J5Z1o2aC92eUtSRDFaa3kwc1F1aUpqNkFaSXgxaGIvNnJvckI3ZWZyVWhDbUFZM2NRQndqUm0vSkN3RWEyZnJHQ3FLU0lOM0R0TFpXd2JlQlBMY0h1eE52Ry9EUnMwMi9IaUw4TXB0OUprTFREY3VTVzQ0MEJqUUt3cTNHYm9ObTFEbmp0Q2gyWVhrK0FMVE52SkpNZVJ6RENPS1ZjOHB5eE5icTZFUHMxMkxQejU0VnNIRFpEWmwxTEQ0VnhUM2tZQ24rRjZlbkxZL1JwZWNuVzVpWVRPWUtuTHBqZVVleHZRYVdid0dZMVR3Um9xT1kxQ3B6blY1QzFTbFRFYXJqSmMxa0toWXRpSXJPRnE3S3ZLZ0tvOWY0S05LQlo0S2RFNm1FYi9xWkRGbzhIUXNjSGNXUWJmY3pSNXUrczQvbm9QTHlMTlJZazJiVHNxZ3p3dHBXM1FieWNsck9DMFl3eWJ5eWFtVlZkS0RWZWlOR1dVNlBMRE9xTjU1bHVZSmwxdUxvMit0RHJCVmZMbFpMTExudWtOeWRHVVFhSXBJZ0pwTXpCU05qQzhNYVhLeldXSmI0Z0d5T0FsR3pEek4yVlAvbjUxUmpjTUhheWdaMTduMnU5Q0w3NUozWnFXcUFvWFNLNlVBZ2F0amFWdlllNUF5aktqU1JEcWNuUDE3SEJkVGVFaW80RmlUVzVTSFpkR0p0OWJxWXBvUDF1K1ZaenN2ZENQdndnOFNsUm1TMnY4c1NacHRNRnZFMVdta2VDMEUwenRVQjdZS2hNanc1MDhDUjB1VXVVQk12cWorNDdUdG9RT2h5WHpVemhCZzBQcXpzZTRVMHkvTG85dHNDdWxxZGxHWDhMU2RsUjVIR0lKRHIwQkF2dzJVSm5lbzlHUUVqUFhIRXZvajdIa2x5YlBwaG0vbmJabHlEMUtaZXpSSWMxdFMrQjdHL0Q0dmdab25oUVpmR2xaZDVrV3EyNXZxVE5Tb3JYeGZpSXlGQzVTRlJIdDk1TW9WUlp0aysvVzl0cmFxaXRGSU9PeGVQWUpjc3Z3OU1jYlRhN3gxUmxaVTdrWm1CMXVhVEJOU3BWUm9pbUNaZklQbHNuMDhIUFhhQWlXMkJVcVduUU0zeDJ2RFUrMHNaVURyNDZQc2twcnlkZlRlSDJzOFVLZGw4Q1FleDZHVVQxcEIrWEJHajc2MitGeXhPenh0QzJWWVdORDdpWGFZMTBPK1I2QXNVNmVEZVhSeWJORjI3Y09uM0ZJWmV5MTBCa29xb3dvWFc1NkFxK3RnY05Oak1hWTBob0ROS2Q3bzZGemx3ald5VnJhOE1UQTZIQ0ptclpqNkhDYmNnMUkyL1Q0Y1pRK3A5eksyQnl2dzJjcUxYWCt3UkpXWWtmZ20yc1Q2NjdjVzhIcFhUSjBoS2NUK0E2M00zZ0pnVTQ3cmNza3h5V3VEWGQrc2thVHg3NlJ0aDJ4SzFqQWxXeXR2N0lGYXk4N2xXRVRrKzhGQnZZSk5kMGFUcmxNWjU0ZDdndE11Y0J3eDVFcGkrOTdiK3pscG5SbFkzVWFkWm0yTmFid0c1Mm1yTXBiR252U3loWTZ6Zno4cDAxc3YydkFJTXBvREpwWVg1KzlEOWRRcWd5eVNIQ2lUeEtIOVg5aU1OdEFiYXd1MlgrRGVacnpMUFloMmY1MVBnRFBwbWJkQitTeXF0bkpZR0kwQmxRdXQzWWl1YjNJbEtYZDBLMXNMcW5MZkk3eGxiNW5yeGVKdWZUektOVVgxN0xjaTQzT2VWeWEzR1NFL3NZeWNDVEQ2enJ0dXhPYUc2SU5QSkVHUFM0MW1FSGxaNnF6NllzVTZKcklQTEVwekcrUDBoOTlhOGpZU0pXM2xINXFPNXVmNWhmcnFkc0xqTDZVYXBMb0ExZmE2VHdiYVkrK05kcTFEMm5xY3dpNGFLMzF4Z2pqMWZxamUrR3h1Nm40cmRQSGJ3UFRsUkpOR2UvbS9jRmFkZWYzaDNiRCtXWmYzSWlNUkQyZjJ2VkdWVVQvMldtdmRWNnlqYjdvbjloY24xc0RiL0tlVHAzb0JUNmJhdjJSTERNZnlpUGI2SXJJNEh2Tk9TUGg5U3NjeDhaSDhnSzhsT295dXpxQXFlT3IvOTBmSUZVV3NmeDNnUDdyNnNBbjhGKzMvMVJUeG10VEdTdzFaWFIvZW5aWkprd1pOTElOZWZOMmpzQ3dOSERIQ0tUY2c4QTNBOE1Wa2VGTnJORk1PUEkzV09hLy9QSitWbVlIK21FNmxpZWl5SDFEZlh6QWQ3R0oyNnE3UlhseUc5aUFSN0ttREhhNnpDYlBEbWViaXJnR3pOZzJlSlJvT0pXenFsUk9NQnFEQUxxWjZMRkxXMDBVaVRJYTQ2VXFieEd3Z2xoVFJGdmplNVE2eTFLbjB1WFhYRHlOYVlqVitqcW41dUs5ZmVxUTB5RE5WV1hnYVlvNDFXUjFuOTRkMFF6NjNHN1lVTGZGKy9PcFovN3VVOEtRSWFOazdrb2JnMGRMVlJtOVo3S1p6SS9naTZQbVlsV3hweGVsbDY2OVVhZk5RL2kwVUhtZVJtWi9FS2lOWEc1WURhSENZUjZubGNvVzZvNWRvZEdRVXBXcHVhNHlCZWZIRzdNeUM0N0s1VDQ1VUhXemp6WTRwWklVTVRCNGRLL2lmNW03Z3hUU2RLVlVsVTEwQlBPaGpFeStsMnFNUkUxb1RqcGMyNXhvbUFjWnV6NFRsZUhveC9ta2tTR3pLZndMOERxVHBSaW5KUi95YTMxUHNSYUY2L2VyTkhQWmZkSVpoTE5lYTg1SXFlbWlwVFo1MDN4LzJGU0d5aGdCVHd0VVpsNnZxTXBqZTlPN2c1SW1aWlJreHpCOXE1cjZqSW9sanpiN2JKV3lRSCt3Tm5sMmFUQ2JlNkVuUHM2ckNQVnhaS3JURGs0aVU2bHE0dVRIOEx3VkVVemoybldzTUd2L1hBUGZXemlXcXdjM3FYNnBHa3h3OHVNaWJ5YjNOcDlYcEl2T1VLWURyVEd3VFI2dERZZmVBWG56VkZPeFRLdUIyMHMwWm00TmVDMHdlQ25ETWV5MFYzbVF6NUxRKzVkcFhVeDFuTTBka0xlOGppTko2UkV6NnhOZC9Nd28yeDB6MzFwMHNsYU5OZUN6d2pJTHZBdWMyQmRCZU56WnJ4OU9PWHdNMkZOZkl2S2xiM3dnYk5YRlZiKzFyZ3Q5NnJMT0h5YnNERmN2TVZ5V0t0ektyc3JTWEJzWlBKVUF4bHJyUEx2V1UrRmU2SE9wTnFXTDN0RTJHdWFmYWNDYnFTcUxxQjZhYzNmR3V0cHFHeGd5b3A2ZGRoWmVUVjZLQWIrMVRiNTB1OXdPOE5KeW54MGVWRGE3V3RZWTc5MnpGa0hGdE9GQkJZTmk3QXBQN2VWQUVZcUs2N2o2R2E4Tm1iWU5kM0l2OUNKSGM3ZE5rK2sxQlVRZGRqNWNjM2VjeFE2bmJXZW9TS254U0wrMzd6ZU5IeXdsWlJCbDJmaDVIRHRORWRpajhMNVNuU2FON2Z6dGRad05HdU9HMFJpc1hwVERrS0x4UWdMNDNnNDB6RFhJRmRVNXlrcGpvU1BFQnM4dXkvTi9rVE1EMjBGbFRHa3lkVDlrQ2xsUFdXeVlaOWRqSXpSY2FXbjJCbG1hb1NramRyeHNuNEVkeExwc3Bxb2lvbnBIUU9od2pNRnNhVU9XeGxsbjdMVGFMZU5NdVI2SDBCZzBldEZSZFJWbjYzdWNiZkxXdmRCaFhhT1BHcXF5V21ld2V4M0RtVHIyczFSWmRUODczSXV4MG14ZDN0TEFuVDlWZVB2YTJ1aEw4V0ZHdis4dUdUTHlnTnVqY0pvNVZNWmJvMzJrVjY0V2FCUnRnK01xNTNNZDV0c082TE1qL2I3WHRBbjJsc3VQSXhOcmpESVl6Qjk5YStheWlmWkdieE56OWdNWnc4N2tlNVFtYTdUUkh5TXo2MlBpV2xpc0xISTRMU052M2dQYm42Q0lMUmVadmFKMmZweFRvNTN3anNSaVBZYUxCRVh3K3p2WnM0cktIcWJ5MC9LbEkrNXJrdjhUdXNlZ0lkb21MMkc2ZHBxUzVVTTdUUmt3dWp4R3M4SU9BTS91VE41TU5XVjAwaEVmVGY1RFhlZk14a1dFZVFLTVJMMFJiN0RXeHJyY3pPMXBoV1BaR00zUFZQdWpXZnQ3dXBnMVM3a2tUb25PME0zZi9YZ0g4RWp6czI1c2t6bU5XUldOa3hrOW5vdjBvRGVuV1dsT1NkUFRya1VlaTg3UzYyVXg2N1FyVWZPUDh5NDdrN3JtVkpUR2kzbTNONXZUNXN0OE5UbnArSmdaM3ROdTdaa1lkdEZlOVVuQkpYdG9mTVpIQm5kUTRybHNaTW8wbXNrc2JkUzh6YnZubldKN1piT3k3N1JyVHE5TnVVbk55dzVYUTdPQmcyT1FzTjdiMEhocmROZ3MzOHR5cG9LR0NiTzFkWm1lYXpLOU1iQS9VS3B5L3NqUDVIc1pwN2FKYlhrTjNKNVhsY0ZWelZYb3RUeGVhc3A0TjVQWkZjWXY5Q0pMUUZrM1R3RXVvclE1bTZqTTNCRjYrM09vY003SGtZclhsdnMyUk50d3NmZmRuL2UrN0pZT1pka2ZJS0JJQ0RST1pWemhuNTIwUDNCK1ZNazZMNFBmcW44V29lL0ZmODFCcFpaaVU2NDZSOFU0K0NjRHBndmN2RGJTRHNKRk5ZVGNuWnIwbm83LzVMQlM4d1o1N1pXWDNsU2w3cVZxODBkeXo5MTRkTEwvcDhqdURUUDUvQ0hXeVo3dmg0dmFXUlZoSXo4emRxY3I0aHA0S3l6TCt5TnoyZS94Q1lPczJqa2x4YkF0QVgwcE1ucmMydURSRWg2WFdVY0pXK20rVHhyMWp5ZG1YcWY3N0lEajdEQ21uNmY0cHNKTmdNczYydXc0QmJjcHM4LzFqN3Q2QmExbENlRnJjaTh5ZWZ2KzBtRk1YUzQvTTRoNi9vNWh4V2o1MXhsYVFldlNZVTFkaDJ1RGZKVEo5VFRVOHlqUkZURlE1VzFYazdjMmxPcTh6Uy9nL3lEdE9CemN5TDFWdG5kai9KZldsVDl0WVBYMnNLcHVpL1gxMXFMREpUaE80dGdvUEhiVHQ3dlFWU2krYURwMTRHZjZuRDEwcFVTVkI1RW01enB5R3JlcnlWRmd1R0J0TG9WOU80MW5VMTBKTWwzRGZrcnI5bWlUWjNjcTA0czBSWGc2TGtuS0ZLb1dzK0tNQnZsd1hhMTFuVCtUeXFKemdMUmxHYmQ2RzEzU0VQREcrUVFBeDhmK0tHdjM1ZS9qSUd0QmRVVWNlOWRRcHBIaEZUcjdXYm5GQjFPcFUxblRnWUgyT1VQcGF3MjVkL2VkZUd6WU80ZEhvb0NMbGtVTWpZVysyQVQ4L0Y3bzdRZWhSZG0yMTdVekthN2E0T2lUZ3YrZzVWS05GQ1NUUjVHdUJQc1dhR1hqUFVaVEJyYkdTSWN3eTNmajBYLzlaT3JrTEwxQ3Z0MkNGa21pZEhrYndLSU5oa3RubFpHd1RNcFc2OUYxeVE5VDlNOXVXc1Z3U2xjdGkzcWJ1cFRUTytkYnJRTnBNenV6OGd3QkkwV2FQS2FNaHBETC9uUHkzVThZTmRYeitISzhKdTJHM21sY0xmWDJncnlyTG9kTjdXSUp4dlYwL2p3ZHp3cGhGSDB3OWpCY2lUSVpOczNPTTIyR3ovMzh1dXZCR0VSdWV0Z3V3T2JUV21xQjRXYWw5dTdnUm9FblJiV3kyc2NsL2FsOFVaS1YrWTFSb3VQU3VoYW5zMHN0TmIrVFhXVHBIMTUwbkt4NmoxTktlaFlmL2FKMnNxd2gwOXZvVTg3VmxjSE9iTmRHSHZ2Y3dnYjg2dWs0NzVJSy9aMzNCMGh6MGQxQjdWTk9sSTliei8xcTVIcWFwL3o4WmR1NEdrdE8zc2dEclhNWEU1dTBJUThRV0w1M2dmWjlYUlpTanArdjJHZXBtOHRXWlRMWnhxcThqZXF0KytweTBjWS95dUhzZWVHVEo4Q1ZYRjJwWCs3a0tqcE8yaE1sdjdQVGkwelZtRUJaZmJaY1ByUk44dmRmcjhpMWpoSVlrYTNmeUdMMGovOEV2aGZyamdmREZ6K015VmFEb3FnckVucnIrdVgvUis1ci8zazZJd3NVWklzTS9Dakc5bHkzOVVmdTY4dXpXSWRxM2pXWUk0aHhlOVN0UVFESGlrTk1USGdFTjU5MnhVdmdYdHJUcWZ3c1B0WnAwNk5vNDRkbUhmS0lNTXhsL2ZYNCtiSDd0VHVXNmxoQzMweEEvdjJJWDY5SU84aSt0UUU5M1VEUUpGdHhtTUFyMHRXM0lzeStTQkdScmVZVjZUcmUvak45UmNaNmFNRzQ4ektmeHc1eWR0bnc5d1dHQUhxeGJrR3k5WVVxWVViUTljUDBMVEQyOXl2U2NiTy9meU9EQktFWEh6a2dKVnVrc0JqNzhVc0lJK2pGNUJVWndzQ1BuTmdQOGJ2SWRrSUlJNXUrdXdXT2RWMGVPdDdTSWx1a3lkNHpEOHppQ3cwWEQzUURNRXhEZjJEdklHVHZkZmlGWlVDejhXVkJ3WWNIOHZjTUwrYXE0eWRlbkhFV3dzaFBRcENyRTNKY0o4NytBa0dDejUyaVhQS0tkRE9leUJiSk5POUhUbzdtV3dLak9palRQQVNsbVFjTSt2c1ZHY0Z3N1JRYkJEWGRMTDdBMGtGSkZNTlFlTW1BVFFPRDRmL1hWYVVTV3FXdkxicEpYdTAxcEtZc1YyUVUrMkVPVGZNT2VVVW1FUXlQVlk4czA1SXpwdk5BUFZEL0ZZcFM4VmhxU25QQjZvMEZTeThhdE5IUUYzU1RObG42eXdNTEFLRHZETVkwSGt6cWpqSDF2NHltNUVkeFZsT0tQQVREMm40VTE3NkNkWU44b0NPOGVYVlJBME9WS3JSQTZVWlBiL04vV2l4NVJTNU5BOHhEUkxheXYxcWxqbjFEcmR2YlN1R3dEN3c5ME1ub0crbzVLQ2RYb3I5K2RUd252b20rWVR3ZHNkdWVkWWxabXh0MkNhRkhqSjluUkZjUnByTXBBYjA0ZEdCRS9QM1ZJd2lDY0V4aTJoV0Y5cEI0RVlWUlcxU0pwNjU2bGIvN2x1aGU3TVFwSVl4blhiNHJabWpHOCtHUTZQUzduU2ZpN3hYQWEwSlJEVWhRL3loV1lnbGd2Z21wTFhiNmJmSHZUTFA1ajJwNUFlVDVNWXlJV1ZlWkZROUFDUFVZbWwvMW1KZ0pvKzUwMWg2OUVJL2RYbnMrbkJHZHVTaDJ4N092MVp0aVVSS1kzN0hvMWZ2SFAxKzk3QUN4eTQ0Q0hSeDhldzVyQWJDaHE1ZGZZbHZrRXQ3SHNCc2JJdGV4UEQrRSsvUlRTTG1KcW9pVXBnd1NrSEtVa1hLQnhqVFh3SjFiSm1NancrRWNVMGFSbGwxdTVUWTQ3T015Q2FSM1QwTEt6WFVlN1lUK21BWkZPMVBvajMwdCt3YWFHUm1NVUxiREE4TUZrZEFmSUFPbkc0cUdpbFR1OEQzZlM3UzJ2eFQ0SnRLWXZId1NPdlltVHo5c3BIVzRocTZJdnREcEJrT0hlekhjYlZQZzJVU2JadWxmeGtQVzZuSzRTSmViYUdqNWlkZ2JMK2JaeEdTTzZhMitrU2F0eGpPQkZ3UGdqWjZHcmhtWW5ZZjhYeDU1aHN1bTJzUlBWQzlJaDV2OFgxMDJFNk14UUIybjZXc3Boclc5MnJPZDZkNnRPODdJbW1UZmoyRVRnYzlTUUJwMHVPeGFGZGo0MzRiZXVBSGEvcmVoTzdEMTdMTVk1NS9aVkpmQjA1T1h5VlJXbFVGZ05LU2QwRVZkVVJrOURUMHVOWmdBcVkzSjA5QkZLMDN1cmp1T241Zzh2UUV1KzYzak5CbkFqTmNhUDEvbkU1OWZzUW5ybnJPQW1YMWZYMSsvZW44anBwa1hhaEdsenR4ZWRCM3UxZHQvc2JKRnJPbFhiK1Y0Wm92b1pGQWpQWGoxeW05MXRyQmlZMjNiNzNGZC9YR3dSZlFOdlhyVmtyb1BhQkgvdnM3dDQzSlg4SkU3K0RtWGNMRmJPT3NhZnRnOS9JaUx3R3V3bS9qNHdJK3V2cjUxeU5NOHNGeDR4QlhTY2xVVVFKQ3R3SUdvUlZSeENEK0tJSUlnOXNQc1BhRUh3VHNZTVFpT2ExRU9URndUUWVqSFB2QlJpNWgxWGtxQllaQVdnWk9rOGttZU1ielVubDlrQ3o4aGxUTHMxWmdISmRzdFl1eDc4SlQ1dDdpdjNiMDVJNEdNS1J4Y3p6R2JQLytZMmVNbTA0K3c3S2FmZU9JbFFkOTE1RGpiT1NlRi9QbmwxbkE0REQrVWhSNEUwZTFlSUk4VjZQY1pCd1pCdWdGUjlQN1pWK0NWUkl1OE1tb1I5QmtWY3ZVWTJNTTY0a3VNcWhSQmlhVE9TT2IzRGhGZWdwSWdLb3J4ZjM4akJNK0ppYXBTSUdLZjJPaE8vdjM5UjY0RXcrNi9VOExzTjd3dXhJbFhYQy84OE5vMGFpNGY1NlV0d2tpaTFQQzNMZnFtY1YvenViN3I2cDVaSXgxamkrekR6OWZnOFBPLzZ4OEpBZ0xiSjE1SldYZGl4N015a2w5eSs1NU9oamMzTjYva0lYeml4UTRpUEVCYzd5cEhrSm5pUHduVFB3U3RrRDl5T0dnUUlkVE45QXhLZ29nUWhBSEJIRDQyQzBkeURsMkc2bjh3b2hJQ3ZDM1pEODZ5SnVmenhYVHIwaUw2Q045TFZacTFpSHBsdGdlclczOU84VUc1ZWVqb0NRSjY2d1BnbkwyaWNWTVhWZGJmcUR2cU0ydGVuc1Z6YTE2emhrNzlpR3ByeHUxUjk4eWFmZVZ6ZHRWODJoVy9mMVhaOURuSFYxSFBuNjU3azZsTWtHZVlLcHRDNTNhcG1rUDdsMUdzaDNFU3ZJUytBUS9zem83amdJZHg2MUJoQXoyMlc4U3REWFVVMjBldnpwd3ZRU3gwQnlVaG5Oa2hqR3dmbVJpaS9qNkFvZU9iVXdoOHo4UmVzbnBaeStPY05mUmdGSDBxamNUeExyazdjM1QwQ0pHZVZnUTEzeUgyYnY5dS94YzJaT2ZUeWYxWk91djBGWTJOSXpMeUhrZnIySkdCSUdrUlRZcHlqMS9rSFkwV2tmVStEbCtXWFpEenlKam0yOGl5N3NoM3BVQi9aUFN2cHpXWGhQODkvT2ZIL3pvdG41VUExSEVlWlFEZkZYd084YndkZlVxNDFxV2R1YzhQUC9XazgzT2M0TzZjeWRhM09lOEYyUTh0bXZsVC9lUkZiUHdWUE9RZlJ1aC9tNHM4K3Y3OGtXdE1ZajhDT25JODYzYk5sQjZ5NzRmT0Roc01ldkhOZGdHQ3M1bjMzS1VkNk5kNkJYdW1Cc3BlekxJS1Q0U0x5b1dlOGRQNHhhbXZ6bG8wSCtlOXRlRkU0VzFyNDR2aTlGMFlodzdJcFg1ZGxMdGljZHI1UnVYWlZ3ZFQ3QndraDdWcTdlQnlOTFhaUnMzeHJtR29XN0QycmtWOG9iNTc5L3pzUDQwQTlyc2k3SityUDMrUzN0UkQxdjhyenFjcXp1bjN6OTdOeXFZRjdCUmVtcFlkZE5qMjJ2TERxZFZSeDY1b2k0MlBPb01udWR4blpXRkgyeDhsWWpFTVhjZkxEb0FQZFFCZjNzb0Qzc25ZVHF2bUlqK3J6WmUvSTRlcXR5K1BTL2g2NFRxZDhXSjNlbElzdjFzdW4xbC9ybXgrcDNBK2cySGZzWHBqLzhQOFpPMmp4SVVqUC9HTzR2T3hQSytMMmZzaGRoY3ZmTWxUbHJVZTNpTEh1TjBQV1creGp1QUYrUzRkcER2dXJMU2R3cjJjcU5KNzJ4NW9pdzRBaktLUmI4S29SZnlMZUNWRnFKdHk2TVR3MlFQd2xTUitMU0VMSEIya1IxR3U2bEdzZTZhK0YrVzVMT2hzMmxLZ2FoRTBmMUZpVXI5VGQrZ2FQQmh2L0hEbGVOYk42aUc2Y2Z5YW54RHlWUmY2Q0tlRTNsZGlDYW9FYlB0UnZGK1ZUOUJ6am5BQ1dqR0g4ODZvMWhUbDJwMm43dml4bFRzWDRsWVBIQ0w3VmRlOXdSV3BxaDdVOGozOGJKWjUycGNRTHB6dC9rM1pqanVRWnU1K2poTERpNmMzSjdueGNSN3BKYTRCdzhPdXd0K0ludmc4bm1XOEFjemJ0WTdRQ1ZOL0JFZjFNY1RGcE9mWlBubEYycjYvT2hpWHZ6L0JKSzlJckV0a2l4ejRSbmFoSnJacmkyNC8vdG1MMm55MnJyY0dsbGxOVndlKzhRTURWZ3luZTU0Zlo1OUt4WHNsYllqY204aSt4ZHkra2kwaUNPRzE0MFd4anRBVi9qdkpmOUMzcHV2NEZQekZZb2pybGFJSU80cFdseGI3K2IyUms4QnhkS3ZrdElOUC9PdTF1SHJ5U3Y1YUM0R2hkZXhTWDhuckpFUy9YSDRYNWJEWm5pT0lZUGpMdXhCbG5QaWxDaGluTU9XOE9Qb2x1NGFSUmpGMFd3V1B0OUUzZEdZSjhEMFBnbGlFMldqN2wzdnFGQ1kvWGxqdjdMOFpZa3FwSDgzY3o4ZVdHbUZleldmSGVoaVhUWkpucjVjM0h2WVErYzZuQi8zR2xxQzhNSEJ3YXBkZUZ5Q3ZTTGlHWG94dGxLeXBMYmE5dmVLU3Z4YS9jaDBtMmRXbGpJVnNnSDd1NTY2YjFBM1RaSnRNZzZYM1A1SmQvcGIxbTR2dWJwb1AxSmRtNDh2K0o3SURXNCt3ejVnbUFFQm81ajk2bmY5dTl0Y0FDOURKcnVLUUJsejRJYnpHMW5lZFhRckFudVRYN0dacStUdlZEMi9kNy9tL0FBQUEvLytGMFVUa0VGd0FBQT09
+  kind: Secret
+  metadata:
+    creationTimestamp: "2026-03-20T09:46:50Z"
+    labels:
+      modifiedAt: "1773992230"
+      name: cigg-app
+      owner: helm
+      status: deployed
+      version: "8"
+    name: sh.helm.release.v1.cigg-app.v8
+    namespace: cigg-app
+    resourceVersion: "62995"
+    uid: 65bf5b7e-756c-49f6-a5da-bc589ad2fa12
+  type: helm.sh/release.v1
+kind: List
+metadata:
+  resourceVersion: ""
+apiVersion: v1
+items:
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-hpa-autoscaler
+    namespace: cigg-app
+    resourceVersion: "78071"
+    uid: cdbdc197-7d94-4942-a1c0-5b980217e772
+  spec:
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 79
+          type: Utilization
+      type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: cigg-app-cigg-app-frontend
+  status:
+    conditions:
+    - lastTransitionTime: "2026-03-20T15:53:47Z"
+      message: the HPA controller was able to get the target's current scale
+      reason: SucceededGetScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2026-03-14T11:32:18Z"
+      message: 'the HPA was unable to compute the replica count: failed to get cpu
+        utilization: unable to get metrics for resource cpu: unable to fetch metrics
+        from resource metrics API: the server could not find the requested resource
+        (get pods.metrics.k8s.io)'
+      reason: FailedGetResourceMetric
+      status: "False"
+      type: ScalingActive
+    currentMetrics:
+    - type: ""
+    - type: ""
+    currentReplicas: 1
+    desiredReplicas: 0
+- apiVersion: autoscaling/v2
+  kind: HorizontalPodAutoscaler
+  metadata:
+    annotations:
+      meta.helm.sh/release-name: cigg-app
+      meta.helm.sh/release-namespace: cigg-app
+    creationTimestamp: "2026-03-14T11:32:03Z"
+    labels:
+      app.kubernetes.io/managed-by: Helm
+    name: cigg-app-hpa-autoscaler-backend
+    namespace: cigg-app
+    resourceVersion: "78070"
+    uid: aaabb6e4-b711-4c7a-93d0-86a351a2cba7
+  spec:
+    maxReplicas: 5
+    metrics:
+    - resource:
+        name: cpu
+        target:
+          averageUtilization: 70
+          type: Utilization
+      type: Resource
+    - resource:
+        name: memory
+        target:
+          averageUtilization: 79
+          type: Utilization
+      type: Resource
+    minReplicas: 1
+    scaleTargetRef:
+      apiVersion: apps/v1
+      kind: Deployment
+      name: cigg-app-cigg-app-backend
+  status:
+    conditions:
+    - lastTransitionTime: "2026-03-20T15:53:47Z"
+      message: the HPA controller was able to get the target's current scale
+      reason: SucceededGetScale
+      status: "True"
+      type: AbleToScale
+    - lastTransitionTime: "2026-03-14T11:32:18Z"
+      message: 'the HPA was unable to compute the replica count: failed to get cpu
+        utilization: unable to get metrics for resource cpu: unable to fetch metrics
+        from resource metrics API: the server could not find the requested resource
+        (get pods.metrics.k8s.io)'
+      reason: FailedGetResourceMetric
+      status: "False"
+      type: ScalingActive
+    currentMetrics:
+    - type: ""
+    - type: ""
+    currentReplicas: 1
+    desiredReplicas: 0
+kind: List
+metadata:
+  resourceVersion: ""

@@ -1,0 +1,47 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cigg-app.fullname" . }}-frontend
+  labels:
+    app: {{ include "cigg-app.fullname" . }}-frontend
+spec:
+  replicas: {{ .Values.frontend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "cigg-app.fullname" . }}-frontend
+  template:
+    metadata:
+      labels:
+        app: {{ include "cigg-app.fullname" . }}-frontend
+    spec:
+      containers:
+      - name: {{ include "cigg-app.fullname" . }}-frontend
+        image: {{ .Values.frontend.image.repository }}:{{ .Values.frontend.image.tag }}
+        imagePullPolicy: {{ .Values.frontend.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.frontend.containerPort }}
+      
+        startupProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.frontend.containerPort }}
+          failureThreshold: 9
+          initialDelaySeconds: 20
+          periodSeconds: 10
+      
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.frontend.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 4
+        
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: {{ .Values.frontend.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 4
+
+        resources:
+         {{- toYaml .Values.frontend.resources | nindent 12 }}

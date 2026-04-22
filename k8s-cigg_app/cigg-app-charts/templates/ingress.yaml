@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ include "cigg-app.fullname" . }}-ingress
+spec:
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      # BACKEND: match /api first
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: {{ include "cigg-app.fullname" . }}-backend-service
+            port:
+              number: {{ .Values.backend.services.port }}
+      # FRONTEND: catch-all
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: my-service
+            port:
+              number: {{ .Values.frontend.services.port }}

@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-service
+spec:
+  type: {{ .Values.frontend.services.type }}
+  selector:
+   app: {{ include "cigg-app.fullname" . }}-frontend
+  ports:
+    - protocol: TCP
+      port: {{ .Values.frontend.services.port }}
+      targetPort: {{ .Values.frontend.services.port }}  
+  

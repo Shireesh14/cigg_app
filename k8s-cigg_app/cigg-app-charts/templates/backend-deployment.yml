@@ -1,0 +1,63 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "cigg-app.fullname" . }}-backend
+  labels:
+    app: {{ include "cigg-app.fullname" . }}-backend
+spec:
+  replicas: {{ .Values.backend.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "cigg-app.fullname" . }}-backend
+  template:
+    metadata:
+      labels:
+        app: {{ include "cigg-app.fullname" . }}-backend
+    spec:
+      # Init container to wait for DB
+      initContainers:
+      - name: wait-for-db
+        image: busybox:1.36
+        command:
+          - sh
+          - -c
+          - |
+            echo "Waiting for PostgreSQL..."
+            until nc -z postgres 5432; do
+              echo "DB not ready..."
+              sleep 2
+            done
+            echo "DB ready!"
+
+      containers:
+      - name: {{ include "cigg-app.fullname" . }}-backend
+        image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+        imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+        ports:
+        - containerPort: {{ .Values.backend.containerPort }}
+        env:
+{{- toYaml .Values.backend.env | nindent 8 }}
+        startupProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.backend.containerPort }}
+          failureThreshold: 30
+          periodSeconds: 10
+      
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.backend.containerPort }}       
+          initialDelaySeconds: 5
+          periodSeconds: 4
+        
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: {{ .Values.backend.containerPort }}
+          initialDelaySeconds: 5
+          periodSeconds: 4
+
+        resources:
+            {{- toYaml .Values.backend.resources | nindent 12 }}
+          
