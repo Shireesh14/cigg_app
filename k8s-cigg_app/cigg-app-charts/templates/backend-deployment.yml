@@ -4,17 +4,20 @@ metadata:
   name: {{ include "cigg-app.fullname" . }}-backend
   labels:
     app: {{ include "cigg-app.fullname" . }}-backend
+
 spec:
   replicas: {{ .Values.backend.replicaCount }}
+
   selector:
     matchLabels:
       app: {{ include "cigg-app.fullname" . }}-backend
+
   template:
     metadata:
       labels:
         app: {{ include "cigg-app.fullname" . }}-backend
+
     spec:
-      # Init container to wait for DB
       initContainers:
       - name: wait-for-db
         image: busybox:1.36
@@ -30,34 +33,64 @@ spec:
             echo "DB ready!"
 
       containers:
-      - name: {{ include "cigg-app.fullname" . }}-backend
-        image: {{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}
+      - name: backend
+        image: "{{ .Values.backend.image.repository }}:{{ .Values.backend.image.tag }}"
         imagePullPolicy: {{ .Values.backend.image.pullPolicy }}
+
         ports:
         - containerPort: {{ .Values.backend.containerPort }}
+
         env:
-{{- toYaml .Values.backend.env | nindent 8 }}
+        - name: DB_HOST
+          value: postgres
+        - name: DB_PORT
+          value: "5432"
+        - name: DB_NAME
+          value: cigtracker
+
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cigg-app.fullname" . }}-secrets
+              key: DB_USER
+
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: {{ include "cigg-app.fullname" . }}-secrets
+              key: DB_PASSWORD
+
+        - name: PORT
+          value: "3000"
+
+        - name: NODE_ENV
+          value: production
+
+        resources:
+          requests:
+            memory: {{ .Values.backend.resources.requests.memory | quote }}
+            cpu: {{ .Values.backend.resources.requests.cpu | quote }}
+          limits:
+            memory: {{ .Values.backend.resources.limits.memory | quote }}
+            cpu: {{ .Values.backend.resources.limits.cpu | quote }}
+
         startupProbe:
           httpGet:
             path: /health
-            port: {{ .Values.backend.containerPort }}
+            port: 3000
           failureThreshold: 30
           periodSeconds: 10
-      
+
         livenessProbe:
           httpGet:
             path: /health
-            port: {{ .Values.backend.containerPort }}       
-          initialDelaySeconds: 5
-          periodSeconds: 4
-        
-        readinessProbe:
-          httpGet:
-            path: /health
-            port: {{ .Values.backend.containerPort }}
+            port: 3000
           initialDelaySeconds: 5
           periodSeconds: 4
 
-        resources:
-            {{- toYaml .Values.backend.resources | nindent 12 }}
-          
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 4

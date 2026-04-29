@@ -6,34 +6,49 @@ spec:
   selector:
     matchLabels:
       app: {{ include "cigg-app.fullname" . }}-statefulset
+
   serviceName: postgres
   replicas: 1
+
   template:
     metadata:
       labels:
         app: {{ include "cigg-app.fullname" . }}-statefulset
+
     spec:
       terminationGracePeriodSeconds: 10
+
       containers:
       - name: postgres
         image: {{ .Values.db.image }}
         ports:
         - containerPort: 5432
+
         env:
           - name: POSTGRES_USER
-            value: {{ .Values.db.user }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "cigg-app.fullname" . }}-secrets
+                key: DB_USER_APP
+
           - name: POSTGRES_PASSWORD
-            value: {{ .Values.db.password }}
+            valueFrom:
+              secretKeyRef:
+                name: {{ include "cigg-app.fullname" . }}-secrets
+                key: DB_PASSWORD_APP
+
           - name: POSTGRES_DB
-            value: {{ .Values.db.db }}    
+            value: {{ .Values.db.db }}
+
         volumeMounts:
           - name: postgres-storage
             mountPath: /var/lib/postgresql/data
+
   volumeClaimTemplates:
   - metadata:
       name: postgres-storage
     spec:
-      accessModes: [ "ReadWriteOnce" ]
+      accessModes: ["ReadWriteOnce"]
       storageClassName: standard
       resources:
         requests:

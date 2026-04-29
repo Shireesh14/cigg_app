@@ -5,30 +5,53 @@ metadata:
   annotations:
     "helm.sh/hook": post-install,post-upgrade
     "helm.sh/hook-weight": "5"
-    "helm.sh/hook-delete-policy": before-hook-creation
+    # 🔴 Temporarily removed delete policy for debugging
+    # "helm.sh/hook-delete-policy": before-hook-creation
+
 spec:
   backoffLimit: 4
+
   template:
     spec:
+      restartPolicy: Never
+
       containers:
-      - name: flyway
-        image: {{ .Values.migration.image }}
-        command: ["flyway"]
-        args:
-          - "-url={{ .Values.migration.jdbcUrl }}"
-          - "-user={{ .Values.db.user }}"
-          - "-password={{ .Values.db.password }}"
-          - "-locations=filesystem:/flyway/sql"
-          - "-connectRetries=60"
-          - "migrate"
+        - name: flyway
+          image: {{ .Values.migration.image }}
 
-        volumeMounts:
-        - name: migration-sql
-          mountPath: /flyway/sql
+          command: ["/bin/sh", "-c"]
 
-      restartPolicy: OnFailure
+          args:
+            - |
+              echo "Waiting for DB...";
+              sleep 20;
+
+              flyway \
+              -url={{ .Values.migration.jdbcUrl }} \
+              -user="$DB_USER" \
+              -password="$DB_PASSWORD" \
+              -locations=filesystem:/flyway/sql \
+              -connectRetries=60 \
+              migrate
+
+          env:
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cigg-app.fullname" . }}-secrets
+                  key: DB_USER_APP
+
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "cigg-app.fullname" . }}-secrets
+                  key: DB_PASSWORD_APP
+
+          volumeMounts:
+            - name: migration-sql
+              mountPath: /flyway/sql
 
       volumes:
-      - name: migration-sql
-        configMap:
-          name: {{ include "cigg-app.fullname" . }}-db-migration-sql
+        - name: migration-sql
+          configMap:
+            name: {{ include "cigg-app.fullname" . }}-db-migration-sql

@@ -1,9 +1,5 @@
-
-
 backend:
-
   replicaCount: 1
-
   containerPort: 3000
 
   image:
@@ -11,34 +7,18 @@ backend:
     tag: d96282f71ef813c223a894ee96ae792c537f0e88
     pullPolicy: IfNotPresent
 
-  env:
-    - name: DB_HOST
-      value: postgres
-    - name: DB_PORT
-      value: "5432"
-    - name: DB_NAME
-      value: cigtracker
-    - name: DB_USER
-      value: cigtracker
-    - name: DB_PASSWORD
-      value: password
-    - name: PORT
-      value: "3000"
-    - name: NODE_ENV
-      value: production
-
   resources:
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
 
   services:
     type: ClusterIP
     port: 3000
-    
+
   hpa:
     enabled: true
     minReplicas: 1
@@ -46,10 +26,9 @@ backend:
     targetCPUUtilizationPercentage: 70
     targetMemoryUtilizationPercentage: 79
 
-frontend:
-  
-  replicaCount: 1
 
+frontend:
+  replicaCount: 1
   containerPort: 8080
 
   image:
@@ -62,12 +41,12 @@ frontend:
     port: 8080
 
   resources:
-          requests:
-            memory: "128Mi"
-            cpu: "250m"
-          limits:
-            memory: "256Mi"
-            cpu: "500m"
+    requests:
+      memory: "128Mi"
+      cpu: "250m"
+    limits:
+      memory: "256Mi"
+      cpu: "500m"
 
   hpa:
     enabled: true
@@ -79,8 +58,6 @@ frontend:
 
 db:
   image: postgres:15
-  user: cigtracker
-  password: password
   db: cigtracker
   storage: 1Gi
 
@@ -90,15 +67,3 @@ ingress:
 migration:
   image: flyway/flyway:9
   jdbcUrl: jdbc:postgresql://postgres:5432/cigtracker
-  sqlFiles:
-    V1__init.sql: |
-      CREATE TABLE IF NOT EXISTS entries (
-          id SERIAL PRIMARY KEY,
-          quantity INTEGER NOT NULL CHECK (quantity > 0),
-          location VARCHAR(255) NOT NULL,
-          notes TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-          updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-
-
